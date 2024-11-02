@@ -12,7 +12,7 @@ class KeywordTestCase < ParserTestCase
   def verifyInsensitiveKeyword(code, keyword)
     assertParser(code, keyword.downcase, 
       Insensitive.lexer.lexeme.nested(Insensitive.parser(keyword)))
-    assertParser(code, keyword.downcase,Insensitive.lexer.lexeme.nested(Insensitive.parser(keyword.downcase.to_sym)))
+    assertParser(code, keyword.downcase, Insensitive.lexer.lexeme.nested(Insensitive.parser(keyword.downcase.to_sym)))
   end
   def testCaseSensitiveKeywords
     verifySensitiveKeyword('new int void', 'new')
