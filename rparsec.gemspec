@@ -12,4 +12,5 @@ spec = Gem::Specification.new do |s|
   s.require_paths=['.']
   s.autorequire='rparsec'
   s.metadata['rubygems_mfa_required'] = 'true'
+  s.required_ruby_version = ">=3.1"
 end
