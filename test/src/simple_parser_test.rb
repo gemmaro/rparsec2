@@ -10,10 +10,10 @@ class SimpleParserTest < ParserTestCase
     assertError('', 'wrong', failure('wrong'))
   end
   def testGoodPlusGoodReturnFirst
-    assertParser('', 1, value(1)|value(2))
+    assertParser('', 1, value(1) | value(2))
   end
   def testFailPlusGoodReturnGood
-    assertParser('', 2, failure('wrong')|value(2))
+    assertParser('', 2, failure('wrong') | value(2))
   end
   def testFailPlusFailFailsWithFirstError
     assertError('', 'wrong', failure('wrong') | failure('wrong too'))
@@ -31,19 +31,19 @@ class SimpleParserTest < ParserTestCase
     assertError('', 'wrong', failure('wrong') >> failure('wrong too'))
   end
   def testMap
-    assertParser('', 2, value(1).map{|x|x*2})
-    relative = Proc.new{|x|x.ord-?a.ord}
+    assertParser('', 2, value(1).map{|x|x * 2})
+    relative = Proc.new{|x|x.ord - ?a.ord}
     assertParser('b', 1, char('b').map(&relative))
   end
   def testMapOnFailFails
-    assertError('', 'wrong', failure('wrong').map{|x|x*2})
+    assertError('', 'wrong', failure('wrong').map{|x|x * 2})
   end
   def testBinds
     assertParser('', 3, value(1).bind do |a|
-      value(2).bind{|b|value(a+b)}
+      value(2).bind{|b|value(a + b)}
     end)
     assertParser('', 2, value(1).repeat(2).bindn do |a, b|
-      value(a+b)
+      value(a + b)
     end)
   end
   def testSum
@@ -53,8 +53,8 @@ class SimpleParserTest < ParserTestCase
     assertError('', 'wrong too', (failure('wrong') | value(1)) >> failure('wrong too'))
   end
   def testSatisfies
-    assertParser('abc', ?a, Parsers.satisfies('a expected'){|c|c==(?a)})
-    assertError('abc', 'b expected', Parsers.satisfies('b expected'){|c|c==(?b)})
+    assertParser('abc', ?a, Parsers.satisfies('a expected'){|c|c == (?a)})
+    assertError('abc', 'b expected', Parsers.satisfies('b expected'){|c|c == (?b)})
   end
   def testIs
     assertParser('abc', ?a, is(?a))
@@ -80,7 +80,7 @@ class SimpleParserTest < ParserTestCase
       char('c').map(&relative),
       char('b').map(&relative),
       char('a').map(&relative)
-    ){|x, y, z| x+y+z}
+    ){|x, y, z| x + y + z}
     assertParser('cba', 3, parser)
   end
   def testPlusAutomaticallyRecoverInputConsumption
@@ -96,14 +96,14 @@ class SimpleParserTest < ParserTestCase
     assert_equal([1, 3], [line, col])
   end
   def testInputConsumptionBiggerThanLookaheadShouldFail
-    assertError('abc', "'d' expected", sum(str('ab')>>char('d'), str('abc')).lookahead(2), 2)
+    assertError('abc', "'d' expected", sum(str('ab') >> char('d'), str('abc')).lookahead(2), 2)
   end
 
   def testInputConsumptionDoesNotFailForAlt
-    assertParser('abc', 'abc', alt(str('ab')>>char('d'), str('abc')))
+    assertParser('abc', 'abc', alt(str('ab') >> char('d'), str('abc')))
   end
   def testAtomParserIsAlwaysRecoverable
-    assertParser('abc', 'abc', (str('ab')>>char('d')).atomize | str('abc'))
+    assertParser('abc', 'abc', (str('ab') >> char('d')).atomize | str('abc'))
   end
   def testSimpleNot
     assertParser('abc', nil, str('abd').not)
@@ -127,7 +127,7 @@ class SimpleParserTest < ParserTestCase
   def testNotString
     assertParser('abc', ?a, not_string('abcd'))
     assertError('abc', '"abc" unexpected', not_string('abc'))
-    assertError('aabcd', '"abc" unexpected', not_string('abc')*2, 1)
+    assertError('aabcd', '"abc" unexpected', not_string('abc') * 2, 1)
   end
   def testArent
     assertError('abc', 'abc unexpected', arent('abc'))
@@ -155,18 +155,18 @@ class SimpleParserTest < ParserTestCase
     assertError('abc', '"bcd" expected', (char(?a) >> str('bcd')).expect('word expected'), 1)
   end
   def testLonger
-    assertParser('abc', 'abc', longer(char('a')>>char('b'), str('abc')))
+    assertParser('abc', 'abc', longer(char('a') >> char('b'), str('abc')))
   end
   def testShorter
-    assertParser('abc', ?b, shorter(char('a')>>char('b')>>char('c'), char(?a) >> char(?c), char('a')>>char('b')))
+    assertParser('abc', ?b, shorter(char('a') >> char('b') >> char('c'), char(?a) >> char(?c), char('a') >> char('b')))
   end
   def testLongerReportsDeepestError
     assertError('abc', "'d' expected",
-      longer(char('a')>>char('b')>>char('d'), char('a')>>char('c')), 2)
+      longer(char('a') >> char('b') >> char('d'), char('a') >> char('c')), 2)
   end
   def testShorterReportsDeepestError
     assertError('abc', "'d' expected",
-      shorter(char('a')>>char('b')>>char('d'), char('a')>>char('c')), 2)
+      shorter(char('a') >> char('b') >> char('d'), char('a') >> char('c')), 2)
   end
   def testFollowed
     assertParser('abc', ?a, char(?a) << char(?b))
@@ -180,9 +180,9 @@ class SimpleParserTest < ParserTestCase
     assertError('abc', '', str('abc') << any, 3)
   end
   def testRepeat_
-    assertParser('abc', ?c, any*3)
+    assertParser('abc', ?c, any * 3)
     assertError('abc', '', any.repeat_(4), 3)
-    assertError('abc', "'d' expected", (any*3) >> char(?d), 3)
+    assertError('abc', "'d' expected", (any * 3) >> char(?d), 3)
   end
   def testMany_
     assertParser('abc', ?c, any.many_)
@@ -240,7 +240,7 @@ class SimpleParserTest < ParserTestCase
     assertParser('', [], any.separated(char(',')))
   end
   def testValueCalledImplicitlyForOverloadedOrOperator
-    assertParser('abc', 1, char(',')|1)
+    assertParser('abc', 1, char(',') | 1)
   end
   def testOptional
     assertParser('abc', nil, char(?,).optional)
@@ -249,7 +249,7 @@ class SimpleParserTest < ParserTestCase
     # assertParser('abc', nil, (any.some_(2) >> char(?.)).optional)
   end
   def testThrowCatch
-    assertParser('abc', :hello, (char('a')>>throwp(:hello)).catchp(:hello))
+    assertParser('abc', :hello, (char('a') >> throwp(:hello)).catchp(:hello))
     assertParser('abc', ?a, char(?a).catchp(:hello))
   end
   def testDelimited1
@@ -291,11 +291,11 @@ class SimpleParserTest < ParserTestCase
     assertError('abc', "'ABc' expected", string_nocase('A') >> string_nocase('ABc'), 1)
   end
   def testFragment
-    assertParser('abc', 'bc', any >> (any*2).fragment)
-    assertError('abc', "'b' expected", any >> (char('b')*2).fragment, 2)
+    assertParser('abc', 'bc', any >> (any * 2).fragment)
+    assertError('abc', "'b' expected", any >> (char('b') * 2).fragment, 2)
   end
   def testToken
-    assertGrammar('abc', 'abcabc', word.token(:word).many, token(:word){|x|x+x})
+    assertGrammar('abc', 'abcabc', word.token(:word).many, token(:word){|x|x + x})
     assertGrammar('abc defg', 1, word.token(:word).delimited(char(' ')), token(:word) >> token(:word) >> value(1))
     assertGrammarError('abc defg', 'integer expected', 'defg', word.token(:word).delimited(char(' ')),
       token(:word) >> token(:integer), 4)
@@ -320,14 +320,14 @@ class SimpleParserTest < ParserTestCase
       //HELLO
       123
     HERE
-    delim = (comment_line('//')|whitespaces)
+    delim = (comment_line('//') | whitespaces)
     assertParser(code, ["123"], integer.lexeme(delim) >> eof)
     assertParser('//', nil, comment_line('//'))
     code = '123'
     assertParser(code, ["123"], integer.lexeme(delim) >> eof)
   end
   def testBlockComment
-    cmt =comment_block('/*', '*/')
+    cmt = comment_block('/*', '*/')
     assertParser('/*abc*/', nil, cmt)
     assertError('/*abcd ', '"*/" expected', cmt, 7)
   end
@@ -377,7 +377,7 @@ class SimpleParserTest < ParserTestCase
   end
   def testWatch
     i = nil
-    assertParser('abc', ?b, any.repeat_(2) >> watch{i=1});
+    assertParser('abc', ?b, any.repeat_(2) >> watch{i = 1});
     assert_equal(1, i)
     assertParser('abc', ?b, any.repeat_(2) >>
       watch{|x|assert_equal(?b, x)}
@@ -391,7 +391,7 @@ class SimpleParserTest < ParserTestCase
     assertParser('abc', ?b, any.repeat_(2) >> watch);
   end
   def testMapCurrent
-    assertParser('abc', ?b.ord, any >> map{|x|x.ord+1})
+    assertParser('abc', ?b.ord, any >> map{|x|x.ord + 1})
     assertParser('abc', ?a, any >> map)
     assertParser('abc', ?a, any.map)
     assertParser('abc', ?a, any.mapn)
