@@ -118,7 +118,7 @@ module Expressions
   # When _delim_ is specified, patterns recognized by _delim_
   # is automatically ignored.
   #
-  def self.build(term, table, delim=nil)
+  def self.build(term, table, delim = nil)
     # sort so that higher precedence first.
     apply_operators(term, prepare_suites(table).sort, delim)
   end
