@@ -557,10 +557,8 @@ end
 class Some_Parser < Parser
   init :parser, :least, :max
   def _parse ctxt
-    for i in (0...@least)
-      return false unless @parser._parse ctxt
-    end
-    for i in (@least...@max)
+    @least.times { return false unless @parser._parse ctxt }
+    (@least...@max).each do
       ind = ctxt.index
       if @parser._parse ctxt
         return true if ind == ctxt.index # infinite loop
@@ -576,11 +574,11 @@ class SomeParser < Parser
   init :parser, :least, :max
   def _parse ctxt
     result = []
-    for i in (0...@least)
+    @least.times do
       return false unless @parser._parse ctxt
       result << ctxt.result
     end
-    for i in (@least...@max)
+    (@least...@max).each do
       ind = ctxt.index
       if @parser._parse ctxt
         result << ctxt.result
