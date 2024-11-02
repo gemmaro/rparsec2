@@ -16,7 +16,7 @@ class ParserMonad
   end
   
   def mplus(p1, p2)
-    PlusParser.new([p1,p2]);
+    PlusParser.new([p1, p2]);
   end
 end
 
