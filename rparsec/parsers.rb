@@ -61,7 +61,7 @@ end
 ###############################################
 class ThrowParser < Parser
   init :symbol
-  def _parse ctxt
+  def _parse _ctxt
     throw @symbol
   end
 end
@@ -598,7 +598,7 @@ class SomeParser < Parser
 end
 
 class OneParser < Parser
-  def _parse ctxt
+  def _parse _ctxt
     true
   end
 end
