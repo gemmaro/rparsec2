@@ -3,8 +3,8 @@ import :parsers, :keywords
 require_relative 'parser_test'
 
 class KeywordTestCase < ParserTestCase
-  Insensitive = Keywords.case_insensitive(%w{select from where group by order having}){|x|x.downcase}
-  Sensitive = Keywords.case_sensitive(%w{new delete if else then void int}){|x|x}
+  Insensitive = Keywords.case_insensitive(%w{select from where group by order having}) {|x|x.downcase}
+  Sensitive = Keywords.case_sensitive(%w{new delete if else then void int}) {|x|x}
   def verifySensitiveKeyword(code, keyword)
     assertParser(code, keyword, Sensitive.lexer.lexeme.nested(Sensitive.parser(keyword)))
     assertParser(code, keyword, Sensitive.lexer.lexeme.nested(Sensitive.parser(keyword.to_sym)))
