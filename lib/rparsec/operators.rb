@@ -89,7 +89,7 @@ class Operators
       for i in (1..suite.length)
         ind = suite.length - i
         cur = suite[ind]
-        if StringUtils.starts_with? cur, s
+        if cur.start_with?(s)
           suite.insert(ind + 1, s) unless cur == s
           return true
         end
