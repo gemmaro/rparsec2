@@ -19,8 +19,8 @@ class FullParserTest < ParserTestCase
   def parser
     keywords = Keywords.case_sensitive(%w{case when then else end and or not true false})
     ops = Operators.new(%w{+ - * / % ++ -- == > < >= <= != : ( )})
-    lexer = integer.token(:int)|keywords.lexer|ops.lexer
-    delim = whitespaces |comment_line('#')
+    lexer = integer.token(:int) | keywords.lexer | ops.lexer
+    delim = whitespaces | comment_line('#')
     lexeme = lexer.lexeme(delim) << eof
     expr = nil
     lazy_expr = lazy{expr}
