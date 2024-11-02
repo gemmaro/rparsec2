@@ -6,7 +6,7 @@ module RParsec
 # This class helps building lexer and parser for operators.
 # The case that one operator (++ for example) contains another operator (+)
 # is automatically handled so client code don't have to worry about ambiguity.
-# 
+#
 class Operators
   #
   # To create an instance of Operators for the given operators.
@@ -32,7 +32,7 @@ class Operators
     end
     @lexer = Parsers.sum(*lexers)
   end
-  
+
   #
   # Get the parser for the given operator.
   #
@@ -41,9 +41,9 @@ class Operators
     raise ArgumentError, "parser not found for #{op}" if result.nil?
     result
   end
-  
+
   alias [] parser
-  
+
   #
   # Get the lexer that lexes operators.
   # If an operator is specified, the lexer for that operator is returned.
@@ -52,7 +52,7 @@ class Operators
     return @lexer if op.nil?
     @lexers[op.to_sym]
   end
-  
+
   #
   # Sort an array of operators so that contained operator appears after containers.
   # When no containment exist between two operators, the shorter one takes precedence.
