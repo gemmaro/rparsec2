@@ -15,31 +15,35 @@ class Parser
   extend DefHelper
   MyMonad = ParserMonad.new
   attr_accessor :name
-  
-  private
-  
-  def initialize
-    initMonad(MyMonad, self)
-  end
-  
-  def self.init(*vars)
-    parser_checker = {}
-    vars.each_with_index do |var, i|
-      name = var.to_s
-      parser_checker[i] = var if name.include?('parser') && !name.include?('parsers')
-    end
-    define_method(:initialize) do |*params|
-      super()
+
+  class << self
+    private
+
+    def init(*vars)
+      parser_checker = {}
       vars.each_with_index do |var, i|
-        param = params[i]
-        if parser_checker.include? i
-          TypeChecker.check_arg_type Parser, param, self, i
+        name = var.to_s
+        parser_checker[i] = var if name.include?('parser') && !name.include?('parsers')
+      end
+      define_method(:initialize) do |*params|
+        super()
+        vars.each_with_index do |var, i|
+          param = params[i]
+          if parser_checker.include? i
+            TypeChecker.check_arg_type Parser, param, self, i
+          end
+          instance_variable_set("@"+var.to_s, param)
         end
-        instance_variable_set("@"+var.to_s, param)
       end
     end
   end
-  
+
+  private
+
+  def initialize
+    initMonad(MyMonad, self)
+  end
+
   def _display_current_input(input, code, index)
     return 'EOF' if input.nil?
     c = input
