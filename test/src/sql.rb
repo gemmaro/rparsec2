@@ -24,7 +24,7 @@ class Expr
       end
     end
   end
-  compare :'==', :'>', :'<', :'>=', :'<='
+  compare :'==', :>, :<, :'>=', :'<='
 end
 class LiteralExpr < Expr
   def_readable :lit
@@ -96,7 +96,6 @@ class CaseExpr < Expr
     cases_string cases, default, 'case'
   end
 end
-
 
 ############Predicate########################
 Predicate = Class.new
