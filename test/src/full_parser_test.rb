@@ -26,7 +26,7 @@ class FullParserTest < ParserTestCase
     lazy_expr = lazy {expr}
     compare = (ops['>'] >> Gt) | (ops['<'] >> Lt) | (ops['>='] >> Ge) | (ops['<='] >> Le) |
       (ops['=='] >> Eq) | (ops['!='] >> Ne)
-    comparison = sequence(lazy_expr, compare, lazy_expr) {|e1, f, e2|f.call(e1, e2)}
+    comparison = sequence(lazy_expr, compare, lazy_expr) {|e1, f, e2| f.call(e1, e2)}
     bool = nil
     lazy_bool = lazy {bool}
     bool_term = (keywords[:true] >> true) | (keywords[:false] >> false) |
