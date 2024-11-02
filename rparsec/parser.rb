@@ -369,7 +369,7 @@ class Parser
   def infixn(op)
     bind do |v1|
       bin = Parsers.sequence(op, self) do |f, v2|
-        f.call(v1,v2)
+        f.call(v1, v2)
       end
       bin | value(v1)
     end
@@ -384,7 +384,7 @@ class Parser
     Parsers.sequence(self, _infix_rest(op, self).many) do |v, rests|
       rests.each do |r|
         f, v1 = *r
-        v = f.call(v,v1)
+        v = f.call(v, v1)
       end
       v
     end
