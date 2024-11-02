@@ -33,21 +33,23 @@ class Failures
     err
     # merge_error(err, e)
   end
-  
-  private
-  
-  def self.get_first_element(err)
-    while err.kind_of?(Array)
-      err = err[0]
-    end
-    err
-  end
 
-  def self.compare_error(e1, e2)
-    e1, e2 = get_first_element(e1), get_first_element(e2)
-    return -1 if e1.index < e2.index
-    return 1 if e1.index > e2.index
-    0
+  class << self
+    private
+
+    def get_first_element(err)
+      while err.kind_of?(Array)
+        err = err[0]
+      end
+      err
+    end
+
+    def compare_error(e1, e2)
+      e1, e2 = get_first_element(e1), get_first_element(e2)
+      return -1 if e1.index < e2.index
+      return 1 if e1.index > e2.index
+      0
+    end
   end
 end
 
