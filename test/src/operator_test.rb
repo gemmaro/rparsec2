@@ -12,7 +12,7 @@ class OperatorTestCase < ParserTestCase
   end
   def testAll
     verifyToken('++ -', '++')
-    verifyParser('++ + -- ++ - +', '-', 
+    verifyParser('++ + -- ++ - +', '-',
       (Ops['++']|Ops['--']|Ops['+']).many_ >> Ops['-'])
   end
   def testSort
