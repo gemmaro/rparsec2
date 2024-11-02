@@ -13,7 +13,7 @@ class Expr
       end
     end
   end
-  binary :+,:-,:*,:/,:%
+  binary :+, :-, :*, :/, :%
   def -@
     PrefixExpr.new(:-, self)
   end
