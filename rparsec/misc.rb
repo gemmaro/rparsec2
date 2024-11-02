@@ -25,7 +25,7 @@ module DefHelper
   def def_ctor(*vars)
     define_method(:initialize) do |*params|
       vars.each_with_index do |var, i|
-        instance_variable_set("@"+var.to_s, params[i])
+        instance_variable_set("@" + var.to_s, params[i])
       end
     end
   end
@@ -49,7 +49,7 @@ module TypeChecker
 
   def nth n
     th = case n when 0 then 'st' when 1 then 'nd' else 'th' end
-    "#{n+1}#{th}"
+    "#{n + 1}#{th}"
   end
 
   public
