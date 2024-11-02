@@ -7,7 +7,7 @@ class ParserException < StandardError
   def_readable :index
 end
 class Failure
-  def initialize(ind, input, message=nil)
+  def initialize(ind, input, message = nil)
     @index, @input, @msg = ind, input, message
   end
 
