@@ -112,7 +112,6 @@ module Expressions
 
   KindPrecedence = array_to_dict Associativities
   
-  public
   
   #
   # build an expression parser using the given term parser
