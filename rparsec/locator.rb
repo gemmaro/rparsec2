@@ -12,13 +12,13 @@ class CodeLocator
   def locate(ind)
     return _locateEof if ind >= code.length
     line, col = 1, 1
-    return line, col if ind<=0
+    return line, col if ind <= 0
     for i in (0...ind)
       c = code[i]
       if c == LF
-        line, col = line+1, 1
+        line, col = line + 1, 1
       else
-        col = col+1
+        col = col + 1
       end
     end
     return line, col
@@ -28,9 +28,9 @@ class CodeLocator
     line, col = 1, 1
     code.each_byte do |c|
       if c == LF.ord
-        line, col = line+1, 1
+        line, col = line + 1, 1
       else
-        col = col+1
+        col = col + 1
       end
     end
     return line, col
