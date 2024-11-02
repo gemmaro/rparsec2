@@ -107,7 +107,7 @@ class ExpressionParserTest < ParserTestCase
       tbl.infixr(rdiv, 40)
     end
     expr = nil
-    term = int | (char(?() >> lazy {expr} << char(?)))
+    term = int | (char(?() >> lazy { expr } << char(?)))
     delim = whitespace.many_
     expr = delim >> Expressions.build(term, ops, delim)
 
