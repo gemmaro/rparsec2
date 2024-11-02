@@ -137,7 +137,7 @@ class Parser
   #
   # To create a new parser that succeed only if self fails.
   #
-  def not(msg="#{self} unexpected")
+  def not(msg = "#{self} unexpected")
     NotParser.new(self, msg)
   end
 
@@ -169,7 +169,7 @@ class Parser
   # and maximally _max_ times.
   # Only the return value of the last execution is preserved.
   #
-  def repeat_(min, max=min)
+  def repeat_(min, max = min)
     return Parsers.failure("min=#{min}, max=#{max}") if min > max
     if min == max
       return Parsers.one if max <= 0
@@ -185,7 +185,7 @@ class Parser
   # and maximally _max_ times.
   # All return values are collected in an array.
   #
-  def repeat(min, max=min)
+  def repeat(min, max = min)
     return Parsers.failure("min=#{min}, max=#{max}") if min > max
     if min == max
       RepeatParser.new(self, max)
@@ -199,7 +199,7 @@ class Parser
   # parser.many_ is equivalent to bnf notation "parser*".
   # Only the return value of the last execution is preserved.
   #
-  def many_(least=0)
+  def many_(least = 0)
     Many_Parser.new(self, least)
   end
 
@@ -207,7 +207,7 @@ class Parser
   # To create a parser that repeats self for at least _least_ times.
   # All return values are collected in an array.
   #
-  def many(least=0)
+  def many(least = 0)
     ManyParser.new(self, least)
   end
 
@@ -294,7 +294,7 @@ class Parser
   #
   # a.optional(default) is equivalent to a.plus(value(default))
   #
-  def optional(default=nil)
+  def optional(default = nil)
     self.plus(value(default))
   end
 
@@ -514,7 +514,7 @@ module Parsers
   # A parser that succeeds when the the current input is equal to the given value.
   # _expected_ is the error message when _pred_ returns false.
   #
-  def is(v, expected="#{v} expected")
+  def is(v, expected = "#{v} expected")
     satisfies(expected) { |c| c == v }
   end
 
@@ -522,7 +522,7 @@ module Parsers
   # A parser that succeeds when the the current input is not equal to the given value.
   # _expected_ is the error message when _pred_ returns false.
   #
-  def isnt(v, expected="#{v} unexpected")
+  def isnt(v, expected = "#{v} unexpected")
     satisfies(expected) { |c| c != v }
   end
 
@@ -571,7 +571,7 @@ module Parsers
   #
   # A parser that succeeds when there's no input available.
   #
-  def eof(expected="EOF expected")
+  def eof(expected = "EOF expected")
     EofParser.new(expected).setName('EOF')
   end
 
@@ -581,7 +581,7 @@ module Parsers
   # It succeeds only when all given values are matched, in which case all the
   # matched inputs are consumed.
   #
-  def are(vals, expected="#{vals} expected")
+  def are(vals, expected = "#{vals} expected")
     AreParser.new(vals, expected)
   end
 
@@ -589,7 +589,7 @@ module Parsers
   # A parser that makes sure that the given values don't match
   # the current inputs. One input is consumed if it succeeds.
   #
-  def arent(vals, expected="#{vals} unexpected")
+  def arent(vals, expected = "#{vals} unexpected")
     are(vals, '').not(expected) >> any
   end
 
@@ -604,7 +604,7 @@ module Parsers
   # A parser that makes sure that the current input doesn't match a string.
   # One character is consumed if it succeeds.
   #
-  def not_string(str, msg="\"#{str}\" unexpected")
+  def not_string(str, msg = "\"#{str}\" unexpected")
     string(str).not(msg) >> any
   end
 
@@ -684,7 +684,7 @@ module Parsers
   #
   # A parser that succeeds if the current input is within a certain range.
   #
-  def range(from, to, msg="#{as_char from}..#{as_char to} expected")
+  def range(from, to, msg = "#{as_char from}..#{as_char to} expected")
     from, to = as_num(from), as_num(to)
     satisfies(msg) { |c| c <= to && c >= from }
   end
@@ -701,7 +701,7 @@ module Parsers
   # the given regular expression.
   # The matched string is consumed and returned as result.
   #
-  def regexp(ptn, expected="/#{ptn}/ expected")
+  def regexp(ptn, expected = "/#{ptn}/ expected")
     RegexpParser.new(as_regexp(ptn), expected).setName(expected)
   end
 
@@ -710,7 +710,7 @@ module Parsers
   # (starting with alpha or underscore, followed by 0 or more alpha, number or underscore).
   # and return the matched word as string.
   #
-  def word(expected='word expected')
+  def word(expected = 'word expected')
     regexp(/[a-zA-Z_]\w*/, expected)
   end
 
@@ -718,7 +718,7 @@ module Parsers
   # A parser that parses an integer
   # and return the matched integer as string.
   #
-  def integer(expected='integer expected')
+  def integer(expected = 'integer expected')
     regexp(/\d+(?!\w)/, expected)
   end
 
@@ -726,14 +726,14 @@ module Parsers
   # A parser that parses a number (integer, or decimal number)
   # and return the matched number as string.
   #
-  def number(expected='number expected')
+  def number(expected = 'number expected')
     regexp(/\d+(\.\d+)?/, expected)
   end
 
   #
   # A parser that matches the given string, case insensitively.
   #
-  def string_nocase(str, expected="'#{str}' expected")
+  def string_nocase(str, expected = "'#{str}' expected")
     StringCaseInsensitiveParser.new(str, expected).setName(str)
   end
 
@@ -764,14 +764,14 @@ module Parsers
   #
   # A parser that parses a white space character.
   #
-  def whitespace(expected="whitespace expected")
+  def whitespace(expected = "whitespace expected")
     satisfies(expected) { |c| Whitespaces.include? c }
   end
 
   #
   # A parser that parses 1 or more white space characters.
   #
-  def whitespaces(expected="whitespace(s) expected")
+  def whitespaces(expected = "whitespace(s) expected")
     whitespace(expected).many_(1)
   end
 
