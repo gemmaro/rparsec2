@@ -171,7 +171,7 @@ class Parser
   # 
   def repeat_(min, max=min)
     return Parsers.failure("min=#{min}, max=#{max}") if min > max
-    if(min==max)
+    if min==max
       return Parsers.one if max <= 0
       return self if max == 1
       Repeat_Parser.new(self, max)
@@ -187,7 +187,7 @@ class Parser
   # 
   def repeat(min, max=min)
     return Parsers.failure("min=#{min}, max=#{max}") if min > max
-    if(min==max)
+    if min==max
       RepeatParser.new(self, max)
     else
       SomeParser.new(self, min, max)
