@@ -11,4 +11,5 @@ spec = Gem::Specification.new do |s|
   s.has_rdoc = true
   s.require_paths=['.']
   s.autorequire='rparsec'
+  s.metadata['rubygems_mfa_required'] = 'true'
 end
