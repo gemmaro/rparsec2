@@ -69,35 +69,37 @@ class Operators
     # suites are populated with bigger suite first
     to_array suites
   end
-  
-  private
-  
-  def self.populate_suites(suites, s)
-    # populate the suites so that bigger suite first
-    # this way we can use << operator for non-contained strings.
-    
-    # we need to start from bigger suite. So loop in reverse order
-    for suite in suites
-      return if populate_suite(suite, s)
-    end
-    suites << [s]
-  end
-  
-  def self.populate_suite(suite, s)
-    # loop from the tail of the suite
-    for i in (1..suite.length)
-      ind = suite.length - i
-      cur = suite[ind]
-      if StringUtils.starts_with? cur, s
-        suite.insert(ind+1, s) unless cur == s
-        return true
+
+  class << self
+    private
+
+    def populate_suites(suites, s)
+      # populate the suites so that bigger suite first
+      # this way we can use << operator for non-contained strings.
+
+      # we need to start from bigger suite. So loop in reverse order
+      for suite in suites
+        return if populate_suite(suite, s)
       end
+      suites << [s]
     end
-    false
-  end
-  
-  def self.to_array suites
-    suites.reverse!.flatten!
+
+    def populate_suite(suite, s)
+      # loop from the tail of the suite
+      for i in (1..suite.length)
+        ind = suite.length - i
+        cur = suite[ind]
+        if StringUtils.starts_with? cur, s
+          suite.insert(ind+1, s) unless cur == s
+          return true
+        end
+      end
+      false
+    end
+
+    def to_array suites
+      suites.reverse!.flatten!
+    end
   end
 end
 
