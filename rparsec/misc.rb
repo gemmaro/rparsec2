@@ -119,11 +119,11 @@ module Signature
       TypeChecker.check_vararg_type star_type, params, sym, star_ind unless star_ind.nil?
       mtd.bind(self)
     end
-    module_eval """
+    module_eval "
     def #{sym}(*params, &block)
       #{helper}(*params).call(*params, &block)
     end
-    """
+    "
   end
 end
 
