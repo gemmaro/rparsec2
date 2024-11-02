@@ -1,8 +1,8 @@
 module RParsec
-  
+
 #
 # This module provides frequently used functors.
-# 
+#
 module Functors
   Id = proc {|x|x}
   Idn = proc {|*x|x}
@@ -40,17 +40,17 @@ module Functors
   To_i = proc {|x|x.to_i}
   To_sym = proc {|x|x.to_sym}
   To_f = proc {|x|x.to_f}
-  
+
   #
   # Get a Proc, when called, always return the given value.
-  # 
+  #
   def const(v)
     proc {|_|v}
   end
-  
+
   #
   # Get a Proc, when called, return the nth parameter.
-  # 
+  #
   def nth(n)
     proc {|*args|args[n]}
   end
@@ -58,20 +58,20 @@ module Functors
   #
   # Create a Proc, which expects the two parameters
   # in the reverse order of _block_.
-  # 
+  #
   def flip(&block)
     proc {|x, y|block.call(y, x)}
   end
-  
+
   #
   # Create a Proc, when called, the parameter is
   # first passed into _f2_, _f1_ is called in turn
   # with the return value from _other_.
-  # 
+  #
   def compose(f1, f2)
     proc {|*x|f1.call(f2.call(*x))}
   end
-  
+
   #
   # Create a Proc that's curriable.
   # When curried, parameters are passed in from left to right.
@@ -79,12 +79,12 @@ module Functors
   # _block_ is encapsulated under the hood to perform the actual
   # job when currying is done.
   # arity explicitly specifies the number of parameters to curry.
-  # 
+  #
   def curry(arity, &block)
     fail "cannot curry for unknown arity" if arity < 0
     Functors.make_curry(arity, &block)
   end
-  
+
   #
   # Create a Proc that's curriable.
   # When curried, parameters are passed in from right to left.
@@ -92,12 +92,12 @@ module Functors
   # _block_ is encapsulated under the hood to perform the actual
   # job when currying is done.
   # arity explicitly specifies the number of parameters to curry.
-  # 
+  #
   def reverse_curry(arity, &block)
     fail "cannot curry for unknown arity" if arity < 0
     Functors.make_reverse_curry(arity, &block)
   end
-  
+
   #
   # Uncurry a curried closure.
   #
@@ -111,10 +111,10 @@ module Functors
       result
     end
   end
-  
+
   #
   # Uncurry a reverse curried closure.
-  # 
+  #
   def reverse_uncurry(&block)
     return block unless block.arity == 1
     proc do |*args|
@@ -125,12 +125,12 @@ module Functors
       result
     end
   end
-  
+
   #
   # Create a Proc, when called,
   # repeatedly call _block_ for _n_ times.
   # The same arguments are passed to each invocation.
-  # 
+  #
   def repeat(n, &block)
     proc do |*args|
       result = nil
@@ -138,13 +138,13 @@ module Functors
       result
     end
   end
-  
+
   #
   # Create a Proc, when called,
   # repeatedly call _block_ for _n_ times.
   # At each iteration, return value from the previous iteration
   # is used as parameter.
-  # 
+  #
   def power(n, &block)
     return const(nil) if n<=0
     return block if n==1
@@ -154,9 +154,9 @@ module Functors
       result
     end
   end
-  
+
   extend self
-  
+
   def self.make_curry(arity, &block)
     return block if arity<=1
     proc do |x|
@@ -177,37 +177,37 @@ module Functors
 end
 
 #
-# This module provides instance methods that 
+# This module provides instance methods that
 # manipulate closures in a functional style.
 # It is typically included in Proc and Method.
-# 
+#
 module FunctorMixin
   #
   # Create a Proc, which expects the two parameters
   # in the reverse order of _self_.
-  # 
+  #
   def flip
     Functors.flip(&self)
   end
-  
+
   #
   # Create a Proc, when called, the parameter is
   # first passed into _other_, _self_ is called in turn
   # with the return value from _other_.
-  # 
+  #
   def compose(other)
     Functors.compose(self, other)
   end
-  
+
   alias << compose
-  
+
   #
   # a >> b is equivalent to b << a
-  # 
+  #
   def >>(other)
     other << self
   end
-  
+
   #
   # Create a Proc that's curriable.
   # When curried, parameters are passed in from left to right.
@@ -215,7 +215,7 @@ module FunctorMixin
   # _self_ is encapsulated under the hood to perform the actual
   # job when currying is done.
   # _ary_ explicitly specifies the number of parameters to curry.
-  # 
+  #
   # *IMPORTANT*
   # Proc and Method have built-in curry.
   # but the arity always return -1.
@@ -237,30 +237,30 @@ module FunctorMixin
   # _self_ is encapsulated under the hood to perform the actual
   # job when currying is done.
   # _ary_ explicitly specifies the number of parameters to curry.
-  # 
+  #
   def reverse_curry(ary=arity)
     Functors.reverse_curry(ary, &self)
   end
-  
+
   #
   # Uncurry a curried closure.
   #
   def uncurry
     Functors.uncurry(&self)
   end
-  
+
   #
   # Uncurry a reverse curried closure.
-  # 
+  #
   def reverse_uncurry
     Functors.reverse_uncurry(&self)
   end
-  
+
   #
   # Create a Proc, when called,
   # repeatedly call _self_ for _n_ times.
   # The same arguments are passed to each invocation.
-  # 
+  #
   def repeat(n)
     Functors.repeat(n, &self)
   end
@@ -270,11 +270,11 @@ module FunctorMixin
   # repeatedly call _self_ for _n_ times.
   # At each iteration, return value from the previous iteration
   # is used as parameter.
-  # 
+  #
   def power(n)
     Functors.power(n, &self)
   end
-  
+
   alias ** power
   alias * repeat
 end
