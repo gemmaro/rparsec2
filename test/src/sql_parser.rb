@@ -143,7 +143,7 @@ module SqlParser
   def calculate_full_cases(cases, default)
     CaseExpr.new(cases, default)
   end
-  def make_expression predicate, rel
+  def make_expression predicate, _rel
     expr = nil
     lazy_expr = lazy{expr}
     simple_case = sequence(keyword[:when], lazy_expr, keyword[:then], lazy_expr) do |_,cond,_,val|
