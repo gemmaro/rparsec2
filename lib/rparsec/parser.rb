@@ -1,7 +1,6 @@
 %w{
 monad misc error context locator token functors parser_monad
 }.each { |lib| require "rparsec/#{lib}" }
-require_relative 'strscan_char'
 
 module RParsec
 
