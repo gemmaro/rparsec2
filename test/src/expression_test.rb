@@ -110,7 +110,7 @@ class ExpressionParserTest < ParserTestCase
     term = int | (char(?() >> lazy{expr} << char(?)))
     delim = whitespace.many_
     expr = delim >> Expressions.build(term, ops, delim)
-    
+
     assertParser('1', 1, expr)
     assertParser('1+2', 3, expr)
     assertParser('(1-2)', -1, expr)
