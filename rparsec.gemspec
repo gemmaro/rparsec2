@@ -8,7 +8,6 @@ spec = Gem::Specification.new do |s|
   s.email = 'ajoo.email@gmail.com'
   s.license = "BSD-3-Clause"
   s.files = FileList['rparsec/*.rb', 'rparsec.rb']
-  s.has_rdoc = true
   s.require_paths = ['.']
   s.metadata['rubygems_mfa_required'] = 'true'
   s.required_ruby_version = ">=3.1"
