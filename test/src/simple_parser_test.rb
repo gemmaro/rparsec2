@@ -31,16 +31,16 @@ class SimpleParserTest < ParserTestCase
     assertError('', 'wrong', failure('wrong') >> failure('wrong too'))
   end
   def testMap
-    assertParser('', 2, value(1).map {|x| x * 2})
-    relative = Proc.new {|x| x.ord - ?a.ord}
+    assertParser('', 2, value(1).map { |x| x * 2 })
+    relative = Proc.new { |x| x.ord - ?a.ord }
     assertParser('b', 1, char('b').map(&relative))
   end
   def testMapOnFailFails
-    assertError('', 'wrong', failure('wrong').map {|x| x * 2})
+    assertError('', 'wrong', failure('wrong').map { |x| x * 2 })
   end
   def testBinds
     assertParser('', 3, value(1).bind do |a|
-      value(2).bind {|b| value(a + b)}
+      value(2).bind { |b| value(a + b) }
     end)
     assertParser('', 2, value(1).repeat(2).bindn do |a, b|
       value(a + b)
@@ -53,8 +53,8 @@ class SimpleParserTest < ParserTestCase
     assertError('', 'wrong too', (failure('wrong') | value(1)) >> failure('wrong too'))
   end
   def testSatisfies
-    assertParser('abc', ?a, Parsers.satisfies('a expected') {|c| c == (?a)})
-    assertError('abc', 'b expected', Parsers.satisfies('b expected') {|c| c == (?b)})
+    assertParser('abc', ?a, Parsers.satisfies('a expected') { |c| c == (?a) })
+    assertError('abc', 'b expected', Parsers.satisfies('b expected') { |c| c == (?b) })
   end
   def testIs
     assertParser('abc', ?a, is(?a))
@@ -75,12 +75,12 @@ class SimpleParserTest < ParserTestCase
   def testSequence
     assertParser('abc', ?c, sequence(char(?a), char('b'), char('c')))
     a = ?a
-    relative = proc {|c| c.ord - a.ord}
+    relative = proc { |c| c.ord - a.ord }
     parser = sequence(
       char('c').map(&relative),
       char('b').map(&relative),
       char('a').map(&relative)
-    ) {|x, y, z| x + y + z}
+    ) { |x, y, z| x + y + z }
     assertParser('cba', 3, parser)
   end
   def testPlusAutomaticallyRecoverInputConsumption
@@ -295,7 +295,7 @@ class SimpleParserTest < ParserTestCase
     assertError('abc', "'b' expected", any >> (char('b') * 2).fragment, 2)
   end
   def testToken
-    assertGrammar('abc', 'abcabc', word.token(:word).many, token(:word) {|x| x + x})
+    assertGrammar('abc', 'abcabc', word.token(:word).many, token(:word) { |x| x + x })
     assertGrammar('abc defg', 1, word.token(:word).delimited(char(' ')), token(:word) >> token(:word) >> value(1))
     assertGrammarError('abc defg', 'integer expected', 'defg', word.token(:word).delimited(char(' ')),
       token(:word) >> token(:integer), 4)
@@ -333,7 +333,7 @@ class SimpleParserTest < ParserTestCase
   end
   def testLazy
     expr = nil
-    lazy_expr = lazy {expr}
+    lazy_expr = lazy { expr }
     expr = integer.map(&To_i) | (char('(') >> lazy_expr << char(')'))
     assertParser('123', 123, expr)
     assertParser('((123))', 123, expr)
@@ -373,14 +373,14 @@ class SimpleParserTest < ParserTestCase
     assertParser('abc', [?a, ?a, ?a], parser.repeat(3))
   end
   def testMapn
-    assertParser('abc', ?b.ord, any.repeat(3).mapn {|a, b, c| c.ord - b.ord + a.ord})
+    assertParser('abc', ?b.ord, any.repeat(3).mapn { |a, b, c| c.ord - b.ord + a.ord })
   end
   def testWatch
     i = nil
-    assertParser('abc', ?b, any.repeat_(2) >> watch {i = 1});
+    assertParser('abc', ?b, any.repeat_(2) >> watch { i = 1 });
     assert_equal(1, i)
     assertParser('abc', ?b, any.repeat_(2) >>
-      watch {|x| assert_equal(?b, x)}
+      watch { |x| assert_equal(?b, x) }
     )
     assertParser('abc', [?a, ?b], any.repeat(2) >>
       watchn do |x, y|
@@ -391,13 +391,13 @@ class SimpleParserTest < ParserTestCase
     assertParser('abc', ?b, any.repeat_(2) >> watch);
   end
   def testMapCurrent
-    assertParser('abc', ?b.ord, any >> map {|x| x.ord + 1})
+    assertParser('abc', ?b.ord, any >> map { |x| x.ord + 1 })
     assertParser('abc', ?a, any >> map)
     assertParser('abc', ?a, any.map)
     assertParser('abc', ?a, any.mapn)
   end
   def testMapnCurrent
-    assertParser('abc', ?a, any.repeat(2) >> mapn {|a, _| a})
+    assertParser('abc', ?a, any.repeat(2) >> mapn { |a, _| a })
     assertParser('abc', ?c, any.repeat_(2) >> mapn(&Succ))
     assertParser('abc', [?a, ?b], any.repeat(2) >> mapn)
   end
