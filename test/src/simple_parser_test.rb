@@ -42,7 +42,7 @@ class SimpleParserTest < ParserTestCase
     assertParser('', 3, value(1).bind do |a|
       value(2).bind{|b|value(a+b)}
     end)
-    assertParser('', 2, value(1).repeat(2).bindn do |a,b|
+    assertParser('', 2, value(1).repeat(2).bindn do |a, b|
       value(a+b)
     end)
   end
@@ -73,14 +73,14 @@ class SimpleParserTest < ParserTestCase
     assertError('abc', '"ab" expected', char('a') >> str('ab'), 1)
   end
   def testSequence
-    assertParser('abc', ?c, sequence(char(?a),char('b'),char('c')))
+    assertParser('abc', ?c, sequence(char(?a), char('b'), char('c')))
     a = ?a
     relative = proc {|c| c.ord - a.ord}
     parser = sequence(
       char('c').map(&relative), 
       char('b').map(&relative), 
       char('a').map(&relative)
-    ){|x,y,z| x+y+z}
+    ){|x, y, z| x+y+z}
     assertParser('cba', 3, parser)
   end
   def testPlusAutomaticallyRecoverInputConsumption
@@ -93,7 +93,7 @@ class SimpleParserTest < ParserTestCase
   end
   def testLocator
     line, col = CodeLocator.new("abc").locate(2)
-    assert_equal([1,3],[line,col])
+    assert_equal([1, 3], [line, col])
   end
   def testInputConsumptionBiggerThanLookaheadShouldFail
     assertError('abc', "'d' expected", sum(str('ab')>>char('d'), str('abc')).lookahead(2), 2)
@@ -136,11 +136,11 @@ class SimpleParserTest < ParserTestCase
   def testAmong
     assertParser('abc', ?a, among(?b, ?a))
     assertParser('abc', ?a, among('ba'))
-    assertError('abc', "one of [b, c] expected", among(?b,?c))
+    assertError('abc', "one of [b, c] expected", among(?b, ?c))
   end
   def testNotAmong
     assertError('abc', "one of [b, a] unexpected", not_among(?b, ?a))
-    assertParser('abc', ?a, not_among(?b,?c))
+    assertParser('abc', ?a, not_among(?b, ?c))
   end
   def testGetIndex
     assertParser('abc', 1, char('a') >> get_index)
@@ -193,9 +193,9 @@ class SimpleParserTest < ParserTestCase
     assertError('abc', "'b' expected", value(1).many_ >> char(?b))
   end
   def testNonDeterministicRepeat_
-    assertParser('abc', ?c, any.repeat_(3,4))
+    assertParser('abc', ?c, any.repeat_(3, 4))
     assertParser('abc', ?b, any.some_(2))
-    assertError('abc', "min=4, max=3", range(?a, ?b).repeat_(4,3))
+    assertError('abc', "min=4, max=3", range(?a, ?b).repeat_(4, 3))
     assertParser('abc', ?b, range(?a, ?b).some_(10))
     # should we break for infinite loop? they are not really infinite for some.
     assertError('abc', "'b' expected", value(1).some_(2) >> char(?b))
@@ -224,17 +224,17 @@ class SimpleParserTest < ParserTestCase
   def testSome
     assertParser('abc', [?a, ?b, ?c], any.some(3))
     assertParser('abc', [?a, ?b], any.some(2))
-    assertError('abc', "a..b expected", range(?a,?b).repeat(3,4), 2)
+    assertError('abc', "a..b expected", range(?a, ?b).repeat(3, 4), 2)
     assertParser('abc', ?c, any.some(2) >> any)
   end
   def testSeparated1
-    assertParser('a,b,c', [?a,?b,?c], any.separated1(char(',')))
+    assertParser('a,b,c', [?a, ?b, ?c], any.separated1(char(',')))
     assertParser('abc', [?a], any.separated1(char(',')))
     assertError('a,', "'a' expected", char('a').separated1(char(',')), 2)
     assertError('', '', any.separated1(char(',')))
   end
   def testSeparated
-    assertParser('a,b,c', [?a,?b,?c], any.separated(char(',')))
+    assertParser('a,b,c', [?a, ?b, ?c], any.separated(char(',')))
     assertParser('abc', [?a], any.separated(char(',')))
     assertError('a,', "'a' expected", char('a').separated(char(',')), 2)
     assertParser('', [], any.separated(char(',')))
@@ -253,16 +253,16 @@ class SimpleParserTest < ParserTestCase
     assertParser('abc', ?a, char(?a).catchp(:hello))
   end
   def testDelimited1
-    assertParser('a,b,c', [?a,?b,?c], any.delimited1(char(',')))
+    assertParser('a,b,c', [?a, ?b, ?c], any.delimited1(char(',')))
     assertParser('abc', [?a], any.delimited1(char(',')))
     assertParser('a,', [?a], char('a').delimited1(char(',')))
     assertError('', '', any.delimited1(char(',')))
     assertParser('a,b', ?b, char(?a).delimited1(char(',')) >> char(?b))
   end
   def testDelimited
-    assertParser('a,b,c', [?a,?b,?c], any.delimited(char(',')))
+    assertParser('a,b,c', [?a, ?b, ?c], any.delimited(char(',')))
     assertParser('abc', [?a], any.delimited(char(',')))
-    assertParser('a,b,', [?a,?b], range('a', 'b').delimited(char(',')))
+    assertParser('a,b,', [?a, ?b], range('a', 'b').delimited(char(',')))
     assertParser('', [], any.delimited(char(',')))
     assertParser('a,b', ?b, char(?a).delimited(char(',')) >> char(?b))
   end
@@ -371,10 +371,10 @@ class SimpleParserTest < ParserTestCase
     parser = get_index.bind do |ind|
       char('a') << set_index(ind)
     end
-    assertParser('abc', [?a,?a,?a], parser.repeat(3))
+    assertParser('abc', [?a, ?a, ?a], parser.repeat(3))
   end
   def testMapn
-    assertParser('abc', ?b.ord, any.repeat(3).mapn{|a,b,c|c.ord - b.ord + a.ord})
+    assertParser('abc', ?b.ord, any.repeat(3).mapn{|a, b, c|c.ord - b.ord + a.ord})
   end
   def testWatch
     i = nil
@@ -383,8 +383,8 @@ class SimpleParserTest < ParserTestCase
     assertParser('abc', ?b, any.repeat_(2) >> 
       watch{|x|assert_equal(?b, x)}
     )
-    assertParser('abc', [?a,?b], any.repeat(2) >> 
-      watchn do |x,y|
+    assertParser('abc', [?a, ?b], any.repeat(2) >> 
+      watchn do |x, y|
         assert_equal(?a, x)
         assert_equal(?b, y)
       end
@@ -398,9 +398,9 @@ class SimpleParserTest < ParserTestCase
     assertParser('abc', ?a, any.mapn)
   end
   def testMapnCurrent
-    assertParser('abc', ?a, any.repeat(2) >> mapn{|a,_|a})
+    assertParser('abc', ?a, any.repeat(2) >> mapn{|a, _|a})
     assertParser('abc', ?c, any.repeat_(2) >> mapn(&Succ))
-    assertParser('abc', [?a,?b], any.repeat(2) >> mapn)
+    assertParser('abc', [?a, ?b], any.repeat(2) >> mapn)
   end
   def verifyTypeMismatch(mtd, n, expected, actual)
     begin
