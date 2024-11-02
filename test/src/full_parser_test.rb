@@ -35,7 +35,7 @@ class FullParserTest < ParserTestCase
       infixl(keywords[:or] >> Or, 20).
       infixl(keywords[:and] >> And, 30).
       infixl(keywords[:not] >> Not, 30)
-    
+
     bool = Expressions.build(bool_term, bool_table)
     simple_case = sequence(keywords[:when], lazy_expr, keywords[:then], lazy_expr) do |_w, cond, _t, val|
       [cond, val]
@@ -44,7 +44,7 @@ class FullParserTest < ParserTestCase
       [cond, val]
     end
     default_case = (keywords[:else] >> lazy_expr).optional
-    simple_when_then = sequence(lazy_expr, simple_case.many, default_case, 
+    simple_when_then = sequence(lazy_expr, simple_case.many, default_case,
       keywords[:end]) do |val, cases, default|
       calculate_simple_cases(val, cases, default)
     end
@@ -52,7 +52,7 @@ class FullParserTest < ParserTestCase
       calculate_full_cases(cases, default)
     end
     case_expr = keywords[:case] >> (simple_when_then | full_when_then)
-    
+
     term = token(:int, &To_i) | (ops['('] >> lazy_expr << ops[')']) | case_expr
     table = OperatorTable.new.
       infixl(ops['+'] >> Plus, 20).
