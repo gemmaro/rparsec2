@@ -705,7 +705,7 @@ module Parsers
   # the given regular expression.
   # The matched string is consumed and returned as result.
   #
-  def regexp(ptn, expected="/#{ptn.to_s}/ expected")
+  def regexp(ptn, expected="/#{ptn}/ expected")
     RegexpParser.new(as_regexp(ptn), expected).setName(expected)
   end
   
