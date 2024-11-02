@@ -65,7 +65,7 @@ class FullParserTest < ParserTestCase
     expr = Expressions.build(term, table)
     lexeme.nested(expr << eof)
   end
-  def verify(code, expected=eval(code))
+  def verify(code, expected = eval(code))
     assertParser(code, expected, self.parser)
   end
   def testNumber
