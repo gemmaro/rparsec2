@@ -225,7 +225,7 @@ class BestParser < Parser
       ctxt.index, ctxt.result = ind, result
       if p._parse(ctxt)
         err, now_ind = nil, ctxt.index
-        if best_ind==-1 || now_ind != best_ind && @longer == (now_ind>best_ind)
+        if best_ind==-1 || (now_ind != best_ind && @longer == (now_ind>best_ind))
           best_result, best_ind = ctxt.result, now_ind
         end
       elsif best_ind < 0 # no good match found yet.
