@@ -60,7 +60,7 @@ class Operators
   def self.sort(ops)
     #sort the array by longer-string-first.
     i = 0
-    ordered = ops.sort_by {|x| [x.length, i += 1] }.reverse
+    ordered = ops.sort_by { |x| [x.length, i += 1] }.reverse
     suites = []
     # loop from the longer to shorter string
     ordered.each do |s|
