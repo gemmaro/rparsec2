@@ -37,7 +37,7 @@ module Monad
     if @monad.respond_to? :seq
       @monad.seq(other)
     else
-      bind {|x|other}
+      bind {|_x|other}
     end
   end
   
