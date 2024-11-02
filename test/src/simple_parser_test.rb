@@ -77,8 +77,8 @@ class SimpleParserTest < ParserTestCase
     a = ?a
     relative = proc {|c| c.ord - a.ord}
     parser = sequence(
-      char('c').map(&relative), 
-      char('b').map(&relative), 
+      char('c').map(&relative),
+      char('b').map(&relative),
       char('a').map(&relative)
     ){|x, y, z| x+y+z}
     assertParser('cba', 3, parser)
@@ -98,7 +98,7 @@ class SimpleParserTest < ParserTestCase
   def testInputConsumptionBiggerThanLookaheadShouldFail
     assertError('abc', "'d' expected", sum(str('ab')>>char('d'), str('abc')).lookahead(2), 2)
   end
-  
+
   def testInputConsumptionDoesNotFailForAlt
     assertParser('abc', 'abc', alt(str('ab')>>char('d'), str('abc')))
   end
@@ -161,11 +161,11 @@ class SimpleParserTest < ParserTestCase
     assertParser('abc', ?b, shorter(char('a')>>char('b')>>char('c'), char(?a) >> char(?c), char('a')>>char('b')))
   end
   def testLongerReportsDeepestError
-    assertError('abc', "'d' expected", 
+    assertError('abc', "'d' expected",
       longer(char('a')>>char('b')>>char('d'), char('a')>>char('c')), 2)
   end
   def testShorterReportsDeepestError
-    assertError('abc', "'d' expected", 
+    assertError('abc', "'d' expected",
       shorter(char('a')>>char('b')>>char('d'), char('a')>>char('c')), 2)
   end
   def testFollowed
@@ -297,7 +297,7 @@ class SimpleParserTest < ParserTestCase
   def testToken
     assertGrammar('abc', 'abcabc', word.token(:word).many, token(:word){|x|x+x})
     assertGrammar('abc defg', 1, word.token(:word).delimited(char(' ')), token(:word) >> token(:word) >> value(1))
-    assertGrammarError('abc defg', 'integer expected', 'defg', word.token(:word).delimited(char(' ')), 
+    assertGrammarError('abc defg', 'integer expected', 'defg', word.token(:word).delimited(char(' ')),
       token(:word) >> token(:integer), 4)
   end
   def testGetIndexFromGrammar
@@ -325,7 +325,6 @@ class SimpleParserTest < ParserTestCase
     assertParser('//', nil, comment_line('//'))
     code = '123'
     assertParser(code, ["123"], integer.lexeme(delim) >> eof)
-    
   end
   def testBlockComment
     cmt =comment_block('/*', '*/')
@@ -380,10 +379,10 @@ class SimpleParserTest < ParserTestCase
     i = nil
     assertParser('abc', ?b, any.repeat_(2) >> watch{i=1});
     assert_equal(1, i)
-    assertParser('abc', ?b, any.repeat_(2) >> 
+    assertParser('abc', ?b, any.repeat_(2) >>
       watch{|x|assert_equal(?b, x)}
     )
-    assertParser('abc', [?a, ?b], any.repeat(2) >> 
+    assertParser('abc', [?a, ?b], any.repeat(2) >>
       watchn do |x, y|
         assert_equal(?a, x)
         assert_equal(?b, y)
