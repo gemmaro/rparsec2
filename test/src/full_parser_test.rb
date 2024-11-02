@@ -37,10 +37,10 @@ class FullParserTest < ParserTestCase
       infixl(keywords[:not] >> Not, 30)
     
     bool = Expressions.build(bool_term, bool_table)
-    simple_case = sequence(keywords[:when], lazy_expr, keywords[:then], lazy_expr) do |w,cond,t,val|
+    simple_case = sequence(keywords[:when], lazy_expr, keywords[:then], lazy_expr) do |_w,cond,_t,val|
       [cond, val]
     end
-    full_case = sequence(keywords[:when], bool, keywords[:then], lazy_expr) do |w,cond,t,val|
+    full_case = sequence(keywords[:when], bool, keywords[:then], lazy_expr) do |_w,cond,_t,val|
       [cond, val]
     end
     default_case = (keywords[:else] >> lazy_expr).optional
