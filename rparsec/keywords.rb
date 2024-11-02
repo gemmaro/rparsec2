@@ -92,7 +92,7 @@ class Keywords
   
   def make_lexer(default_lexer, word_map)
     default_lexer.map do |tok|
-      text,ind = tok.text, tok.index
+      text, ind = tok.text, tok.index
       key = canonical_name(text)
       my_symbol = word_map[key]
       case when my_symbol.nil? then tok
