@@ -8,7 +8,6 @@ spec = Gem::Specification.new do |s|
   s.email = 'ajoo.email@gmail.com'
   s.license = "BSD-3-Clause"
   s.files = FileList['rparsec/*.rb','rparsec.rb']
-  s.test_files = FileList['test/src/*.rb']
   s.has_rdoc = true
   s.require_paths=['.']
   s.autorequire='rparsec'
