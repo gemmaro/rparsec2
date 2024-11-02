@@ -48,7 +48,7 @@ class FunctorTestCase < Test::Unit::TestCase
   end
   def testRepeat
     cnt = 0
-    inc = proc {cnt += 1}
+    inc = proc { cnt += 1 }
     n = 10
     verify(n, (inc * n))
     assert_equal(10, cnt)
