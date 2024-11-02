@@ -54,14 +54,14 @@ module TypeChecker
 
   public
 
-  def check_arg_type expected, obj, mtd, n=0
+  def check_arg_type expected, obj, mtd, n = 0
     unless obj.kind_of? expected
       raise ArgumentError,
         "#{obj.class} assigned to #{expected} for the #{nth n} argument of #{mtd}."
     end
   end
 
-  def check_arg_array_type elem_type, arg, mtd, n=0
+  def check_arg_array_type elem_type, arg, mtd, n = 0
     check_arg_type Array, arg, mtd, n
     arg.each_with_index do |x, i|
       unless x.kind_of? elem_type
