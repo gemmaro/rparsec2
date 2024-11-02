@@ -10,7 +10,7 @@ class ParserTestCase < Test::Unit::TestCase
   def assertParser(code, expected, parser)
     assert_equal(expected, parser.parse(code))
   end
-  def assertError(code, expected, parser, index=0, line=1, col=1+index)
+  def assertError(code, expected, parser, index=0, line=1, col=1 + index)
     begin
       parser.parse(code)
       assert_fail("error should have happened")
@@ -24,7 +24,7 @@ class ParserTestCase < Test::Unit::TestCase
   def assertGrammar(code, expected, lexer, grammar)
     assertParser(code, expected, lexer.nested(grammar))
   end
-  def assertGrammarError(code, expected, token_name, lexer, grammar, index=0, line=1, col=1+index)
+  def assertGrammarError(code, expected, token_name, lexer, grammar, index=0, line=1, col=1 + index)
     parser = lexer.nested(grammar)
     begin
       parser.parse(code)
