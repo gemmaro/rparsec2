@@ -11,8 +11,8 @@ class CodeLocator
   
   def locate(ind)
     return _locateEof if ind >= code.length
-    line, col = 1,1
-    return line,col if ind<=0
+    line, col = 1, 1
+    return line, col if ind<=0
     for i in (0...ind)
       c = code[i]
       if c == LF
