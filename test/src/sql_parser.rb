@@ -71,14 +71,14 @@ module SqlParser
   end
   ################################### predicate parser #############################
   def logical_operator op
-    proc{|a, b|CompoundPredicate.new(a, op, b)}
+    proc {|a, b|CompoundPredicate.new(a, op, b)}
   end
   def make_predicate expr, rel
     expr_list = list expr
     comparison = make_comparison_predicate expr, rel
     group_comparison = sequence(expr_list, Comparators, expr_list, &ctor(GroupComparisonPredicate))
     bool = nil
-    lazy_bool = lazy{bool}
+    lazy_bool = lazy {bool}
     bool_term = (keyword[:true] >> true) | (keyword[:false] >> false) |
       comparison | group_comparison | paren(lazy_bool) |
       make_exists(rel) | make_not_exists(rel)
@@ -114,7 +114,7 @@ module SqlParser
   end
   def make_comparison_predicate expr, rel
     comparison = sequence(Comparators, expr) do |op, e2|
-      proc{|e1|ComparePredicate.new(e1, op, e2)}
+      proc {|e1|ComparePredicate.new(e1, op, e2)}
     end
     in_clause = make_in expr
     not_in_clause = make_not_in expr
@@ -144,7 +144,7 @@ module SqlParser
   end
   def make_expression predicate, _rel
     expr = nil
-    lazy_expr = lazy{expr}
+    lazy_expr = lazy {expr}
     simple_case = sequence(keyword[:when], lazy_expr, keyword[:then], lazy_expr) do |_, cond, _, val|
       [cond, val]
     end
@@ -180,12 +180,12 @@ module SqlParser
   def make_relation expr, pred
     exprs = expr.delimited1(comma)
     relation = nil
-    lazy_relation = lazy{relation}
+    lazy_relation = lazy {relation}
     term_relation = word {|w|TableRelation.new w} | (operator['('] >> lazy_relation << operator[')'])
     sub_relation = sequence(term_relation, (keyword[:as].optional >> word).optional) do |rel, name|
       case when name.nil? then rel else AliasRelation.new(rel, name) end
     end
-    joined_relation = sub_relation.postfix(join_maker(lazy{joined_relation}, pred))
+    joined_relation = sub_relation.postfix(join_maker(lazy {joined_relation}, pred))
     where_clause = keyword[:where] >> pred
     order_element = sequence(expr, ((keyword[:asc] >> true) | (keyword[:desc] >> false)).optional(true),
       &ctor(OrderElement))
@@ -219,7 +219,7 @@ module SqlParser
     innerjoin = keyword[:inner].optional >> keyword[:join] >> :inner
     join_with_condition = sequence(sum(leftjoin, rightjoin, innerjoin), rel,
       keyword[:on], pred) do |kind, r, _, on|
-        proc{|r0|JoinRelation.new(kind, r0, r, on)}
+        proc {|r0|JoinRelation.new(kind, r0, r, on)}
       end
     sum(crossjoin, join_with_condition)
   end
@@ -242,8 +242,8 @@ module SqlParser
   def assemble
     pred = nil
     rel = nil
-    lazy_predicate = lazy{pred}
-    lazy_rel = lazy{rel}
+    lazy_predicate = lazy {pred}
+    lazy_rel = lazy {rel}
     expr = make_expression lazy_predicate, lazy_rel
     pred = make_predicate expr, lazy_rel
     rel = make_relation expr, pred
