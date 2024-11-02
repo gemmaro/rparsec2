@@ -4,7 +4,7 @@ class ParseContext
   attr_reader :error, :src, :index, :result
   attr_writer :error, :index, :result
 
-  def initialize(src, index=0, error=nil)
+  def initialize(src, index = 0, error = nil)
     @src, @index, @error = src, index, error
     @scanner = nil
   end
@@ -65,12 +65,12 @@ class ParseContext
     true
   end
 
-  def failure(msg=nil)
+  def failure(msg = nil)
     @error = Failure.new(@index, get_current_input, msg)
     return false
   end
 
-  def expecting(expected=nil)
+  def expecting(expected = nil)
     @error = Expected.new(@index, get_current_input, expected)
     return false
   end
