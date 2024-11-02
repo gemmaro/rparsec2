@@ -24,13 +24,13 @@ class FullParserTest < ParserTestCase
     lexeme = lexer.lexeme(delim) << eof
     expr = nil
     lazy_expr = lazy{expr}
-    compare = ops['>'] >> Gt | ops['<'] >> Lt | ops['>='] >> Ge | ops['<='] >> Le |
-      ops['=='] >> Eq | ops['!='] >> Ne
+    compare = (ops['>'] >> Gt) | (ops['<'] >> Lt) | (ops['>='] >> Ge) | (ops['<='] >> Le) |
+      (ops['=='] >> Eq) | (ops['!='] >> Ne)
     comparison = sequence(lazy_expr, compare, lazy_expr) {|e1,f,e2|f.call(e1,e2)}
     bool = nil
     lazy_bool = lazy{bool}
-    bool_term = keywords[:true] >> true | keywords[:false] >> false |
-      comparison | ops['('] >> lazy_bool << ops[')']
+    bool_term = (keywords[:true] >> true) | (keywords[:false] >> false) |
+      comparison | (ops['('] >> lazy_bool << ops[')'])
     bool_table = OperatorTable.new.
       infixl(keywords[:or] >> Or, 20).
       infixl(keywords[:and] >> And, 30).
