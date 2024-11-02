@@ -6,7 +6,7 @@ module RParsec
 module StringUtils
   #
   # Does _str_ starts with the _sub_ string?
-  # 
+  #
   def self.starts_with? str, sub
     return true if sub.nil?
     len = sub.length
@@ -43,24 +43,24 @@ end
 
 #
 # To type check method parameters.
-# 
+#
 module TypeChecker
   private
-  
+
   def nth n
     th = case n when 0 then 'st' when 1 then 'nd' else 'th' end
     "#{n+1}#{th}"
   end
-  
+
   public
-  
+
   def check_arg_type expected, obj, mtd, n=0
     unless obj.kind_of? expected
       raise ArgumentError,
         "#{obj.class} assigned to #{expected} for the #{nth n} argument of #{mtd}."
     end
   end
-  
+
   def check_arg_array_type elem_type, arg, mtd, n=0
     check_arg_type Array, arg, mtd, n
     arg.each_with_index do |x, i|
@@ -70,19 +70,19 @@ module TypeChecker
       end
     end
   end
-  
+
   def check_vararg_type expected, args, mtd, n = 0
     (n...args.length).each do |i|
       check_arg_type expected, args[i], mtd, i
     end
   end
-  
+
   extend self
 end
 
 #
 # To add declarative signature support.
-# 
+#
 module Signature
   # Signatures = {}
   def def_sig sym, *types
@@ -96,9 +96,9 @@ module Signature
     # Signatures[sym] = types
     __intercept_method_to_check_param_types__(sym, types)
   end
-  
+
   private
-  
+
   def __intercept_method_to_check_param_types__(sym, types)
     mtd = instance_method(sym)
     helper = "_#{sym}_param_types_checked_helper".to_sym
