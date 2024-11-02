@@ -453,7 +453,6 @@ class Parser
     Parsers.sequence(operator, operand, &Idn)
   end
   
-  public
   
   alias ~ not
   alias << followed
@@ -461,7 +460,6 @@ class Parser
   
   def_sig :plus, Parser
   
-  private
   
   def _parse(_ctxt)
     false
