@@ -10,7 +10,7 @@ class KeywordTestCase < ParserTestCase
     assertParser(code, keyword, Sensitive.lexer.lexeme.nested(Sensitive.parser(keyword.to_sym)))
   end
   def verifyInsensitiveKeyword(code, keyword)
-    assertParser(code, keyword.downcase, 
+    assertParser(code, keyword.downcase,
       Insensitive.lexer.lexeme.nested(Insensitive.parser(keyword)))
     assertParser(code, keyword.downcase, Insensitive.lexer.lexeme.nested(Insensitive.parser(keyword.downcase.to_sym)))
   end
