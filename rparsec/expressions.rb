@@ -132,7 +132,7 @@ module Expressions
         key, ops = *entry
         _, kind_index = *key
         op = ops[0]
-        op = Parsers.sum(*ops) if ops.length>1
+        op = Parsers.sum(*ops) if ops.length > 1
         apply_operator(result, op, Associativities[kind_index], delim)
       end
     end
