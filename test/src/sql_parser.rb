@@ -39,8 +39,7 @@ module SqlParser
   MyLexer = number.token(:number) | StringLiteral.token(:string) | Variable.token(:var) | QuotedName.token(:word) |
     MyKeywords.lexer | MyOperators.lexer
   MyLexeme = MyLexer.lexeme(whitespaces | comment_line('#')) << eof
-  
-  
+
   ######################################### utilities #########################################
   def keyword
     MyKeywords
@@ -60,7 +59,7 @@ module SqlParser
     else
       token(:word, &block)
     end
-  end 
+  end
   def paren parser
     operator['('] >> parser << operator[')']
   end
@@ -135,7 +134,7 @@ module SqlParser
     variant2 = keyword[:between] >> sequence(expr, keyword[:and], expr, &factory)
     variant1 | variant2
   end
-  
+
   ################################ expression parser ###############################
   def calculate_simple_cases(val, cases, default)
     SimpleCaseExpr.new(val, cases, default)
@@ -153,7 +152,7 @@ module SqlParser
       [cond, val]
     end
     default_case = (keyword[:else] >> lazy_expr).optional
-    simple_when_then = sequence(lazy_expr, simple_case.many, default_case, 
+    simple_when_then = sequence(lazy_expr, simple_case.many, default_case,
       keyword[:end]) do |val, cases, default, _|
       calculate_simple_cases(val, cases, default)
     end
@@ -176,7 +175,7 @@ module SqlParser
       prefix(operator['-'] >> Neg, 50)
     expr = Expressions.build(term, table)
   end
-  
+
   ################################ relation parser ###############################
   def make_relation expr, pred
     exprs = expr.delimited1(comma)
@@ -195,8 +194,8 @@ module SqlParser
     order_by_clause = keyword[:order] >> keyword[:by] >> order_elements
     group_by = keyword[:group] >> keyword[:by] >> exprs
     group_by_clause = sequence(group_by, (keyword[:having] >> pred).optional, &ctor(GroupByClause))
-    relation = sub_relation | sequence(keyword[:select], 
-      keyword[:distinct].optional(false), exprs, 
+    relation = sub_relation | sequence(keyword[:select],
+      keyword[:distinct].optional(false), exprs,
       keyword[:from], joined_relation,
       where_clause.optional, group_by_clause.optional, order_by_clause.optional
     ) do |_, distinct, projected, _, from, where, groupby, orderby|
@@ -218,7 +217,7 @@ module SqlParser
     rightjoin = outer_join :right
     fulljoin = outer_join :full
     innerjoin = keyword[:inner].optional >> keyword[:join] >> :inner
-    join_with_condition = sequence(sum(leftjoin, rightjoin, innerjoin), rel, 
+    join_with_condition = sequence(sum(leftjoin, rightjoin, innerjoin), rel,
       keyword[:on], pred) do |kind, r, _, on|
         proc{|r0|JoinRelation.new(kind, r0, r, on)}
       end
@@ -227,9 +226,7 @@ module SqlParser
   def outer_join kind
     keyword[kind] >> keyword[:outer].optional >> keyword[:join] >> kind
   end
-  
-  
-  
+
   ########################## put together ###############################
   def expression
     assemble[0]
@@ -241,7 +238,7 @@ module SqlParser
   def predicate
     assemble[1]
   end
-  
+
   def assemble
     pred = nil
     rel = nil
@@ -252,8 +249,7 @@ module SqlParser
     rel = make_relation expr, pred
     return expr, pred, rel
   end
-  
-  
+
   def make parser
     MyLexeme.nested(parser << eof)
   end
