@@ -8,3 +8,7 @@ end
 RDoc::Task.new do |rdoc|
   rdoc.rdoc_files.include("lib/**/*.rb")
 end
+
+task :gensig do
+  sh 'typeprof', '-r', 'strscan', '-o', 'rparsec2.rbs', *Dir['lib/**/*.rb']
+end
