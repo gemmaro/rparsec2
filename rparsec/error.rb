@@ -10,14 +10,14 @@ class Failure
   def initialize(ind, input, message=nil)
     @index, @input, @msg = ind, input, message
   end
-  
+
   attr_reader :index, :input
   attr_writer :index
-  
+
   def msg
     return @msg.to_s
   end
-  
+
   Precedence = 100
 end
 
