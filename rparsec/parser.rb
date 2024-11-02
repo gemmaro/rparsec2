@@ -44,7 +44,7 @@ class Parser
     initMonad(MyMonad, self)
   end
 
-  def _display_current_input(input, code, index)
+  def _display_current_input(input, _code, _index)
     return 'EOF' if input.nil?
     c = input
     case c when Integer then "'" << c << "'" when Token then c.text else c.to_s end
@@ -56,7 +56,7 @@ class Parser
     "#{result}#{encountered}"
   end
   
-  def _add_location_to_error(locator, ctxt, msg, code)
+  def _add_location_to_error(locator, ctxt, msg, _code)
     line, col = locator.locate(ctxt.error.index)
     msg << " at line #{line}, col #{col}."
   end
@@ -144,7 +144,7 @@ class Parser
   #
   # To create a parser that does "look ahead" for n inputs.
   # 
-  def lookahead n
+  def lookahead _n
     self
   end
   
@@ -463,7 +463,7 @@ class Parser
   
   private
   
-  def _parse(ctxt)
+  def _parse(_ctxt)
     false
   end
 end
