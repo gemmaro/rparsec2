@@ -48,7 +48,7 @@ class Operators
   # Get the lexer that lexes operators.
   # If an operator is specified, the lexer for that operator is returned.
   #
-  def lexer(op=nil)
+  def lexer(op = nil)
     return @lexer if op.nil?
     @lexers[op.to_sym]
   end
