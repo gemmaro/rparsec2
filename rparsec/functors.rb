@@ -224,7 +224,7 @@ module FunctorMixin
   # See the "functor_test.rb"
   [Proc, Method].each do |klass|
     refine klass do
-      def curry(ary=arity)
+      def curry(ary = arity)
         Functors.curry(ary, &self)
       end
     end
@@ -238,7 +238,7 @@ module FunctorMixin
   # job when currying is done.
   # _ary_ explicitly specifies the number of parameters to curry.
   #
-  def reverse_curry(ary=arity)
+  def reverse_curry(ary = arity)
     Functors.reverse_curry(ary, &self)
   end
 
