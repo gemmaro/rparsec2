@@ -15,7 +15,7 @@ class PerfTestCase < Test::Unit::TestCase
       tbl.prefix(char(?-) >> Neg, 60)
     end
     expr = nil
-    term = integer.map(&To_i) | (char(?() >> lazy{expr} << char(?)))
+    term = integer.map(&To_i) | (char(?() >> lazy {expr} << char(?)))
     delim = whitespace.many_
     expr = delim >> Expressions.build(term, ops, delim)
     Benchmark.bm do |x|
