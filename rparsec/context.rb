@@ -22,7 +22,7 @@ class ParseContext
   def to_msg
     return '' if @error.nil?
     return @error.msg unless @error.kind_of?(Array)
-    @error.map {|e| e.msg}.join(' or ')
+    @error.map { |e| e.msg }.join(' or ')
   end
 
   def error_input
