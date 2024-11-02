@@ -32,7 +32,7 @@ module SqlParser
   Comparators = operators(*%w{= > < >= <= <> !=})
   StringLiteral = (char(?') >> (not_char(?')|str("''")).many_.fragment << char(?')).
     map do |raw|
-      raw.gsub!(/''/,"'")
+      raw.gsub!(/''/, "'")
     end
   QuotedName = char(?[) >> not_char(?]).many_.fragment << char(?])
   Variable = char(?$) >> word
@@ -72,7 +72,7 @@ module SqlParser
   end
   ################################### predicate parser #############################
   def logical_operator op
-    proc{|a,b|CompoundPredicate.new(a,op,b)}
+    proc{|a, b|CompoundPredicate.new(a, op, b)}
   end
   def make_predicate expr, rel
     expr_list = list expr
@@ -114,7 +114,7 @@ module SqlParser
     keyword[:not] >> make_between_clause(expr, &ctor(NotBetweenPredicate))
   end
   def make_comparison_predicate expr, rel
-    comparison = sequence(Comparators, expr) do |op,e2|
+    comparison = sequence(Comparators, expr) do |op, e2|
       proc{|e1|ComparePredicate.new(e1, op, e2)}
     end
     in_clause = make_in expr
@@ -128,8 +128,8 @@ module SqlParser
     sequence(expr, compare_with, &Feed)
   end
   def make_between_clause expr, &maker
-    factory = proc do |a,_,b|
-      proc {|v|maker.call(v,a,b)}
+    factory = proc do |a, _, b|
+      proc {|v|maker.call(v, a, b)}
     end
     variant1 = keyword[:between] >> paren(sequence(expr, comma, expr, &factory))
     variant2 = keyword[:between] >> sequence(expr, keyword[:and], expr, &factory)
@@ -146,10 +146,10 @@ module SqlParser
   def make_expression predicate, _rel
     expr = nil
     lazy_expr = lazy{expr}
-    simple_case = sequence(keyword[:when], lazy_expr, keyword[:then], lazy_expr) do |_,cond,_,val|
+    simple_case = sequence(keyword[:when], lazy_expr, keyword[:then], lazy_expr) do |_, cond, _, val|
       [cond, val]
     end
-    full_case = sequence(keyword[:when], predicate, keyword[:then], lazy_expr) do |_,cond,_,val|
+    full_case = sequence(keyword[:when], predicate, keyword[:then], lazy_expr) do |_, cond, _, val|
       [cond, val]
     end
     default_case = (keyword[:else] >> lazy_expr).optional
