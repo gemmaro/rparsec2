@@ -99,8 +99,7 @@ end
 
 
 ############Predicate########################
-class Predicate
-end
+Predicate = Class.new
 
 class ComparePredicate < Predicate
   def_readable :left, :op, :right
