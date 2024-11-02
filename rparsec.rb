@@ -1,3 +1,3 @@
 %w{
 parsers operators keywords expressions
-}.each {|lib| require "rparsec/#{lib}"}
+}.each { |lib| require "rparsec/#{lib}" }
