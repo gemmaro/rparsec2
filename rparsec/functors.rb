@@ -7,29 +7,29 @@ module Functors
   Id = proc {|x|x}
   Idn = proc {|*x|x}
   Neg = proc {|x|-x}
-  Inc = proc {|x|x+1}
+  Inc = proc {|x|x + 1}
   Succ = proc {|x|x.succ}
-  Dec = proc {|x|x-1}
-  Plus = proc {|x, y|x+y}
-  Minus = proc {|x, y|x-y}
-  Mul = proc {|x, y|x*y}
-  Div = proc {|x, y|x/y}
-  Mod = proc {|x, y|x%y}
+  Dec = proc {|x|x - 1}
+  Plus = proc {|x, y|x + y}
+  Minus = proc {|x, y|x - y}
+  Mul = proc {|x, y|x * y}
+  Div = proc {|x, y|x / y}
+  Mod = proc {|x, y|x % y}
   Power = proc {|x, y|x**y}
   Not = proc {|x, _y|!x}
-  And = proc {|x, y|x&&y}
-  Or = proc {|x, y|x||y}
-  Xor = proc {|x, y|x^y}
-  BitAnd = proc {|x, y|x&y}
-  Union = proc {|x, y|x|y}
-  Match = proc {|x, y|x=~y}
-  Eq = proc {|x, y|x==y}
-  Ne = proc {|x, y|x!=y}
-  Lt = proc {|x, y|x<y}
-  Gt = proc {|x, y|x>y}
-  Le = proc {|x, y|x<=y}
-  Ge = proc {|x, y|x>=y}
-  Compare = proc {|x, y|x<=>y}
+  And = proc {|x, y|x && y}
+  Or = proc {|x, y|x || y}
+  Xor = proc {|x, y|x ^ y}
+  BitAnd = proc {|x, y|x & y}
+  Union = proc {|x, y|x | y}
+  Match = proc {|x, y|x =~ y}
+  Eq = proc {|x, y|x == y}
+  Ne = proc {|x, y|x != y}
+  Lt = proc {|x, y|x < y}
+  Gt = proc {|x, y|x > y}
+  Le = proc {|x, y|x <= y}
+  Ge = proc {|x, y|x >= y}
+  Compare = proc {|x, y|x <=> y}
   Call = proc {|x, y|x.call(y)}
   Feed = proc {|x, y|y.call(x)}
   Fst = proc {|x, _|x}
@@ -146,11 +146,11 @@ module Functors
   # is used as parameter.
   #
   def power(n, &block)
-    return const(nil) if n<=0
-    return block if n==1
+    return const(nil) if n <= 0
+    return block if n == 1
     proc do |*args|
       result = block.call(*args)
-      (n-1).times {result = block.call(result)}
+      (n - 1).times {result = block.call(result)}
       result
     end
   end
@@ -158,9 +158,9 @@ module Functors
   extend self
 
   def self.make_curry(arity, &block)
-    return block if arity<=1
+    return block if arity <= 1
     proc do |x|
-      make_curry(arity-1) do |*rest|
+      make_curry(arity - 1) do |*rest|
         block.call(*rest.insert(0, x))
       end
     end
@@ -169,7 +169,7 @@ module Functors
   def self.make_reverse_curry(arity, &block)
     return block if arity <= 1
     proc do |x|
-      make_reverse_curry(arity-1) do |*rest|
+      make_reverse_curry(arity - 1) do |*rest|
         block.call(*rest << x)
       end
     end
