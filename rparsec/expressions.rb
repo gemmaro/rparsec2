@@ -104,7 +104,7 @@ module Expressions
     def array_to_dict arr
       result = {}
       arr.each_with_index do |key, i|
-        result [key] = i unless result.include? key
+        result[key] = i unless result.include? key
       end
       result
     end
