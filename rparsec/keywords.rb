@@ -36,7 +36,7 @@ class Keywords
   # The _block_ parameter, if present, is used to convert the token text to another object
   # when the token is recognized during grammar parsing phase.
   #
-  def self.case_sensitive(words, default_lexer=word.token(:word), keyword_symbol=:keyword, &block)
+  def self.case_sensitive(words, default_lexer = word.token(:word), keyword_symbol = :keyword, &block)
     new(words, true, default_lexer, keyword_symbol, &block)
   end
 
@@ -49,7 +49,7 @@ class Keywords
   # The _block_ parameter, if present, is used to convert the token text to another object
   # when the token is recognized during parsing phase.
   #
-  def self.case_insensitive(words, default_lexer=word.token(:word), keyword_symbol=:keyword, &block)
+  def self.case_insensitive(words, default_lexer = word.token(:word), keyword_symbol = :keyword, &block)
     new(words, false, default_lexer, keyword_symbol, &block)
   end
 
