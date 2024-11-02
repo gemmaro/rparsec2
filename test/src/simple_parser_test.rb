@@ -85,11 +85,11 @@ class SimpleParserTest < ParserTestCase
   end
   def testPlusAutomaticallyRecoverInputConsumption
     assertError('abc', '"bcd" expected', char('a') >> str('bcd').plus(str('abc')), 1)
-    assertParser('abc', 'abc', char('a') >> str('bcd') | str('abc'))
-    assertError('abc', "'d' expected", char('a') >> char(?b) >> char(?d) | char(?a) >> char(?c) | str('abd'), 2)
+    assertParser('abc', 'abc', (char('a') >> str('bcd')) | str('abc'))
+    assertError('abc', "'d' expected", (char('a') >> char(?b) >> char(?d)) | (char(?a) >> char(?c)) | str('abd'), 2)
   end
   def testLookaheadRecoversInputConsumption
-    assertParser('abc', 'abc', (char('x') | char('a') >> str('bcd') | str('abc') | char('x')).lookahead(2))
+    assertParser('abc', 'abc', (char('x') | (char('a') >> str('bcd')) | str('abc') | char('x')).lookahead(2))
   end
   def testLocator
     line, col = CodeLocator.new("abc").locate(2)
@@ -119,7 +119,7 @@ class SimpleParserTest < ParserTestCase
     assertParser('abc', nil, parser)
   end
   def testLookeaheadUsedInPlusCanBeUsedByNot
-    parser = (char('a') >> str('abc') | char('a') >> str('bcd')).lookahead(2)
+    parser = ((char('a') >> str('abc')) | (char('a') >> str('bcd'))).lookahead(2)
     # assertError('abc', '"abc" expected or "bcd" expected', parser, 1)
     assertError('abc', '"abc" expected', parser, 1)
     assertParser('abc', nil, parser.not)
@@ -182,7 +182,7 @@ class SimpleParserTest < ParserTestCase
   def testRepeat_
     assertParser('abc', ?c, any*3)
     assertError('abc', '', any.repeat_(4), 3)
-    assertError('abc', "'d' expected", any*3 >> char(?d), 3)
+    assertError('abc', "'d' expected", (any*3) >> char(?d), 3)
   end
   def testMany_
     assertParser('abc', ?c, any.many_)
@@ -335,7 +335,7 @@ class SimpleParserTest < ParserTestCase
   def testLazy
     expr = nil
     lazy_expr = lazy{expr}
-    expr = integer.map(&To_i) | char('(') >> lazy_expr << char(')')
+    expr = integer.map(&To_i) | (char('(') >> lazy_expr << char(')'))
     assertParser('123', 123, expr)
     assertParser('((123))', 123, expr)
   end
