@@ -519,7 +519,7 @@ class Many_Parser < Parser
     @least.times do
       return false unless @parser._parse ctxt
     end
-    while(true)
+    while true
       ind = ctxt.index
       if @parser._parse ctxt
         return true if ind==ctxt.index # infinite loop
@@ -538,7 +538,7 @@ class ManyParser < Parser
       return false unless @parser._parse ctxt
       result << ctxt.result
     end
-    while(true)
+    while true
       ind = ctxt.index
       if @parser._parse ctxt
         result << ctxt.result
