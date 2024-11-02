@@ -1,6 +1,6 @@
 %w{
 monad misc error context locator token functors parser_monad
-}.each {|lib| require "rparsec/#{lib}"}
+}.each { |lib| require "rparsec/#{lib}" }
 require_relative 'strscan_char'
 
 module RParsec
@@ -237,7 +237,7 @@ class Parser
     rest = delim >> self
     self.bind do |v0|
       result = [v0]
-      (rest.map {|v| result << v}).many_ >> value(result)
+      (rest.map { |v| result << v }).many_ >> value(result)
     end
   end
 
@@ -261,7 +261,7 @@ class Parser
     rest = delim >> (self.plus Parsers.throwp(:__end_delimiter__))
     self.bind do |v0|
       result = [v0]
-      (rest.map {|v| result << v}).many_.catchp(:__end_delimiter__) >> value(result)
+      (rest.map { |v| result << v }).many_.catchp(:__end_delimiter__) >> value(result)
     end
   end
 
@@ -341,7 +341,7 @@ class Parser
   #
   def prefix(op)
     Parsers.sequence(op.many, self) do |funcs, v|
-      funcs.reverse_each {|f| v = f.call(v)}
+      funcs.reverse_each { |f| v = f.call(v) }
       v
     end
   end
@@ -356,7 +356,7 @@ class Parser
   #
   def postfix(op)
     Parsers.sequence(self, op.many) do |v, funcs|
-      funcs.each {|f| v = f.call(v)}
+      funcs.each { |f| v = f.call(v) }
       v
     end
   end
@@ -515,7 +515,7 @@ module Parsers
   # _expected_ is the error message when _pred_ returns false.
   #
   def is(v, expected="#{v} expected")
-    satisfies(expected) {|c| c == v}
+    satisfies(expected) { |c| c == v }
   end
 
   #
@@ -523,7 +523,7 @@ module Parsers
   # _expected_ is the error message when _pred_ returns false.
   #
   def isnt(v, expected="#{v} unexpected")
-    satisfies(expected) {|c| c != v}
+    satisfies(expected) { |c| c != v }
   end
 
   #
@@ -532,7 +532,7 @@ module Parsers
   def among(*vals)
     expected = "one of [#{vals.join(', ')}] expected"
     vals = as_list vals
-    satisfies(expected) {|c| vals.include? c}
+    satisfies(expected) { |c| vals.include? c }
   end
 
   #
@@ -541,7 +541,7 @@ module Parsers
   def not_among(*vals)
     expected = "one of [#{vals.join(', ')}] unexpected"
     vals = as_list vals
-    satisfies(expected) {|c| !vals.include? c}
+    satisfies(expected) { |c| !vals.include? c }
   end
 
   #
@@ -686,7 +686,7 @@ module Parsers
   #
   def range(from, to, msg="#{as_char from}..#{as_char to} expected")
     from, to = as_num(from), as_num(to)
-    satisfies(msg) {|c| c <= to && c >= from}
+    satisfies(msg) { |c| c <= to && c >= from }
   end
 
   #
@@ -757,7 +757,7 @@ module Parsers
         tok.respond_to? :kind, :text and kinds.include? tok.kind
       end
     end
-    recognizer = recognizer.map {|tok| proc.call(tok.text)} if proc
+    recognizer = recognizer.map { |tok| proc.call(tok.text) } if proc
     recognizer
   end
 
@@ -765,7 +765,7 @@ module Parsers
   # A parser that parses a white space character.
   #
   def whitespace(expected="whitespace expected")
-    satisfies(expected) {|c| Whitespaces.include? c}
+    satisfies(expected) { |c| Whitespaces.include? c }
   end
 
   #
