@@ -1,7 +1,7 @@
 %w{
 monad misc error context locator token functors parser_monad
 }.each {|lib| require "rparsec/#{lib}"}
-require 'strscan'
+require_relative 'strscan_char'
 
 module RParsec
   
@@ -43,7 +43,7 @@ class Parser
   def _display_current_input(input, code, index)
     return 'EOF' if input.nil?
     c = input
-    case c when Fixnum then "'"<<c<<"'" when Token then c.text else c.to_s end
+    case c when Integer then "'" << c << "'" when Token then c.text else c.to_s end
   end
   
   def _add_encountered_error(msg, encountered)
@@ -434,7 +434,7 @@ class Parser
   #
   # Similar to _seq_. _other_ is auto-boxed if it is not of type Parser.
   #
-  def >> (other)
+  def >>(other)
     seq(autobox_parser(other))
   end
   
@@ -548,7 +548,7 @@ module Parsers
   # A parser that succeeds when the the current input is the given character.
   #
   def char(c)
-    if c.kind_of? Fixnum
+    if c.kind_of? Integer
       nm = c.chr
       is(c, "'#{nm}' expected").setName(nm)
     else
@@ -560,7 +560,7 @@ module Parsers
   # A parser that succeeds when the the current input is not the given character.
   #
   def not_char(c)
-    if c.kind_of? Fixnum
+    if c.kind_of? Integer
       nm = c.chr
       isnt(c, "'#{nm}' unexpected").setName("~#{nm}")
     else
@@ -878,7 +878,7 @@ module Parsers
   end
   
   def as_num c
-    case c when String: c[0] else c end
+    case c when String then c[0] else c end
   end
   
   def as_list vals

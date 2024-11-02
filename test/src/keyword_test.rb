@@ -1,6 +1,6 @@
-require 'import'
+require_relative 'import'
 import :parsers, :keywords
-require 'parser_test'
+require_relative 'parser_test'
 
 class KeywordTestCase < ParserTestCase
   Insensitive = Keywords.case_insensitive(%w{select from where group by order having}){|x|x.downcase}
@@ -23,6 +23,6 @@ class KeywordTestCase < ParserTestCase
   def testBasics
     assert(!Insensitive.case_sensitive?)
     assert(Sensitive.case_sensitive?)
-    assert(:keyword, Sensitive.keyword_symbol)
+    assert_equal(:keyword, Sensitive.keyword_symbol)
   end
 end

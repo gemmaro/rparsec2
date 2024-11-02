@@ -1,4 +1,4 @@
-require 'import'
+require_relative 'import'
 import :parsers, :keywords, :operators, :functors, :expressions
 
 include RParsec
@@ -9,6 +9,8 @@ end
 class Proc
   include FunctorMixin
 end
+using FunctorMixin
+
 module SqlParser
   include Functors
   include Parsers
@@ -17,7 +19,7 @@ module SqlParser
     select from where group by having order desc asc
     inner left right full outer inner join on cross
     union all distinct as exists in between limit
-    case when else end and or not true false
+    case when then else end and or not true false
   })
   MyOperators = Operators.new(%w{+ - * / % = > < >= <= <> != : ( ) . ,})
   def self.operators(*ops)
@@ -144,10 +146,10 @@ module SqlParser
   def make_expression predicate, rel
     expr = nil
     lazy_expr = lazy{expr}
-    simple_case = sequence(keyword[:when], lazy_expr, operator[':'], lazy_expr) do |_,cond,_,val|
+    simple_case = sequence(keyword[:when], lazy_expr, keyword[:then], lazy_expr) do |_,cond,_,val|
       [cond, val]
     end
-    full_case = sequence(keyword[:when], predicate, operator[':'], lazy_expr) do |_,cond,_,val|
+    full_case = sequence(keyword[:when], predicate, keyword[:then], lazy_expr) do |_,cond,_,val|
       [cond, val]
     end
     default_case = (keyword[:else] >> lazy_expr).optional
@@ -182,7 +184,7 @@ module SqlParser
     lazy_relation = lazy{relation}
     term_relation = word {|w|TableRelation.new w} | operator['('] >> lazy_relation << operator[')']
     sub_relation = sequence(term_relation, (keyword[:as].optional >> word).optional) do |rel, name|
-      case when name.nil?: rel else AliasRelation.new(rel, name) end
+      case when name.nil? then rel else AliasRelation.new(rel, name) end
     end
     joined_relation = sub_relation.postfix(join_maker(lazy{joined_relation}, pred))
     where_clause = keyword[:where] >> pred
@@ -201,7 +203,7 @@ module SqlParser
       SelectRelation.new(projected, distinct, from, where, groupby, orderby)
     end
     relation = sequence(relation, (keyword[:limit] >> token(:number, &To_i)).optional) do |rel, limit|
-      case when limit.nil?: rel else LimitRelation.new(rel, limit) end
+      case when limit.nil? then rel else LimitRelation.new(rel, limit) end
     end
     relation = relation.infixl(union_maker)
   end

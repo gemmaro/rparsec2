@@ -1,6 +1,6 @@
-require 'import'
+require_relative 'import'
 import :parsers, :functors, :expressions
-require 'parser_test'
+require_relative 'parser_test'
 
 class ExpressionParserTest < ParserTestCase
   include Functors

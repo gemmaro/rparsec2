@@ -371,19 +371,20 @@ class AreParser < Parser
   end
 end
 
-def downcase c
-  case when c >= ?A && c <=?Z then c + (?a - ?A) else c end
-end
-
 class StringCaseInsensitiveParser < Parser
   init :str, :msg
+  def _downcase c
+    case when c.ord >= ?A.ord && c.ord <= ?Z.ord then (c.ord + (?a.ord - ?A.ord)).chr else c end
+  end
+  private :_downcase
+
   def _parse ctxt
     if @str.length > ctxt.available
       return ctxt.expecting(@msg)
     end
     cur = 0
     for cur in (0...@str.length)
-      if downcase(@str[cur]) != downcase(ctxt.peek(cur))
+      if _downcase(@str[cur]) != _downcase(ctxt.peek(cur))
         return ctxt.expecting(@msg)
       end
     end
@@ -491,7 +492,7 @@ end
 class Repeat_Parser < Parser
   init :parser, :times
   def _parse ctxt
-    for i in (0...@times)
+    @times.times do
       return false unless @parser._parse ctxt
     end
     return true
@@ -502,7 +503,7 @@ class RepeatParser < Parser
   init :parser, :times
   def _parse ctxt
     result = []
-    for i in (0...@times)
+    @times.times do
       return false unless @parser._parse ctxt
       result << ctxt.result
     end
@@ -513,7 +514,7 @@ end
 class Many_Parser < Parser
   init :parser, :least
   def _parse ctxt
-    for i in (0...@least)
+    @least.times do
       return false unless @parser._parse ctxt
     end
     while(true)
@@ -531,7 +532,7 @@ class ManyParser < Parser
   init :parser, :least
   def _parse ctxt
     result = []
-    for i in (0...@least)
+    @least.times do
       return false unless @parser._parse ctxt
       result << ctxt.result
     end

@@ -6,6 +6,7 @@ class ParseContext
   
   def initialize(src, index=0, error=nil)
     @src, @index, @error = src, index, error
+    @scanner = nil
   end
 
   def scanner

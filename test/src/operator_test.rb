@@ -1,6 +1,6 @@
-require 'import'
+require_relative 'import'
 import :parsers, :operators, :functors
-require 'parser_test'
+require_relative 'parser_test'
 
 class OperatorTestCase < ParserTestCase
   Ops = Operators.new(%w{++ + - -- * / ~}, &Id)

@@ -129,7 +129,7 @@ module Expressions
   # apply operators stored in [[precedence,associativity],[op...]] starting from beginning.
     entries.inject(term) do |result, entry|
       key, ops = *entry
-      null, kind_index = *key
+      _, kind_index = *key
       op = ops[0]
       op = Parsers.sum(*ops) if ops.length>1
       apply_operator(result, op, Associativities[kind_index], delim)

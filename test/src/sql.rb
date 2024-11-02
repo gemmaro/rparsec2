@@ -1,4 +1,4 @@
-require 'import'
+require_relative 'import'
 import :misc
 
 include RParsec
@@ -76,7 +76,7 @@ class PrefixExpr < Expr
 end
 def cases_string cases, default, result
     cases.each do |cond, val|
-      result << " when #{cond}: #{val}"
+      result << " when #{cond} then #{val}"
     end
     unless default.nil?
       result << " else #{default}"
@@ -108,7 +108,7 @@ class ComparePredicate < Predicate
     "#{left} #{op_name} #{right}"
   end
   def op_name
-    case op when :"!=": "<>" else op.to_s end
+    case op when :"!=" then "<>" else op.to_s end
   end
 end
 class CompoundPredicate < Predicate
@@ -263,6 +263,6 @@ end
 class UnionRelation < Relation
   def_readable :left, :all, :right
   def to_s
-    "#{left} union #{case when all: 'all ' else '' end}#{right}"
+    "#{left} union #{case when all then 'all ' else '' end}#{right}"
   end
 end

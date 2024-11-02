@@ -1,10 +1,10 @@
-require 'import'
-require 'rubyunit'
+require_relative 'import'
+require 'test/unit'
 import :parsers, :functors
 
 include RParsec
 
-class ParserTestCase < RUNIT::TestCase
+class ParserTestCase < Test::Unit::TestCase
   include Functors
   include Parsers
   def assertParser(code, expected, parser)
@@ -39,8 +39,8 @@ class ParserTestCase < RUNIT::TestCase
   def current(code, index)
     return "EOF" if code.length <= index
     c = code[index]
-    if c.kind_of? Fixnum
-      "'"<<c<<"'"
+    if c.kind_of? Integer
+      "'" << c << "'"
     else
       c.to_s
     end

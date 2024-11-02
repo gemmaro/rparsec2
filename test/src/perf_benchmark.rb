@@ -1,8 +1,8 @@
-require 'import'
+require_relative 'import'
 import :rparsec
 require 'benchmark'
-require 'rubyunit'
-class PerfTestCase < RUNIT::TestCase
+require 'test/unit'
+class PerfTestCase < Test::Unit::TestCase
   include Parsers
   include Functors
   def test1

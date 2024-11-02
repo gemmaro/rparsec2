@@ -1,6 +1,6 @@
-require 'parser_test'
-require 'sql'
-require 'sql_parser'
+require_relative 'parser_test'
+require_relative 'sql'
+require_relative 'sql_parser'
 class SqlTestCase < ParserTestCase
   include SqlParser
   def verify_sql(code, expected, parser)
@@ -16,8 +16,8 @@ class SqlTestCase < ParserTestCase
     verify_sql('1+2+3', '((1 + 2) + 3)', expression)
   end
   def testExpressionWithBool
-    verify_sql('1+Case 2 when 1: x else dbo.y end', 
-      '(1 + case 2 when 1: x else dbo.y end)', expression)
+    verify_sql('1+Case 2 when 1 then x else dbo.y end', 
+      '(1 + case 2 when 1 then x else dbo.y end)', expression)
   end
   def testExpressionWithWildcard
     verify_sql('a.*', 'a.*', expression)

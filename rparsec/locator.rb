@@ -27,7 +27,7 @@ class CodeLocator
   def _locateEof
     line, col = 1, 1
     code.each_byte do |c|
-      if c == LF
+      if c == LF.ord
         line, col = line+1, 1 
       else
         col = col+1

@@ -1,5 +1,5 @@
-require 'import'
-require 'runit/testcase'
+require_relative 'import'
+require 'test/unit'
 import :id_monad, :monad
 
 include RParsec
@@ -14,9 +14,9 @@ class Idm
   end
 end
 
-class SimpleMonadTest < RUNIT::TestCase
+class SimpleMonadTest < Test::Unit::TestCase
   def test1
-    assert 20, Idm.new(10).map{|i|i*2}
-    assert 10, Idm.new(10).plus(Idm.new(20))
+    assert_equal 20, Idm.new(10).map{|i|i*2}
+    assert_equal 10, Idm.new(10).plus(Idm.new(20))
   end
 end

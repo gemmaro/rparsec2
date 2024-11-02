@@ -1,5 +1,5 @@
-require 'import'
-require 'runit/testcase'
+require_relative 'import'
+require 'test/unit'
 import :parsers, :functors
 
 include RParsec
@@ -9,8 +9,9 @@ end
 class Method
   include FunctorMixin
 end
-    
-class FunctorTestCase < RUNIT::TestCase
+using FunctorMixin
+
+class FunctorTestCase < Test::Unit::TestCase
   include Functors
   def verify(expected, f, *args)
     assert_equal(expected, f.call(*args))
@@ -19,7 +20,7 @@ class FunctorTestCase < RUNIT::TestCase
     verify(1, const(1), 'a')
   end
   def testMethod
-    verify(true, 1.method(:kind_of?), Fixnum)
+    verify(true, 1.method(:kind_of?), Integer)
   end
   def testFlip
     verify(1, Minus.flip, 1, 2)

@@ -9,5 +9,5 @@
   full_parser
   sql
 }.each do |name|
-  require "#{name}_test"
+  require_relative "#{name}_test"
 end
