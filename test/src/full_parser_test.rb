@@ -26,7 +26,7 @@ class FullParserTest < ParserTestCase
     lazy_expr = lazy{expr}
     compare = (ops['>'] >> Gt) | (ops['<'] >> Lt) | (ops['>='] >> Ge) | (ops['<='] >> Le) |
       (ops['=='] >> Eq) | (ops['!='] >> Ne)
-    comparison = sequence(lazy_expr, compare, lazy_expr) {|e1,f,e2|f.call(e1,e2)}
+    comparison = sequence(lazy_expr, compare, lazy_expr) {|e1, f, e2|f.call(e1, e2)}
     bool = nil
     lazy_bool = lazy{bool}
     bool_term = (keywords[:true] >> true) | (keywords[:false] >> false) |
@@ -37,10 +37,10 @@ class FullParserTest < ParserTestCase
       infixl(keywords[:not] >> Not, 30)
     
     bool = Expressions.build(bool_term, bool_table)
-    simple_case = sequence(keywords[:when], lazy_expr, keywords[:then], lazy_expr) do |_w,cond,_t,val|
+    simple_case = sequence(keywords[:when], lazy_expr, keywords[:then], lazy_expr) do |_w, cond, _t, val|
       [cond, val]
     end
-    full_case = sequence(keywords[:when], bool, keywords[:then], lazy_expr) do |_w,cond,_t,val|
+    full_case = sequence(keywords[:when], bool, keywords[:then], lazy_expr) do |_w, cond, _t, val|
       [cond, val]
     end
     default_case = (keywords[:else] >> lazy_expr).optional
