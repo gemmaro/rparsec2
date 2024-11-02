@@ -80,7 +80,7 @@ module SqlParser
     group_comparison = sequence(expr_list, Comparators, expr_list, &ctor(GroupComparisonPredicate))
     bool = nil
     lazy_bool = lazy{bool}
-    bool_term = keyword[:true] >> true | keyword[:false] >> false |
+    bool_term = (keyword[:true] >> true) | (keyword[:false] >> false) |
       comparison | group_comparison | paren(lazy_bool) |
       make_exists(rel) | make_not_exists(rel)
     bool_table = OperatorTable.new.
@@ -182,13 +182,13 @@ module SqlParser
     exprs = expr.delimited1(comma)
     relation = nil
     lazy_relation = lazy{relation}
-    term_relation = word {|w|TableRelation.new w} | operator['('] >> lazy_relation << operator[')']
+    term_relation = word {|w|TableRelation.new w} | (operator['('] >> lazy_relation << operator[')'])
     sub_relation = sequence(term_relation, (keyword[:as].optional >> word).optional) do |rel, name|
       case when name.nil? then rel else AliasRelation.new(rel, name) end
     end
     joined_relation = sub_relation.postfix(join_maker(lazy{joined_relation}, pred))
     where_clause = keyword[:where] >> pred
-    order_element = sequence(expr, (keyword[:asc] >> true | keyword[:desc] >> false).optional(true),
+    order_element = sequence(expr, ((keyword[:asc] >> true) | (keyword[:desc] >> false)).optional(true),
       &ctor(OrderElement))
     order_elements = order_element.separated1(comma)
     exprs = expr.separated1(comma)
@@ -208,7 +208,7 @@ module SqlParser
     relation = relation.infixl(union_maker)
   end
   def union_maker
-    keyword[:union] >> (keyword[:all]>>true|false).map do |all|
+    keyword[:union] >> ((keyword[:all]>>true)|false).map do |all|
       proc {|r1, r2|UnionRelation.new(r1, all, r2)}
     end
   end
