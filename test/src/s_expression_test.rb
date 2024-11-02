@@ -17,7 +17,7 @@ class SExpressionTestCase < ParserTestCase
   end
   def parser
     expr = nil
-    lazy_expr = lazy{expr}
+    lazy_expr = lazy {expr}
     term = number.map(&To_f) | (lparen >> lazy_expr << rparen)
     binop = (char('+') >> Plus) | (char('-') >> Minus) | (char('*') >> Mul) | (char('/') >> Div)
     binop = ignore binop
