@@ -32,7 +32,7 @@ class Parser
           if parser_checker.include? i
             TypeChecker.check_arg_type Parser, param, self, i
           end
-          instance_variable_set("@"+var.to_s, param)
+          instance_variable_set("@" + var.to_s, param)
         end
       end
     end
@@ -171,7 +171,7 @@ class Parser
   #
   def repeat_(min, max=min)
     return Parsers.failure("min=#{min}, max=#{max}") if min > max
-    if min==max
+    if min == max
       return Parsers.one if max <= 0
       return self if max == 1
       Repeat_Parser.new(self, max)
@@ -187,7 +187,7 @@ class Parser
   #
   def repeat(min, max=min)
     return Parsers.failure("min=#{min}, max=#{max}") if min > max
-    if min==max
+    if min == max
       RepeatParser.new(self, max)
     else
       SomeParser.new(self, min, max)
@@ -341,7 +341,7 @@ class Parser
   #
   def prefix(op)
     Parsers.sequence(op.many, self) do |funcs, v|
-      funcs.reverse_each {|f|v=f.call(v)}
+      funcs.reverse_each {|f|v = f.call(v)}
       v
     end
   end
@@ -356,7 +356,7 @@ class Parser
   #
   def postfix(op)
     Parsers.sequence(self, op.many) do |v, funcs|
-      funcs.each{|f|v=f.call(v)}
+      funcs.each{|f|v = f.call(v)}
       v
     end
   end
@@ -401,8 +401,8 @@ class Parser
         v
       else
         f, seed = *rests.last
-        for i in (0...rests.length-1)
-          cur = rests.length-2-i
+        for i in (0...rests.length - 1)
+          cur = rests.length - 2 - i
           f1, v1 = *rests[cur]
           seed = f.call(v1, seed)
           f = f1
@@ -515,7 +515,7 @@ module Parsers
   # _expected_ is the error message when _pred_ returns false.
   #
   def is(v, expected="#{v} expected")
-    satisfies(expected) {|c|c==v}
+    satisfies(expected) {|c|c == v}
   end
 
   #
@@ -523,14 +523,14 @@ module Parsers
   # _expected_ is the error message when _pred_ returns false.
   #
   def isnt(v, expected="#{v} unexpected")
-    satisfies(expected) {|c|c!=v}
+    satisfies(expected) {|c|c != v}
   end
 
   #
   # A parser that succeeds when the the current input is among the given values.
   #
   def among(*vals)
-    expected="one of [#{vals.join(', ')}] expected"
+    expected = "one of [#{vals.join(', ')}] expected"
     vals = as_list vals
     satisfies(expected) {|c|vals.include? c}
   end
@@ -745,9 +745,9 @@ module Parsers
   # Otherwise, the token object is used as result.
   #
   def token(*kinds, &proc)
-    expected="#{kinds.join(' or ')} expected"
+    expected = "#{kinds.join(' or ')} expected"
     recognizer = nil
-    if kinds.length==1
+    if kinds.length == 1
       kind = kinds[0]
       recognizer = satisfies(expected) do |tok|
         tok.respond_to? :kind, :text and kind == tok.kind
@@ -882,7 +882,7 @@ module Parsers
   end
 
   def as_list vals
-    return vals unless vals.length==1
+    return vals unless vals.length == 1
     val = vals[0]
     return vals unless val.kind_of? String
     val
