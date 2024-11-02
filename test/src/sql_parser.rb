@@ -66,7 +66,7 @@ module SqlParser
   def ctor cls
     cls.method :new
   end
-  def rctor cls, arity=2
+  def rctor cls, arity = 2
     ctor(cls).reverse_curry arity
   end
   ################################### predicate parser #############################
