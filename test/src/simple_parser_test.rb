@@ -405,7 +405,7 @@ class SimpleParserTest < ParserTestCase
     begin
       yield
       assert_fail('should have failed with type mismatch')
-      rescue ArgumentError => e
+    rescue ArgumentError => e
         assert_equal("#{actual} assigned to #{expected} for the #{n} argument of #{mtd}.",
           e.message)
     end
@@ -414,7 +414,7 @@ class SimpleParserTest < ParserTestCase
     begin
       yield
       assert_fail('should have failed with type mismatch')
-      rescue ArgumentError => e
+    rescue ArgumentError => e
         assert_equal("#{actual} assigned to #{expected} for the #{n_elem} element of the #{n_arg} argument of #{mtd}.",
           e.message)
     end
