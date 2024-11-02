@@ -17,7 +17,7 @@ class ParserTestCase < Test::Unit::TestCase
       rescue ParserException => e
         assert_equal(index, e.index)
         msg = expected
-        msg = add_encountered(msg, current(code,index)) << " at line #{line}, col #{col}." unless expected.include? 'at line'
+        msg = add_encountered(msg, current(code, index)) << " at line #{line}, col #{col}." unless expected.include? 'at line'
         assert_equal(msg, e.message)
     end
   end
