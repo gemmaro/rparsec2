@@ -14,7 +14,7 @@ class ParserTestCase < Test::Unit::TestCase
     begin
       parser.parse(code)
       assert_fail("error should have happened")
-      rescue ParserException => e
+    rescue ParserException => e
         assert_equal(index, e.index)
         msg = expected
         msg = add_encountered(msg, current(code, index)) << " at line #{line}, col #{col}." unless expected.include? 'at line'
@@ -29,7 +29,7 @@ class ParserTestCase < Test::Unit::TestCase
     begin
       parser.parse(code)
       assert_fail("error should have happened")
-      rescue ParserException => e
+    rescue ParserException => e
         assert_equal(index, e.index)
         msg = expected
         msg = "#{msg}, #{token_name}" << " at line #{line}, col #{col}." unless expected.include? 'at line'
