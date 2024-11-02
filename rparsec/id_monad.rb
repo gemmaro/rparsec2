@@ -9,7 +9,7 @@ class IdMonad
     yield prev
   end
   
-  def mplus a, b
+  def mplus a, _b
     a
   end
 end
