@@ -30,7 +30,7 @@ module SqlParser
     sum(*result)
   end
   Comparators = operators(*%w{= > < >= <= <> !=})
-  StringLiteral = (char(?') >> (not_char(?')|str("''")).many_.fragment << char(?')).
+  StringLiteral = (char(?') >> (not_char(?') | str("''")).many_.fragment << char(?')).
     map do |raw|
       raw.gsub!(/''/, "'")
     end
@@ -163,7 +163,7 @@ module SqlParser
     wildcard = operator[:*] >> WildcardExpr::Instance
     lit = token(:number, :string, &ctor(LiteralExpr)) | token(:var, &ctor(VarExpr))
     atom = lit | wildcard |
-      sequence(word, operator['.'], word|wildcard) {|owner, _, col| QualifiedColumnExpr.new owner, col} |
+      sequence(word, operator['.'], word | wildcard) {|owner, _, col| QualifiedColumnExpr.new owner, col} |
       word(&ctor(WordExpr))
     term = atom | (operator['('] >> lazy_expr << operator[')']) | case_expr
     table = OperatorTable.new.
@@ -207,7 +207,7 @@ module SqlParser
     relation = relation.infixl(union_maker)
   end
   def union_maker
-    keyword[:union] >> ((keyword[:all]>>true)|false).map do |all|
+    keyword[:union] >> ((keyword[:all] >> true) | false).map do |all|
       proc {|r1, r2|UnionRelation.new(r1, all, r2)}
     end
   end
