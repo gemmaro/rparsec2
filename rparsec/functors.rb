@@ -10,31 +10,31 @@ module Functors
   Inc = proc {|x|x+1}
   Succ = proc {|x|x.succ}
   Dec = proc {|x|x-1}
-  Plus = proc {|x,y|x+y}
-  Minus = proc {|x,y|x-y}
-  Mul = proc {|x,y|x*y}
-  Div = proc {|x,y|x/y}
-  Mod = proc {|x,y|x%y}
-  Power = proc {|x,y|x**y}
-  Not = proc {|x,_y|!x}
-  And = proc {|x,y|x&&y}
-  Or = proc {|x,y|x||y}
-  Xor = proc {|x,y|x^y}
-  BitAnd = proc {|x,y|x&y}
-  Union = proc {|x,y|x|y}
-  Match = proc {|x,y|x=~y}
-  Eq = proc {|x,y|x==y}
-  Ne = proc {|x,y|x!=y}
-  Lt = proc {|x,y|x<y}
-  Gt = proc {|x,y|x>y}
-  Le = proc {|x,y|x<=y}
-  Ge = proc {|x,y|x>=y}
-  Compare = proc {|x,y|x<=>y}
-  Call = proc {|x,y|x.call(y)}
-  Feed = proc {|x,y|y.call(x)}
-  Fst = proc {|x,_|x}
+  Plus = proc {|x, y|x+y}
+  Minus = proc {|x, y|x-y}
+  Mul = proc {|x, y|x*y}
+  Div = proc {|x, y|x/y}
+  Mod = proc {|x, y|x%y}
+  Power = proc {|x, y|x**y}
+  Not = proc {|x, _y|!x}
+  And = proc {|x, y|x&&y}
+  Or = proc {|x, y|x||y}
+  Xor = proc {|x, y|x^y}
+  BitAnd = proc {|x, y|x&y}
+  Union = proc {|x, y|x|y}
+  Match = proc {|x, y|x=~y}
+  Eq = proc {|x, y|x==y}
+  Ne = proc {|x, y|x!=y}
+  Lt = proc {|x, y|x<y}
+  Gt = proc {|x, y|x>y}
+  Le = proc {|x, y|x<=y}
+  Ge = proc {|x, y|x>=y}
+  Compare = proc {|x, y|x<=>y}
+  Call = proc {|x, y|x.call(y)}
+  Feed = proc {|x, y|y.call(x)}
+  Fst = proc {|x, _|x}
   Snd = proc {|_, x|x}
-  At = proc {|x,y|x[y]}
+  At = proc {|x, y|x[y]}
   To_a = proc {|x|x.to_a}
   To_s = proc {|x|x.to_s}
   To_i = proc {|x|x.to_i}
@@ -60,7 +60,7 @@ module Functors
   # in the reverse order of _block_.
   # 
   def flip(&block)
-    proc {|x,y|block.call(y,x)}
+    proc {|x, y|block.call(y, x)}
   end
   
   #
