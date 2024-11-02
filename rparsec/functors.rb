@@ -16,7 +16,7 @@ module Functors
   Div = proc {|x,y|x/y}
   Mod = proc {|x,y|x%y}
   Power = proc {|x,y|x**y}
-  Not = proc {|x,y|!x}
+  Not = proc {|x,_y|!x}
   And = proc {|x,y|x&&y}
   Or = proc {|x,y|x||y}
   Xor = proc {|x,y|x^y}
