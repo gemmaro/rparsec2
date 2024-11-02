@@ -115,7 +115,7 @@ class LookAheadSensitiveParser < Parser
     ctxt.index - n < @lookahead
   end
   def lookahead(n)
-    raise ArgumentError, "lookahead number #{n} should be positive" unless n>0
+    raise ArgumentError, "lookahead number #{n} should be positive" unless n > 0
     return self if n == @lookahead
     withLookahead(n)
   end
@@ -225,7 +225,7 @@ class BestParser < Parser
       ctxt.index, ctxt.result = ind, result
       if p._parse(ctxt)
         err, now_ind = nil, ctxt.index
-        if best_ind==-1 || (now_ind != best_ind && @longer == (now_ind>best_ind))
+        if best_ind == -1 || (now_ind != best_ind && @longer == (now_ind > best_ind))
           best_result, best_ind = ctxt.result, now_ind
         end
       elsif best_ind < 0 # no good match found yet.
@@ -317,7 +317,7 @@ class SatisfiesParser < Parser
   init :pred, :expected
   def _parse ctxt
     elem = nil
-    if ctxt.eof || !@pred.call(elem=ctxt.current)
+    if ctxt.eof || !@pred.call(elem = ctxt.current)
       return ctxt.expecting(@expected)
     end
     ctxt.next
@@ -401,7 +401,7 @@ class FragmentParser < Parser
   def _parse ctxt
     ind = ctxt.index
     return false unless @parser._parse ctxt
-    ctxt.retn(ctxt.src[ind, ctxt.index-ind])
+    ctxt.retn(ctxt.src[ind, ctxt.index - ind])
   end
 end
 
@@ -411,7 +411,7 @@ class TokenParser < Parser
     ind = ctxt.index
     return false unless @parser._parse ctxt
     raw = ctxt.result
-    raw = ctxt.src[ind, ctxt.index-ind] unless raw.kind_of? String
+    raw = ctxt.src[ind, ctxt.index - ind] unless raw.kind_of? String
     ctxt.retn(Token.new(@symbol, raw, ind))
   end
 end
@@ -522,10 +522,10 @@ class Many_Parser < Parser
     while true
       ind = ctxt.index
       if @parser._parse ctxt
-        return true if ind==ctxt.index # infinite loop
+        return true if ind == ctxt.index # infinite loop
         next
       end
-      return ind==ctxt.index
+      return ind == ctxt.index
     end
   end
 end
@@ -542,10 +542,10 @@ class ManyParser < Parser
       ind = ctxt.index
       if @parser._parse ctxt
         result << ctxt.result
-        return ctxt.retn(result) if ind==ctxt.index # infinite loop
+        return ctxt.retn(result) if ind == ctxt.index # infinite loop
         next
       end
-      if ind==ctxt.index
+      if ind == ctxt.index
         return ctxt.retn(result)
       else
         return false
@@ -563,10 +563,10 @@ class Some_Parser < Parser
     for i in (@least...@max)
       ind = ctxt.index
       if @parser._parse ctxt
-        return true if ind==ctxt.index # infinite loop
+        return true if ind == ctxt.index # infinite loop
         next
       end
-      return ind==ctxt.index
+      return ind == ctxt.index
     end
     return true
   end
@@ -584,10 +584,10 @@ class SomeParser < Parser
       ind = ctxt.index
       if @parser._parse ctxt
         result << ctxt.result
-        return ctxt.retn(result) if ind==ctxt.index # infinite loop
+        return ctxt.retn(result) if ind == ctxt.index # infinite loop
         next
       end
-      if ind==ctxt.index
+      if ind == ctxt.index
         return ctxt.retn(result)
       else
         return false
