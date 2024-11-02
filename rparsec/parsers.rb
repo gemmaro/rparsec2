@@ -107,7 +107,7 @@ class AtomParser < Parser
 end
 
 class LookAheadSensitiveParser < Parser
-  def initialize(la=1)
+  def initialize(la = 1)
     super()
     @lookahead = la
   end
@@ -119,13 +119,13 @@ class LookAheadSensitiveParser < Parser
     return self if n == @lookahead
     withLookahead(n)
   end
-  def not(msg="#{self} unexpected")
+  def not(msg = "#{self} unexpected")
     NotParser.new(self, msg, @lookahead)
   end
 end
 
 class NotParser < LookAheadSensitiveParser
-  def initialize(parser, msg, la=1)
+  def initialize(parser, msg, la = 1)
     super(la)
     @parser, @msg, @name = parser, msg, "~#{parser.name}"
   end
@@ -160,7 +160,7 @@ class ExpectParser < Parser
 end
 
 class PlusParser < LookAheadSensitiveParser
-  def initialize(alts, la=1)
+  def initialize(alts, la = 1)
     super(la)
     @alts = alts
   end
