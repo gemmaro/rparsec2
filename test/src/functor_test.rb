@@ -47,16 +47,16 @@ class FunctorTestCase < Test::Unit::TestCase
     verify(1, Minus.curry.reverse_uncurry, 1, 2)
   end
   def testRepeat
-    cnt=0
-    inc = proc {cnt+=1}
+    cnt = 0
+    inc = proc {cnt += 1}
     n = 10
-    verify(n, (inc*n))
+    verify(n, (inc * n))
     assert_equal(10, cnt)
   end
   def testPower
     double = Mul.curry.call(2)
-    verify(8, double ** 3, 1)
-    verify(nil, double ** 0, 1)
+    verify(8, double**3, 1)
+    verify(nil, double**0, 1)
   end
   def testNth
     verify(2, nth(1), 1, 2, 3)
