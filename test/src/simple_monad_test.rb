@@ -16,7 +16,7 @@ end
 
 class SimpleMonadTest < Test::Unit::TestCase
   def test1
-    assert_equal 20, Idm.new(10).map{|i|i*2}
+    assert_equal 20, Idm.new(10).map{|i|i * 2}
     assert_equal 10, Idm.new(10).plus(Idm.new(20))
   end
 end
