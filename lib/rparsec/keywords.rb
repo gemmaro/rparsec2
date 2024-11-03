@@ -30,13 +30,13 @@ module RParsec
     end
 
     #
-    # To create an instance that lexes the given keywords
-    # case sensitively.
-    # _default_lexer_ is used to lex a token first, the token text is then compared with
-    # the given keywords. If it matches any of the keyword, a keyword token is generated instead
-    # using _keyword_symbol_.
-    # The _block_ parameter, if present, is used to convert the token text to another object
-    # when the token is recognized during grammar parsing phase.
+    # To create an instance that lexes the given keywords case
+    # sensitively.  +default_lexer+ is used to lex a token first, the
+    # token text is then compared with the given keywords. If it
+    # matches any of the keyword, a keyword token is generated instead
+    # using +keyword_symbol+.  The +block+ parameter, if present, is
+    # used to convert the token text to another object when the token
+    # is recognized during grammar parsing phase.
     #
     def self.case_sensitive(words, default_lexer = word.token(:word), keyword_symbol = :keyword, &block)
       new(words, true, default_lexer, keyword_symbol, &block)
