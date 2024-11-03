@@ -572,7 +572,7 @@ module RParsec
     end
   end
 
-  class ExpectParser < Parser
+  class ExpectParser < Parser # :nodoc:
     def initialize(parser, msg)
       super()
       @parser, @msg, @name = parser, msg, msg
