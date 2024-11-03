@@ -429,7 +429,8 @@ module RParsec
     end
 
     #
-    # Similar to _seq_. _other_ is auto-boxed if it is not of type Parser.
+    # Similar to #seq.  +other+ is auto-boxed if it is not of type
+    # Parser.
     #
     def >>(other)
       seq(autobox_parser(other))
