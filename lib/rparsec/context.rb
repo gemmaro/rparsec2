@@ -15,7 +15,7 @@ module RParsec
 
     def scanner
       @scanner = StringScanner.new(src) if @scanner.nil?
-      @scanner.pos= @index
+      @scanner.pos = @index
       @scanner
     end
 
@@ -53,7 +53,7 @@ module RParsec
     end
 
     def peek i
-      @src[@index+i]
+      @src[@index + i]
     end
 
     def next
