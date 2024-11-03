@@ -294,7 +294,8 @@ module RParsec
     end
 
     #
-    # a.optional(default) is equivalent to a.plus(value(default))
+    # <tt>a.optional(default)</tt> is equivalent to
+    # <tt>a.plus(value(default))</tt>.  See also #plus and #value.
     #
     def optional(default = nil)
       self.plus(value(default))
