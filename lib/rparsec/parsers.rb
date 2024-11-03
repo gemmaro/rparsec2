@@ -550,7 +550,7 @@ module RParsec
     end
   end
 
-  class NotParser < LookAheadSensitiveParser
+  class NotParser < LookAheadSensitiveParser # :nodoc:
     def initialize(parser, msg, la = 1)
       super(la)
       @parser, @msg, @name = parser, msg, "~#{parser.name}"
