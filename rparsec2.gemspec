@@ -1,7 +1,9 @@
 require 'rake'
+require_relative "lib/rparsec"
+
 spec = Gem::Specification.new do |s|
   s.name = 'rparsec2'
-  s.version = '1.0'
+  s.version = RParsec::VERSION
   s.summary = 'A Ruby Parser Combinator Framework'
   s.description = 'rparsec is a recursive descent parser combinator framework. Declarative API allows creating parser intuitively and dynamically.'
   s.author = 'Ben Yu'
