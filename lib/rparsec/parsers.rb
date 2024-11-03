@@ -1035,7 +1035,7 @@ module RParsec
       ctxt.retn(ctxt.index)
     end
   end
-  class SetIndexParser < Parser
+  class SetIndexParser < Parser # :nodoc:
     init :index
     def _parse ctxt
       ctxt.index = @index
