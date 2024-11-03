@@ -8,7 +8,7 @@ end
 RDoc::Task.new do |rdoc|
   readme = "README.rdoc"
   rdoc.main = readme
-  rdoc.rdoc_files.include("lib/**/*.rb", readme, "doc/overview.rdoc")
+  rdoc.rdoc_files.include("lib/**/*.rb", readme, "doc/*.rdoc")
   rdoc.generator = "hanna"
 end
 

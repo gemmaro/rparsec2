@@ -1,0 +1,73 @@
+= Tips
+
+Similar to any higher order combinator framework, rparsec program is
+not real easy to debug.  When error does happen, especially when the
+production rule is complex, tracing down the error may take
+considerable amount of time.  Though I do not think debugging rparsec
+is any harder than debugging parser generators, this is an undebatable
+problem that we should face.
+
+My experience in using rparsec (and jparsec too), is that <b>test
+driven development</b> <i>really</i> helps.  It is unfortunately hard
+to debug a complex parser object, but it is much easier for a small
+vanilla one.  If the whole parser program is built with test cases
+that tests every tiny piece of logic, detecting and debugging an error
+becomes a much easier task.
+
+Start from writing unit test case for every production rule before
+implementing it.  Run the test case, see the red bar, and then
+implement the production rule to turn it to green.
+
+That said, when you do encounter errors, here're a few things to check
+up.
+
+Lookahead:: Parsers#sum[rdoc-ref:RParsec::Parsers#sum] and
+            Parser#plus[rdoc-ref:RParsec::Parser#plus] are subject to
+            the default look-ahead value.  Suppose if any of the
+            alternative parser fails with some input consumption, the
+            rest of the alternatives will not get the chance to run.
+            The solution is to use the <tt>|</tt> operator or
+            Parsers#alt[rodc-ref:RParsec::Parsers#alt].  They will try
+            all the alternatives until a success regardless of input
+            consumption.
+            Parser#atomize[rdoc-ref:RParsec::Parser#atomize] or
+            Parser#lookahead[rdoc-ref:RParsec::Parser#lookahead] are
+            also tools to get around this problem.
+
+Ambiguity:: Suppose we have both +integer+ and +number+ that parses
+            integral literal and decimal literal.
+            <tt>(integer|number) << eof</tt> will fail given the input
+            of <tt>1.0</tt> because <tt>integer|number</tt> will first
+            try <i>integer</i>, which successfully recognizes the
+            input <tt>1</tt>.  And since the first alternative
+            succeeded, the <i>number</i> parser will not get a chance
+            to run.  Later when we try to run <i>eof</i> against the
+            remaining <tt>.0</tt>, we get an error.  Solution would be
+            either place +number+ as the first alterantive, or to use
+            <tt>longer(integer, number)</tt> which will try both
+            alternative and prefer the one with longer match.
+
+Consistency:: Make sure the token identifier you use in the syntactic
+              parser matches the one used in lexecial analysis.  If
+              you use different identifier for number token and
+              integer token, don't expect <tt>token(:number)</tt> will
+              match <tt>:integer</tt> tokens. Regular words are by
+              default identified by <tt>:word</tt>.
+
+Right input:: When your syntactic parser complains something like
+              <tt>'c' encountered</tt>, where <tt>c</tt> is the first
+              character of the current word (<tt>copy</tt> for
+              example), it is quite possible that you are feeding it
+              string as input, not the desired token array.
+
+Utilities that may help in troubleshooting:
+
+Parsers#watch[rdoc-ref:RParsec::Parsers#watch] can be used to print
+trace message as well as monitor the current input.
+Parsers#get_index[rdoc-ref:RParsec::Parsers#get_index] is a parser
+that reads the index number of the current input, with which you can
+know where the you are.
+
+---
+
+Originally written by Ben Yu at {rparsec tips}[https://web.archive.org/web/20150522220548/https://docs.codehaus.org/display/JPARSEC/rparsec+tips].
