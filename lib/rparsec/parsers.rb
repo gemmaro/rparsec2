@@ -779,7 +779,7 @@ module RParsec
     end
   end
 
-  class AreParser < Parser
+  class AreParser < Parser # :nodoc:
     init :vals, :msg
     def _parse ctxt
       if @vals.length > ctxt.available
