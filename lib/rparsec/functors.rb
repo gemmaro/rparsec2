@@ -88,12 +88,13 @@ module RParsec
     end
 
     #
-    # Create a Proc that's curriable.
-    # When curried, parameters are passed in from right to left.
-    # i.e. reverse_curry(closure).call(a).call(b) is quivalent to closure.call(b,a) .
-    # _block_ is encapsulated under the hood to perform the actual
-    # job when currying is done.
-    # arity explicitly specifies the number of parameters to curry.
+    # Create a +Proc+ that's curriable.  When curried, parameters are
+    # passed in from right to left.
+    # i.e. <tt>reverse_curry(closure).call(a).call(b)</tt> is
+    # quivalent to <tt>closure.call(b, a)</tt>.  +block+ is
+    # encapsulated under the hood to perform the actual job when
+    # currying is done.  +arity+ explicitly specifies the number of
+    # parameters to curry.
     #
     def reverse_curry(arity, &block)
       fail "cannot curry for unknown arity" if arity < 0
