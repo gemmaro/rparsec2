@@ -21,7 +21,7 @@ class PerfTestCase < Test::Unit::TestCase
     delim = whitespace.many_
     expr = delim >> Expressions.build(term, ops, delim)
     Benchmark.bm do |x|
-        x.report("parsing") { puts(expr.parse(code)) }
+      x.report("parsing") { puts(expr.parse(code)) }
     end
   end
 end
