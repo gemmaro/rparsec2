@@ -492,7 +492,7 @@ module RParsec
     end
   end
 
-  class CatchParser < Parser
+  class CatchParser < Parser # :nodoc:
     init :symbol, :parser
     def _parse ctxt
       interrupted = true
