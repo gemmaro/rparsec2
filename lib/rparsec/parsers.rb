@@ -173,8 +173,8 @@ module RParsec
     end
 
     #
-    # A parser that tries all given alternative parsers
-    # and picks the one with the longest match.
+    # A parser that tries all given alternative +parsers+ and picks
+    # the one with the longest match.
     #
     def longest(*parsers)
       BestParser.new(parsers, true)
