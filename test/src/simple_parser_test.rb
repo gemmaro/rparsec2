@@ -317,7 +317,7 @@ class SimpleParserTest < ParserTestCase
     assertError("\n \tabc ", "whitespace(s) expected, a at line 2, col 3.", whitespaces >> whitespaces, 3)
   end
   def testCommentLineWithLexeme
-   assertParser('#abc', nil, comment_line('#'))
+    assertParser('#abc', nil, comment_line('#'))
    code = <<-HERE
       //HELLO
       123
