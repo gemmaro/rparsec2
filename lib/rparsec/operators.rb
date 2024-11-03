@@ -5,9 +5,10 @@ require 'rparsec/parser'
 module RParsec
 
   #
-  # This class helps building lexer and parser for operators.
-  # The case that one operator (++ for example) contains another operator (+)
-  # is automatically handled so client code don't have to worry about ambiguity.
+  # This class helps building lexer and parser for operators.  The
+  # case that one operator (<tt>++</tt> for example) contains another
+  # operator (<tt>+</tt>) is automatically handled so client code
+  # don't have to worry about ambiguity.
   #
   class Operators
     #
