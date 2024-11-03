@@ -18,11 +18,6 @@ module RParsec
       attr_reader(*vars)
       def_ctor(*vars)
     end
-
-    def def_mutable(*vars)
-      attr_accessor(*vars)
-      def_ctor(*vars)
-    end
   end
 
 end # module

@@ -178,7 +178,6 @@ module RParsec
   module DefHelper
     def def_ctor: (*:index | :kind | :text vars) -> untyped
     def def_readable: (*untyped vars) -> untyped
-    def def_mutable: (*untyped vars) -> untyped
     def initialize: (*untyped params) -> void
   end
 
