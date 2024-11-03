@@ -26,10 +26,9 @@ module RParsec
     KindPrecedence = array_to_dict Associativities
 
     #
-    # build an expression parser using the given term parser
-    # and operator table.
-    # When _delim_ is specified, patterns recognized by _delim_
-    # is automatically ignored.
+    # build an expression parser using the given +term+ parser and
+    # operator +table+.  When +delim+ is specified, patterns
+    # recognized by +delim+ is automatically ignored.
     #
     def self.build(term, table, delim = nil)
       # sort so that higher precedence first.
