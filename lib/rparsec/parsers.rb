@@ -828,7 +828,7 @@ module RParsec
     end
   end
 
-  class TokenParser < Parser
+  class TokenParser < Parser # :nodoc:
     init :symbol, :parser
     def _parse ctxt
       ind = ctxt.index
