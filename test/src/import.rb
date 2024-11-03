@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 $: << File.join(__dir__, "../../lib")
 
 def import *names
