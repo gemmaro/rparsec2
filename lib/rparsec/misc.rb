@@ -5,7 +5,7 @@ module RParsec
   #
   # Helpers for defining ctor.
   #
-  module DefHelper
+  module DefHelper # :nodoc:
     def def_ctor(*vars)
       define_method(:initialize) do |*params|
         vars.each_with_index do |var, i|
