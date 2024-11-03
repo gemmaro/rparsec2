@@ -796,7 +796,7 @@ module RParsec
     end
   end
 
-  class StringCaseInsensitiveParser < Parser
+  class StringCaseInsensitiveParser < Parser # :nodoc:
     init :str, :msg
     def _downcase c
       case when c.ord >= ?A.ord && c.ord <= ?Z.ord then (c.ord + (?a.ord - ?A.ord)).chr else c end
