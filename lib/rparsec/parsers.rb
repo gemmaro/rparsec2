@@ -639,7 +639,7 @@ module RParsec
   end
 
 
-  class BestParser < Parser
+  class BestParser < Parser # :nodoc:
     init :alts, :longer
     def _parse ctxt
       best_result, best_ind = nil, -1
