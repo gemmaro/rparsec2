@@ -140,9 +140,11 @@ module RParsec
     end
 
     #
-    # To create a parser that does "look ahead" for n inputs.
+    # To create a parser that does "look ahead" for _n_ inputs.
     #
-    def lookahead _n
+    # WARNING: Not implemented yet?
+    #
+    def lookahead _n # :nodoc:
       self
     end
 
