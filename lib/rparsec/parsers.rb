@@ -506,7 +506,7 @@ module RParsec
     end
   end
 
-  class PeekParser < Parser
+  class PeekParser < Parser # :nodoc:
     init :parser
     def _parse ctxt
       ind = ctxt.index
