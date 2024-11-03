@@ -93,11 +93,13 @@ module RParsec
     end
 
     #
-    # _self_ is first executed, the parser result is then passed as parameter to the associated block,
-    # which evaluates to another Parser object at runtime. This new Parser object is then executed
-    # to get the final parser result.
+    # +self+ is first executed, the parser result is then passed as
+    # parameter to the associated +block+, which evaluates to another
+    # Parser object at runtime.  This new Parser object is then
+    # executed to get the final parser result.
     #
-    # Different from _bind_, parser result of _self_ will be expanded first if it is an array.
+    # Different from #bind, parser result of +self+ will be expanded
+    # first if it is an array.
     #
     def bindn(&block)
       return self unless block
