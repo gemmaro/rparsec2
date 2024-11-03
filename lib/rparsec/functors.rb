@@ -44,7 +44,7 @@ module RParsec
     To_f = proc { |x| x.to_f }
 
     #
-    # Get a Proc, when called, always return the given value.
+    # Get a +Proc+, when called, always return the given value.
     #
     def const(v)
       proc { |_| v }
