@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 %w{
 monad misc error context locator token functors parser_monad
 }.each { |lib| require "rparsec/#{lib}" }
