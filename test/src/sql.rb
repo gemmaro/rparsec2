@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'import'
 import :misc
 
@@ -214,7 +216,7 @@ end
 class SelectRelation < Relation
   def_readable :select, :distinct, :from, :where, :groupby, :orderby
   def to_s
-    result = "select "
+    result = +"select "
     if distinct
       result << 'distinct '
     end
