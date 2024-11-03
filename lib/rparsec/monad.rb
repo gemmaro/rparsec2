@@ -32,8 +32,9 @@ module RParsec
     end
 
     #
-    # Run the _seq_ operation on the encapsulated object following the monad law.
-    # If _seq_ is not defined by the monad impl, use _bind_ to implement.
+    # Run the _seq_ operation on the encapsulated object following the
+    # monad law.  If +seq+ is not defined by the monad impl, use #bind
+    # to implement.
     #
     def seq(other)
       if @monad.respond_to? :seq
