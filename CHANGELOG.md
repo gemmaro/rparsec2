@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 1.2.0 - 2024-11-04
+
 * Remove runtime type checker and signature.
 * Removed `def_mutable` method.
 * Enable frozen string literal.
