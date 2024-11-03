@@ -936,7 +936,7 @@ module RParsec
     end
   end
 
-  class Many_Parser < Parser
+  class Many_Parser < Parser # :nodoc:
     init :parser, :least
     def _parse ctxt
       @least.times do
