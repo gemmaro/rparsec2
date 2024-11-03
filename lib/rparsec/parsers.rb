@@ -435,7 +435,7 @@ module RParsec
     end
   end
 
-  class ValueParser < Parser
+  class ValueParser < Parser # :nodoc:
     init :value
     def _parse ctxt
       ctxt.retn @value
