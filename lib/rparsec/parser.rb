@@ -118,8 +118,8 @@ module RParsec
     end
 
     #
-    # Create a new parser that's atomic.,
-    # meaning that when it fails, input consumption is undone.
+    # Create a new parser that's atomic, meaning that when it fails,
+    # input consumption is undone.
     #
     def atomize
       AtomParser.new(self).setName(@name)
