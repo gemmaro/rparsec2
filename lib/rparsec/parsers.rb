@@ -532,7 +532,7 @@ module RParsec
     end
   end
 
-  class LookAheadSensitiveParser < Parser
+  class LookAheadSensitiveParser < Parser # :nodoc:
     def initialize(la = 1)
       super()
       @lookahead = la
