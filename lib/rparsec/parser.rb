@@ -299,7 +299,8 @@ module RParsec
     end
 
     #
-    # a.catchp(:somesymbol) will catch the :somesymbol thrown by a.
+    # <tt>a.catchp(:somesymbol)</tt> will catch the
+    # <tt>:somesymbol</tt> thrown by +a+.
     #
     def catchp(symbol)
       CatchParser.new(symbol, self)
