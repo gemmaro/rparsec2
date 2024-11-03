@@ -181,9 +181,9 @@ module RParsec
     end
 
     #
-    # To create a parser that repeats self for a minimum _min_ times,
-    # and maximally _max_ times.
-    # All return values are collected in an array.
+    # To create a parser that repeats +self+ for a minimum +min+
+    # times, and maximally +max+ times.  All return values are
+    # collected in an array.
     #
     def repeat(min, max = min)
       return Parsers.failure("min=#{min}, max=#{max}") if min > max
