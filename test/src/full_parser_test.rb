@@ -86,12 +86,12 @@ class FullParserTest < ParserTestCase
     verify('case 1 when 1*1 then (1-2) when 3 then 4 end+1')
   end
   def testFullCaseWhen
-      assertParser('3*case when 1==0 and 1==1 then 1 when 1==1 then 2 end', 6, parser)
+    assertParser('3*case when 1==0 and 1==1 then 1 when 1==1 then 2 end', 6, parser)
     begin
       parser.parse('3*case when (1==0 and 1==1) : 1 when 1==1 then 2 end')
       fail('should have failed')
     rescue ParserException => e
-        assert(e.message.include?('keyword:then expected, : at line 1, col 29'))
+      assert(e.message.include?('keyword:then expected, : at line 1, col 29'))
     end
   end
 end
