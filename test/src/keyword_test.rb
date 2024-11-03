@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'import'
-import :parsers, :keywords
-require_relative 'parser_test'
+require "test_helper"
+require "rparsec/keywords"
 
 class KeywordTestCase < ParserTestCase
   Insensitive = Keywords.case_insensitive(%w{select from where group by order having}) { |x| x.downcase }

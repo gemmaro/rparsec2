@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'import'
-import :parsers, :functors, :expressions
-require_relative 'parser_test'
+require "test_helper"
+require "rparsec/expressions"
 
 class SExpressionTestCase < ParserTestCase
   def delim

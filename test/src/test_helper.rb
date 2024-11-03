@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
-require_relative 'import'
+$: << File.join(__dir__, "../../lib")
+
 require 'test/unit'
-import :parsers, :functors
+
+require "rparsec/parsers"
+require "rparsec/functors"
 
 include RParsec
 

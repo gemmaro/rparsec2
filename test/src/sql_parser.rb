@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
-require_relative 'import'
-import :parsers, :keywords, :operators, :functors, :expressions
+require "test_helper"
+require "rparsec/keywords"
+require "rparsec/operators"
+require "rparsec/expressions"
 
 include RParsec
 

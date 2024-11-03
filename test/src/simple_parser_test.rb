@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'import'
-import :parsers
-require_relative 'parser_test'
+require "test_helper"
 
 class SimpleParserTest < ParserTestCase
   def testValue

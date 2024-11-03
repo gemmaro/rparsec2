@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
-require_relative 'import'
-import :rparsec
+require "test_helper"
 require 'benchmark'
-require 'test/unit'
+
 class PerfTestCase < Test::Unit::TestCase
   include Parsers
   include Functors

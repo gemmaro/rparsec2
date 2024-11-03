@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'import'
-import :misc
+require "test_helper"
+require "rparsec/misc"
 
 include RParsec
 class Module

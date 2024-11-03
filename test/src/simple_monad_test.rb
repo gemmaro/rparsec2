@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative 'import'
-require 'test/unit'
-import :id_monad, :monad
+require "test_helper"
+require "rparsec/id_monad"
+require "rparsec/monad"
 
 include RParsec
 class Idm

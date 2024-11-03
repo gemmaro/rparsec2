@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
-require_relative 'parser_test'
-require_relative 'sql'
-require_relative 'sql_parser'
+require "test_helper"
+require 'sql'
+require 'sql_parser'
+
 class SqlTestCase < ParserTestCase
   include SqlParser
   def verify_sql(code, expected, parser)

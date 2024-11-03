@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'import'
-require 'test/unit'
-import :parsers, :functors
+require "test_helper"
 
 include RParsec
 class Proc

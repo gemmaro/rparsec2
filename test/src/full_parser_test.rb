@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
-require_relative 'import'
-import :parsers, :keywords, :operators, :functors, :expressions
-require_relative 'parser_test'
+require 'test_helper'
+require "rparsec/keywords"
+require "rparsec/operators"
+require "rparsec/expressions"
 
 class FullParserTest < ParserTestCase
   def calculate_simple_cases(val, cases, default)
