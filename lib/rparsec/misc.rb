@@ -101,10 +101,8 @@ module Signature
       TypeChecker.check_vararg_type star_type, params, sym, star_ind unless star_ind.nil?
       mtd.bind(self)
     end
-    module_eval do
-      define_method(sym) do |*params, &block|
-        send(helper, *params).call(*params, &block)
-      end
+    define_method(sym) do |*params, &block|
+      send(helper, *params).call(*params, &block)
     end
   end
 end
