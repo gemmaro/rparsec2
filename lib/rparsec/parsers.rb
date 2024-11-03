@@ -839,7 +839,7 @@ module RParsec
     end
   end
 
-  class NestedParser < Parser
+  class NestedParser < Parser # :nodoc:
     init :parser1, :parser2
     def _parse ctxt
       ind = ctxt.index
