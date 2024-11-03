@@ -350,12 +350,12 @@ module RParsec
     end
 
     #
-    # For postfix unary operator.
-    # a.postfix op will run parser _a_ for once and then _op_ for 0 or more times.
-    # _op_ should return a Proc that accepts one parameter.
-    # Proc objects returned by _op_ is then fed with the value returned by _a_
-    # from left to right.
-    # The final result is returned as return value.
+    # For postfix unary operator.  <tt>a.postfix op</tt> will run
+    # parser +a+ for once and then +op+ for 0 or more times.  +op+
+    # should return a +Proc+ that accepts one parameter.  +Proc+
+    # objects returned by +op+ is then fed with the value returned by
+    # +a+ from left to right.  The final result is returned as return
+    # value.
     #
     def postfix(op)
       Parsers.sequence(self, op.many) do |v, funcs|
