@@ -97,10 +97,6 @@ Such use is demonstrated in detail in the test code.)
 
   gem install rparsec2
 
-== Limitations
-
-There might be "method redefined" warning.
-
 == Reference
 
 This file was written according to the original and archived
