@@ -269,11 +269,11 @@ module RParsec
     end
 
     #
-    # A parser that succeeds when the current input
-    # is a token with one of the the given token kinds.
-    # If a block is given, the token text is passed to the block
-    # as parameter, and the block return value is used as result.
-    # Otherwise, the token object is used as result.
+    # A parser that succeeds when the current input is a token with
+    # one of the the given token +kinds+.  If a block is given, the
+    # token text is passed to the block as parameter, and the block
+    # return value is used as result.  Otherwise, the token object is
+    # used as result.
     #
     def token(*kinds, &proc)
       expected = "#{kinds.join(' or ')} expected"
