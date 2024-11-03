@@ -416,10 +416,10 @@ module RParsec
     end
 
     #
-    # a.token(:word_token) will return a Token object when _a_ succeeds.
-    # The matched string (or the string returned by _a_, if any) is
-    # encapsulated in the token, together with the :word_token symbol and
-    # the starting index of the match.
+    # <tt>a.token(:word_token)</tt> will return a Token object when
+    # +a+ succeeds.  The matched string (or the string returned by
+    # +a+, if any) is encapsulated in the token, together with the
+    # <tt>:word_token</tt> symbol and the starting index of the match.
     #
     def token(kind)
       TokenParser.new(kind, self)
