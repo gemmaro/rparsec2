@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 %w{
   simple_monad
   functor
