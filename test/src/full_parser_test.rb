@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'import'
 import :parsers, :keywords, :operators, :functors, :expressions
 require_relative 'parser_test'
