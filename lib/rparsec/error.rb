@@ -8,7 +8,8 @@ module RParsec
     extend DefHelper
     def_readable :index
   end
-  class Failure
+
+  class Failure # :nodoc:
     def initialize(ind, input, message = nil)
       @index, @input, @msg = ind, input, message
     end
