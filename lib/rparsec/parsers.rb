@@ -726,7 +726,7 @@ module RParsec
     end
   end
 
-  class FollowedParser < Parser
+  class FollowedParser < Parser # :nodoc:
     init :p1, :p2
     def _parse ctxt
       return false unless @p1._parse ctxt
