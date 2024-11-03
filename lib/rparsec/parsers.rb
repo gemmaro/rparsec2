@@ -914,7 +914,7 @@ module RParsec
     end
   end
 
-  class Repeat_Parser < Parser
+  class Repeat_Parser < Parser # :nodoc:
     init :parser, :times
     def _parse ctxt
       @times.times do
