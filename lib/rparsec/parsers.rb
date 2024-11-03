@@ -1030,7 +1030,7 @@ module RParsec
     end
   end
 
-  class GetIndexParser < Parser
+  class GetIndexParser < Parser # :nodoc:
     def _parse ctxt
       ctxt.retn(ctxt.index)
     end
