@@ -323,9 +323,9 @@ module RParsec
     end
 
     #
-    # A lazy parser, when executed, calls the given block
-    # to get a parser object and delegate the call to this lazily
-    # instantiated parser.
+    # A lazy parser, when executed, calls the given +block+ to get a
+    # parser object and delegate the call to this lazily instantiated
+    # parser.
     #
     def lazy(&block)
       LazyParser.new(block)
