@@ -765,7 +765,7 @@ module RParsec
     end
   end
 
-  class RegexpParser < Parser
+  class RegexpParser < Parser # :nodoc:
     init :ptn, :msg
     def _parse ctxt
       scanner = ctxt.scanner
