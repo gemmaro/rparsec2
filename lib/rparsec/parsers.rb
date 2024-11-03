@@ -748,7 +748,7 @@ module RParsec
     end
   end
 
-  class AnyParser < Parser
+  class AnyParser < Parser # :nodoc:
     def _parse ctxt
       return ctxt.expecting if ctxt.eof
       result = ctxt.current
