@@ -485,7 +485,7 @@ module RParsec
   #  [e1,e2]
   #end
   ###############################################
-  class ThrowParser < Parser
+  class ThrowParser < Parser # :nodoc:
     init :symbol
     def _parse _ctxt
       throw @symbol
