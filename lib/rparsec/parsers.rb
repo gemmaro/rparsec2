@@ -307,8 +307,8 @@ module RParsec
     end
 
     #
-    # A parser that parses a line started with _start_.
-    # nil is the result.
+    # A parser that parses a line started with +start+.  +nil+ is the
+    # result.
     #
     def comment_line start
       string(start) >> not_char(?\n).many_ >> char(?\n).optional >> value(nil)
