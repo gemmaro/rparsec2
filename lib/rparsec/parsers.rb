@@ -46,8 +46,9 @@ module RParsec
     end
 
     #
-    # A parser that succeeds when the the current input is equal to the given value.
-    # _expected_ is the error message when _pred_ returns false.
+    # A parser that succeeds when the the current input is equal to
+    # the given value.  +expected+ is the error message when the
+    # predicate returns false.
     #
     def is(v, expected = "#{v} expected")
       satisfies(expected) { |c| c == v }
