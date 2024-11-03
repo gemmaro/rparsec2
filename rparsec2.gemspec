@@ -1,4 +1,6 @@
 require 'rake'
+
+$LOAD_PATH << File.join(__dir__, "lib")
 require_relative "lib/rparsec"
 
 spec = Gem::Specification.new do |s|
