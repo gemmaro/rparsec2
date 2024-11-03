@@ -32,4 +32,5 @@ with RubyGems and Rake tasks.")
 
 (concatenate-manifests (list (packages->manifest (list ruby-hanna))
                              (specifications->manifest (list "ruby@3.1"
-                                                             "ruby-rubocop"))))
+                                                             "ruby-rubocop"
+                                                             "ruby-simplecov"))))
