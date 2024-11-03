@@ -84,9 +84,9 @@ module RParsec
     alias setName set_name
 
     #
-    # a.map{|x|x+1} will first execute parser a, when it succeeds,
-    # the associated block is executed to transform the result to a new value
-    # (increment it in this case).
+    # <tt>a.map { |x| x + 1 }</tt> will first execute parser +a+, when
+    # it succeeds, the associated block is executed to transform the
+    # result to a new value (increment it in this case).
     #
     def map(&block)
       return self unless block
