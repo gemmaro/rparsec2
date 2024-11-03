@@ -307,7 +307,7 @@ module RParsec
     end
 
     #
-    # a.fragment will return the string matched by a.
+    # <tt>a.fragment</tt> will return the string matched by +a+.
     #
     def fragment
       FragmentParser.new(self)
