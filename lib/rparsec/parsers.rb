@@ -38,8 +38,8 @@ module RParsec
 
     #
     # A parser that succeeds when the given predicate returns true
-    # (with the current input as the parameter).
-    # _expected_ is the error message when _pred_ returns false.
+    # (with the current input as the parameter).  +expected+ is the
+    # error message when +pred+ returns false.
     #
     def satisfies(expected, &pred)
       SatisfiesParser.new(pred, expected)
