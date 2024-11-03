@@ -819,7 +819,7 @@ module RParsec
     end
   end
 
-  class FragmentParser < Parser
+  class FragmentParser < Parser # :nodoc:
     init :parser
     def _parse ctxt
       ind = ctxt.index
