@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rparsec/parser'
 
 module RParsec
