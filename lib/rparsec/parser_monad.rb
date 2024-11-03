@@ -2,7 +2,7 @@
 
 module RParsec
 
-  class ParserMonad
+  class ParserMonad # :nodoc:
     def fail msg
       FailureParser.new(msg)
     end
