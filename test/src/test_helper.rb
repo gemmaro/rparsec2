@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require "simplecov"
+SimpleCov.start
+
 $: << File.join(__dir__, "../../lib")
 
 require 'test/unit'
