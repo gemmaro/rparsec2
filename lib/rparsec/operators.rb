@@ -12,9 +12,10 @@ module RParsec
   #
   class Operators
     #
-    # To create an instance of Operators for the given operators.
-    # The _block_ parameter, if present, is used to convert the token text to another object
-    # when the token is recognized during grammar parsing phase.
+    # To create an instance of Operators for the given operators.  The
+    # +block+ parameter, if present, is used to convert the token text
+    # to another object when the token is recognized during grammar
+    # parsing phase.
     #
     def initialize(ops, &block)
       @lexers = {}
