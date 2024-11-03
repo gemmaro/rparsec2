@@ -363,13 +363,16 @@ module RParsec
 
     #
     # A parser that maps current parser result to a new result using
-    # the given block.
-    ##
-    # Different from Parser#map, this method does not need to be combined
-    # with any Parser object. It is rather an independent Parser object
-    # that maps the _current_ parser result.
-    ##
-    # parser1.map{|x|...} is equivalent to parser1 >> map{|x|...}
+    # the given +block+.
+    #
+    # Different from Parser#map, this method does not need to be
+    # combined with any Parser object.  It is rather an independent
+    # Parser object that maps the _current_ parser result.
+    #
+    # <tt>parser1.map { |x| ... }</tt> is equivalent to <tt>parser1 >>
+    # map { |x| ... }</tt>.
+    #
+    # See also Parser#>>.
     #
     def map(&block)
       return one unless block
