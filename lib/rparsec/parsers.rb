@@ -442,7 +442,7 @@ module RParsec
     end
   end
 
-  class LazyParser < Parser
+  class LazyParser < Parser # :nodoc:
     init :block
     def _parse ctxt
       @block.call._parse ctxt
