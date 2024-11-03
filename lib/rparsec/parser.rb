@@ -392,9 +392,9 @@ module RParsec
     end
 
     #
-    # For right-associative infix binary operator.
-    # _op_ has to return a Proc that takes two parameters, who
-    # are returned by the _self_ parser as operands.
+    # For right-associative infix binary operator.  +op+ has to return
+    # a +Proc+ that takes two parameters, who are returned by the
+    # +self+ parser as operands.
     #
     def infixr(op)
       Parsers.sequence(self, _infix_rest(op, self).many) do |v, rests|
