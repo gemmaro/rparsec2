@@ -204,8 +204,8 @@ module RParsec
     end
 
     #
-    # To create a parser that repeats self for at least _least_ times.
-    # All return values are collected in an array.
+    # To create a parser that repeats +self+ for at least +least+
+    # times.  All return values are collected in an array.
     #
     def many(least = 0)
       ManyParser.new(self, least)
