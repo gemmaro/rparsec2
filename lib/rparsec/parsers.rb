@@ -704,7 +704,7 @@ module RParsec
     end
   end
 
-  class SequenceParser < Parser
+  class SequenceParser < Parser # :nodoc:
     init :parsers, :proc
     def _parse ctxt
       if @proc.nil?
