@@ -322,9 +322,9 @@ module RParsec
     end
 
     #
-    # a.lexeme(delim) will parse _a_ for 0 or more times and ignore all
-    # patterns recognized by _delim_.
-    # Values returned by _a_ are collected in an array.
+    # <tt>a.lexeme(delim)</tt> will parse +a+ for 0 or more times and
+    # ignore all patterns recognized by +delim+.  Values returned by
+    # +a+ are collected in an array.
     #
     def lexeme(delim = Parsers.whitespaces)
       delim = delim.many_
