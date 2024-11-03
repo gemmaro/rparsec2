@@ -906,7 +906,7 @@ module RParsec
     end
   end
 
-  class MapnCurrentParser < Parser
+  class MapnCurrentParser < Parser # :nodoc:
     init :proc
     def _parse ctxt
       ctxt.result = @proc.call(*ctxt.result)
