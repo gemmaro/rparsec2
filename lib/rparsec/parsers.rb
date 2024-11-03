@@ -428,7 +428,7 @@ module RParsec
     extend self
   end
 
-  class FailureParser < Parser
+  class FailureParser < Parser # :nodoc:
     init :msg
     def _parse ctxt
       return ctxt.failure(@msg)
