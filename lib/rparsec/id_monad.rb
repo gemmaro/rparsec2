@@ -2,7 +2,7 @@
 
 module RParsec
 
-  class IdMonad
+  class IdMonad # :nodoc:
     def value v
       v
     end
