@@ -4,7 +4,7 @@ require 'strscan'
 
 module RParsec
 
-  class ParseContext
+  class ParseContext # :nodoc:
     attr_reader :error, :src, :index, :result
     attr_writer :error, :index, :result
 
