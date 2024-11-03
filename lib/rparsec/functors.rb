@@ -51,7 +51,7 @@ module RParsec
     end
 
     #
-    # Get a Proc, when called, return the nth parameter.
+    # Get a +Proc+, when called, return the <tt>n</tt>th parameter.
     #
     def nth(n)
       proc { |*args| args[n] }
