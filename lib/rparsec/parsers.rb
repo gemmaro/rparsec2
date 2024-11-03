@@ -519,7 +519,7 @@ module RParsec
     end
   end
 
-  class AtomParser < Parser
+  class AtomParser < Parser # :nodoc:
     init :parser
     def _parse ctxt
       ind = ctxt.index
