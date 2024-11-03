@@ -194,9 +194,10 @@ module RParsec
     end
 
     #
-    # To create a parser that repeats self for at least _least_ times.
-    # parser.many_ is equivalent to bnf notation "parser*".
-    # Only the return value of the last execution is preserved.
+    # To create a parser that repeats +self+ for at least +least+
+    # times.  <tt>parser.many_</tt> is equivalent to bnf notation
+    # <tt>parser*</tt>.  Only the return value of the last execution
+    # is preserved.
     #
     def many_(least = 0)
       Many_Parser.new(self, least)
