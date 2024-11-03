@@ -134,7 +134,7 @@ module RParsec
     end
 
     #
-    # To create a new parser that succeed only if self fails.
+    # To create a new parser that succeed only if +self+ fails.
     #
     def not(msg = "#{self} unexpected")
       NotParser.new(self, msg)
