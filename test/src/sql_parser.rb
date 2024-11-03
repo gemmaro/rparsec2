@@ -3,6 +3,7 @@
 require "rparsec/keywords"
 require "rparsec/operators"
 require "rparsec/expressions"
+require "rparsec/operator_table"
 
 include RParsec
 
