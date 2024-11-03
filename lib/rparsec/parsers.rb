@@ -736,7 +736,7 @@ module RParsec
     end
   end
 
-  class SatisfiesParser < Parser
+  class SatisfiesParser < Parser # :nodoc:
     init :pred, :expected
     def _parse ctxt
       elem = nil
