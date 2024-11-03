@@ -317,8 +317,8 @@ module RParsec
     end
 
     #
-    # a.nested b will feed the token array returned by parser a to parser b
-    # for a nested parsing.
+    # <tt>a.nested b</tt> will feed the token array returned by parser
+    # +a+ to parser +b+ for a nested parsing.
     #
     def nested(parser)
       NestedParser.new(self, parser)
