@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'import'
 require 'test/unit'
 import :parsers, :functors
