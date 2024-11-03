@@ -335,13 +335,12 @@ module RParsec
     end
 
     #
-    # For prefix unary operator.
-    # a.prefix op will run parser _op_ for 0 or more times and eventually run parser _a_
-    # for one time.
-    # _op_ should return a Proc that accepts one parameter.
-    # Proc objects returned by _op_ is then fed with the value returned by _a_
-    # from right to left.
-    # The final result is returned as return value.
+    # For prefix unary operator.  <tt>a.prefix op</tt> will run parser
+    # +op+ for 0 or more times and eventually run parser +a+ for one
+    # time.  +op+ should return a +Proc+ that accepts one parameter.
+    # +Proc+ objects returned by +op+ is then fed with the value
+    # returned by +a+ from right to left.  The final result is
+    # returned as return value.
     #
     def prefix(op)
       Parsers.sequence(op.many, self) do |funcs, v|
