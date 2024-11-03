@@ -315,9 +315,8 @@ module RParsec
     end
 
     #
-    # A parser that parses a chunk of text started with _open_
-    # and ended by _close_.
-    # nil is the result.
+    # A parser that parses a chunk of text started with +open+ and
+    # ended by +close+.  +nil+ is the result.
     #
     def comment_block open, close
       string(open) >> not_string(close).many_ >> string(close) >> value(nil)
