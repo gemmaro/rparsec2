@@ -1,5 +1,9 @@
 # rparsec Change Log
 
+## Unreleased
+
+* Remove runtime type checker and signature.
+
 ## 1.1.0 - 2024-11-03
 
 Changes from 1.0:
