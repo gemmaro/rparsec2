@@ -66,9 +66,8 @@ module RParsec
     end
 
     #
-    # Create a Proc, when called, the parameter is
-    # first passed into _f2_, _f1_ is called in turn
-    # with the return value from _other_.
+    # Create a +Proc+, when called, the parameter is first passed into
+    # +f2+, +f1+ is called in turn with the return value from +f2+.
     #
     def compose(f1, f2)
       proc { |*x| f1.call(f2.call(*x)) }
