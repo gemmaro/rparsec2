@@ -1,0 +1,108 @@
+= rparsec
+
+rparsec is a parser combinator library in Ruby.
+This is a port of Jparsec, written in Java.
+
+== Demo
+
+=== Calculator
+
+The following is the Ruby version of calculator.
+
+  require 'rparsec'
+
+  include RParsec
+
+  class Calculator
+    include Parsers
+    include Functors
+
+    def parser
+      ops = OperatorTable.new
+              .infixl(char(?+) >> Plus,  20)
+              .infixl(char(?-) >> Minus, 20)
+              .infixl(char(?*) >> Mul,   40)
+              .infixl(char(?/) >> Div,   40)
+              .prefix(char(?-) >> Neg,   60)
+      expr = nil
+      term = integer.map(&To_i) | char('(') >> lazy { expr } << char(')')
+      delim = whitespace.many_
+      expr = delim >> Expressions.build(term, ops, delim)
+    end
+  end
+
+  Calculator.new.parser.parse '1+2*(3-1)' # => 5
+
+As simple as that!
+
+=== S-expression
+
+The above example utilizes the pre-built
+Expressions[rdoc-ref:RParsec::Expressions] class to help building
+expression parser.  Another example is for a simpler s-expression
+parser (in lisp syntax, <tt>- (+ 1 (* 2 2)) (1)</tt> sort of thing).
+As s-expression is way simpler to parse than expressions with infix
+operators, we will build the parser without using
+Expressions[rdoc-ref:RParsec::Expressions] class:
+
+  include RParsec
+
+  class SExpressionTestCase < RUNIT::TestCase
+    include Parsers
+    include Functors
+
+    def delim
+      whitespace.many_
+    end
+
+    def ignore parser
+      parser << delim
+    end
+
+    def lparen
+      ignore(char('('))
+    end
+
+    def rparen
+      ignore(char(')'))
+    end
+
+    def parser
+      expr      = nil
+      lazy_expr = lazy { expr }
+      term      = number.map(&To_f) | lparen >> lazy_expr << rparen
+      binop     = char('+') >> Plus | char('-') >> Minus | char('*') >> Mul | char('/') >> Div
+      binop     = ignore binop
+      term      = ignore term
+
+      binary = sequence(binop, lazy_expr, lazy_expr) do |op, e1, e2|
+        op.call(e1, e2)
+      end
+
+      expr = delim >> (term | binary)
+    end
+
+    def test1
+      assert_equal(4, parser.parse('- + 1 (* 2 2.0) (1)'))
+    end
+  end
+
+The code is pretty self-explanatory.  The only thing to note is that
+we had to manually skip whitespaces using the +ignore+
+function. (Whitespace skipping can be more elegant if we do a 2-phase
+parsing, where lexer takes care of them before grammar rule kicks in.
+Such use is demonstrated in detail in the test code.)
+
+== Installation
+
+  gem install rparsec2
+
+== Limitations
+
+There might be "method redefined" warning.
+
+== Reference
+
+This file was written according to the original and archived
+{rparsec project page}[https://web.archive.org/web/20150522210425/https://docs.codehaus.org/display/JPARSEC/Ruby+Parsec]
+written by Ben Yu.
