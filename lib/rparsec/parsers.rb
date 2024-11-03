@@ -611,7 +611,7 @@ module RParsec
   end
 
 
-  class AltParser < LookAheadSensitiveParser
+  class AltParser < LookAheadSensitiveParser # :nodoc:
     def initialize(alts, la = 1)
       super(la)
       @alts, @lookahead = alts, la
