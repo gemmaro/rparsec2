@@ -343,29 +343,6 @@ class SimpleParserTest < ParserTestCase
     assertParser('abc', ?a, char('a').peek.repeat_(2))
     assertError('abc', "'b' expected", char('a').peek >> char('b'))
   end
-  def testParserTypeCheck
-    verifyTypeMismatch(:plus, '1st', Parser, String) do
-      char('a').plus('a')
-    end
-    verifyTypeMismatch(:seq, '1st', Parser, String) do
-      char('a').seq('a')
-    end
-    verifyTypeMismatch(:followed, '1st', Parser, String) do
-      char('a') << 'a'
-    end
-    verifyTypeMismatch(:sequence, '2nd', Parser, Integer) do
-      sequence(char('a'), 1, 2)
-    end
-    verifyTypeMismatch(:sum, '2nd', Parser, Integer) do
-      sum(char('a'), 1, 2)
-    end
-    verifyTypeMismatch(:longest, '2nd', Parser, Integer) do
-      longest(char('a'), 1, 2)
-    end
-    verifyTypeMismatch(:shortest, '2nd', Parser, Integer) do
-      shortest(char('a'), 1, 2)
-    end
-  end
   def testSetIndex
     parser = get_index.bind do |ind|
       char('a') << set_index(ind)
@@ -400,23 +377,5 @@ class SimpleParserTest < ParserTestCase
     assertParser('abc', ?a, any.repeat(2) >> mapn { |a, _| a })
     assertParser('abc', ?c, any.repeat_(2) >> mapn(&Succ))
     assertParser('abc', [?a, ?b], any.repeat(2) >> mapn)
-  end
-  def verifyTypeMismatch(mtd, n, expected, actual)
-    begin
-      yield
-      assert_fail('should have failed with type mismatch')
-    rescue ArgumentError => e
-        assert_equal("#{actual} assigned to #{expected} for the #{n} argument of #{mtd}.",
-          e.message)
-    end
-  end
-  def verifyArrayTypeMismatch(mtd, n_arg, n_elem, expected, actual)
-    begin
-      yield
-      assert_fail('should have failed with type mismatch')
-    rescue ArgumentError => e
-        assert_equal("#{actual} assigned to #{expected} for the #{n_elem} element of the #{n_arg} argument of #{mtd}.",
-          e.message)
-    end
   end
 end

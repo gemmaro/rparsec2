@@ -182,7 +182,6 @@ class PlusParser < LookAheadSensitiveParser
   def plus other
     PlusParser.new(@alts.dup << other, @lookahead).setName(name)
   end
-  def_sig :plus, Parser
 end
 
 
@@ -297,10 +296,8 @@ class SequenceParser < Parser
     return true
   end
   def seq(other, &block)
-    # TypeChecker.check_arg_type Parser, other, :seq
     SequenceParser.new(@parsers.dup << other, &block)
   end
-  def_sig :seq, Parser
 end
 
 class FollowedParser < Parser

@@ -10,7 +10,6 @@ module RParsec
 class Parser
   include Functors
   include Monad
-  extend Signature
   extend DefHelper
   MyMonad = ParserMonad.new
   attr_accessor :name
@@ -27,11 +26,7 @@ class Parser
       define_method(:initialize) do |*params|
         super()
         vars.each_with_index do |var, i|
-          param = params[i]
-          if parser_checker.include? i
-            TypeChecker.check_arg_type Parser, param, self, i
-          end
-          instance_variable_set("@" + var.to_s, param)
+          instance_variable_set("@#{var}", params[i])
         end
       end
     end
@@ -161,7 +156,6 @@ class Parser
   def followed(other)
     FollowedParser.new(self, other)
   end
-  def_sig :followed, Parser
 
   #
   # To create a parser that repeats self for a minimum _min_ times,
@@ -429,10 +423,8 @@ class Parser
   # the block is used as the final result of the parser.
   #
   def seq(other, &block)
-    # TypeChecker.check_arg_type Parser, other, :seq
     Parsers.sequence(self, other, &block)
   end
-  def_sig :seq, Parser
 
   #
   # Similar to _seq_. _other_ is auto-boxed if it is not of type Parser.
@@ -456,8 +448,6 @@ class Parser
   alias << followed
   alias * repeat_
 
-  def_sig :plus, Parser
-
   def _parse(_ctxt)
     false
   end
@@ -466,8 +456,6 @@ end
 # This module provides all out-of-box parser implementations.
 #
 module Parsers
-  extend Signature
-
   #
   # A parser that always fails with the given error message.
   #
@@ -487,10 +475,8 @@ module Parsers
   # or any failure with input consumption beyond the current look-ahead.
   #
   def sum(*alts)
-    # TypeChecker.check_vararg_type Parser, alts, :sum
     PlusParser.new(alts)
   end
-  def_sig :sum, [Parser]
 
   #
   # A parser that calls alternative parsers until one succeeds.
@@ -498,7 +484,6 @@ module Parsers
   def alt(*alts)
     AltParser.new(alts)
   end
-  def_sig :alt, [Parser]
 
   #
   # A parser that succeeds when the given predicate returns true
@@ -617,10 +602,8 @@ module Parsers
   # is used as result instead.
   #
   def sequence(*parsers, &proc)
-    # TypeChecker.check_vararg_type Parser, parsers, :sequence
     SequenceParser.new(parsers, proc)
   end
-  def_sig :sequence, [Parser]
 
   #
   # A parser that returns the current input index (starting from 0).
@@ -641,20 +624,16 @@ module Parsers
   # and picks the one with the longest match.
   #
   def longest(*parsers)
-    # TypeChecker.check_vararg_type Parser, parsers, :longest
     BestParser.new(parsers, true)
   end
-  def_sig :longest, [Parser]
 
   #
   # A parser that tries all given alternative parsers
   # and picks the one with the shortest match.
   #
   def shortest(*parsers)
-    # TypeChecker.check_vararg_type Parser, parsers, :shortest
     BestParser.new(parsers, false)
   end
-  def_sig :shortest, [Parser]
 
   alias shorter shortest
   alias longer longest
