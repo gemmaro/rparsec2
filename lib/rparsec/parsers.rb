@@ -148,11 +148,11 @@ module RParsec
     alias str string
 
     #
-    # A parser that sequentially run the given parsers.
-    # The result of the last parser is used as return value.
-    # If a block is given, the results of the parsers are passed
-    # into the block as parameters, and the block return value
-    # is used as result instead.
+    # A parser that sequentially run the given +parsers+.  The result
+    # of the last parser is used as return value.  If a block is
+    # given, the results of the +parsers+ are passed into the block as
+    # parameters, and the block return value is used as result
+    # instead.
     #
     def sequence(*parsers, &proc)
       SequenceParser.new(parsers, proc)
