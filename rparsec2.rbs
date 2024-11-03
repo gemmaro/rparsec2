@@ -48,20 +48,6 @@ module RParsec
     Precedence: Integer
   end
 
-  class OperatorTable
-    attr_reader operators: Array[[:infixl | :infixn | :infixr | :postfix | :prefix, untyped, untyped]]
-    def reinit: -> Array[untyped]
-    def self.new: -> untyped
-    def prefix: (untyped op, untyped precedence) -> OperatorTable
-    def postfix: (untyped op, untyped precedence) -> OperatorTable
-    def infixl: (untyped op, untyped precedence) -> OperatorTable
-    def infixr: (untyped op, untyped precedence) -> OperatorTable
-    def infixn: (untyped op, untyped precedence) -> OperatorTable
-
-    private
-    def add: (*:infixl | :infixn | :infixr | :postfix | :prefix entry) -> OperatorTable
-  end
-
   module Expressions
     KindPrecedence: {prefix: Integer, postfix: Integer, infixn: Integer, infixr: Integer, infixl: Integer}
 
@@ -184,13 +170,27 @@ module RParsec
   module Monad
     @monad: untyped
 
-    attr_reader this: AltParser | ExpectParser | LookAheadSensitiveParser | NotParser | Parser | PlusParser
-    def initMonad: (untyped m, AltParser | ExpectParser | LookAheadSensitiveParser | NotParser | Parser | PlusParser v) -> (AltParser | ExpectParser | LookAheadSensitiveParser | NotParser | Parser | PlusParser)
+    attr_reader this: AltParser | AnyParser | ExpectParser | GetIndexParser | NotParser | OneParser | Parser | PlusParser | ZeroParser
+    def initMonad: (untyped m, AltParser | AnyParser | ExpectParser | GetIndexParser | NotParser | OneParser | Parser | PlusParser | ZeroParser v) -> (AltParser | AnyParser | ExpectParser | GetIndexParser | NotParser | OneParser | Parser | PlusParser | ZeroParser)
     def value: (Array[untyped]? v) -> untyped
     def bind: ?{ -> untyped } -> untyped
     def seq: (untyped other) -> untyped
     def map: -> untyped
     def plus: (untyped other) -> untyped
+  end
+
+  class OperatorTable
+    attr_reader operators: Array[[:infixl | :infixn | :infixr | :postfix | :prefix, untyped, untyped]]
+    def reinit: -> Array[untyped]
+    def self.new: -> untyped
+    def prefix: (untyped op, untyped precedence) -> OperatorTable
+    def postfix: (untyped op, untyped precedence) -> OperatorTable
+    def infixl: (untyped op, untyped precedence) -> OperatorTable
+    def infixr: (untyped op, untyped precedence) -> OperatorTable
+    def infixn: (untyped op, untyped precedence) -> OperatorTable
+
+    private
+    def add: (*:infixl | :infixn | :infixr | :postfix | :prefix entry) -> OperatorTable
   end
 
   class Operators
@@ -214,6 +214,28 @@ module RParsec
     include Monad
     include Functors
     @monad: untyped
+    @msg: bot
+    @value: bot
+    @block: bot
+    @symbol: bot
+    @parser: bot
+    @alts: bot
+    @proc: bot
+    @parsers: bot
+    @pred: bot
+    @expected: bot
+    @ptn: bot
+    @p1: bot
+    @p2: bot
+    @vals: bot
+    @str: bot
+    @parser1: bot
+    @parser2: bot
+    @times: bot
+    @least: bot
+    @max: bot
+    @index: bot
+    @longer: bot
 
     attr_accessor name: String
     def self.init: (*:alts | :block | :expected | :index | :least | :longer | :max | :msg | :p1 | :p2 | :parser | :parser1 | :parser2 | :parsers | :pred | :proc | :ptn | :str | :symbol | :times | :vals | :value vars) -> untyped
@@ -226,19 +248,20 @@ module RParsec
 
     public
     def parse: (untyped src) -> untyped
-    def setName: (String nm) -> (AltParser | Parser | PlusParser)
+    def set_name: (String nm) -> (AreParser | EofParser | GetIndexParser | Parser | PlusParser | RegexpParser | SatisfiesParser | SetIndexParser | StringCaseInsensitiveParser)
+    alias setName set_name
     def map: -> Parser
     def bindn: -> Parser
     def mapn: -> Parser
     def atomize: -> untyped
     def peek: -> untyped
-    def not: (?String msg) -> untyped
+    def not: (?String msg) -> NotParser
     def lookahead: (untyped _n) -> Parser
     def expect: (untyped msg) -> untyped
     def followed: (untyped other) -> untyped
     def repeat_: (Integer min, ?Integer max) -> Parser
     def repeat: (Integer min, ?Integer max) -> untyped
-    def many_: (?Integer least) -> untyped
+    def many_: (?Integer least) -> Many_Parser
     def many: (?Integer least) -> untyped
     def some_: (untyped max) -> Parser
     def some: (untyped max) -> untyped
@@ -248,7 +271,7 @@ module RParsec
     def delimited: (untyped delim) -> untyped
     def to_s: -> String
     def |: (untyped other) -> untyped
-    def optional: (?nil default) -> untyped
+    def optional: (?nil default) -> (AreParser | EofParser | GetIndexParser | Parser | PlusParser | RegexpParser | SatisfiesParser | SetIndexParser | StringCaseInsensitiveParser)
     def catchp: (untyped symbol) -> untyped
     def fragment: -> untyped
     def nested: (untyped parser) -> untyped
@@ -259,11 +282,11 @@ module RParsec
     def infixl: (untyped op) -> untyped
     def infixr: (untyped op) -> untyped
     def token: (untyped kind) -> untyped
-    def seq: (untyped other) -> untyped
-    def >>: (untyped other) -> untyped
+    def seq: (AnyParser | Many_Parser other) -> untyped
+    def >>: (AnyParser | Many_Parser other) -> untyped
 
     private
-    def autobox_parser: (untyped val) -> untyped
+    def autobox_parser: (AnyParser | Many_Parser val) -> (AnyParser | Many_Parser)
     def _infix_rest: (untyped operator, Parser operand) -> untyped
 
     public
@@ -278,54 +301,61 @@ module RParsec
     def self.initialize: (*untyped params) -> void
   end
 
+  class ParserMonad
+    def fail: (untyped msg) -> untyped
+    def value: (untyped v) -> untyped
+    def bind: (untyped v) -> untyped
+    def mplus: (untyped p1, untyped p2) -> untyped
+  end
+
   module Parsers
     Whitespaces: String
     extend Parsers
 
-    def failure: (untyped msg) -> untyped
-    def value: (nil v) -> untyped
-    def sum: (*untyped alts) -> untyped
-    def alt: (*untyped alts) -> untyped
-    def satisfies: (String expected) ?{ -> bool } -> untyped
-    def is: (String? v, ?String expected) -> untyped
-    def isnt: (String? v, ?String expected) -> untyped
-    def among: (*untyped vals) -> untyped
-    def not_among: (*untyped vals) -> untyped
-    def char: (String c) -> untyped
-    def not_char: (String c) -> untyped
-    def eof: (?String expected) -> untyped
-    def are: (untyped vals, ?String expected) -> untyped
+    def failure: (untyped msg) -> FailureParser
+    def value: (nil v) -> ValueParser
+    def sum: (*untyped alts) -> PlusParser
+    def alt: (*untyped alts) -> AltParser
+    def satisfies: (String expected) ?{ -> bool } -> SatisfiesParser
+    def is: (String? v, ?String expected) -> SatisfiesParser
+    def isnt: (String? v, ?String expected) -> SatisfiesParser
+    def among: (*untyped vals) -> SatisfiesParser
+    def not_among: (*untyped vals) -> SatisfiesParser
+    def char: (String c) -> (AreParser | EofParser | GetIndexParser | Parser | PlusParser | RegexpParser | SatisfiesParser | SetIndexParser | StringCaseInsensitiveParser)
+    def not_char: (String c) -> (AreParser | EofParser | GetIndexParser | Parser | PlusParser | RegexpParser | SatisfiesParser | SetIndexParser | StringCaseInsensitiveParser)
+    def eof: (?String expected) -> (AreParser | EofParser | GetIndexParser | Parser | PlusParser | RegexpParser | SatisfiesParser | SetIndexParser | StringCaseInsensitiveParser)
+    def are: (untyped vals, ?String expected) -> AreParser
     def arent: (untyped vals, ?String expected) -> untyped
-    def string: (untyped str, ?String msg) -> untyped
+    def string: (untyped str, ?String msg) -> (AreParser | EofParser | GetIndexParser | Parser | PlusParser | RegexpParser | SatisfiesParser | SetIndexParser | StringCaseInsensitiveParser)
     def not_string: (untyped str, ?String msg) -> untyped
     alias str string
-    def sequence: (*untyped parsers) -> untyped
-    def get_index: -> untyped
-    def set_index: (untyped ind) -> untyped
-    def longest: (*untyped parsers) -> untyped
-    def shortest: (*untyped parsers) -> untyped
+    def sequence: (*untyped parsers) -> SequenceParser
+    def get_index: -> (AreParser | EofParser | GetIndexParser | Parser | PlusParser | RegexpParser | SatisfiesParser | SetIndexParser | StringCaseInsensitiveParser)
+    def set_index: (untyped ind) -> (AreParser | EofParser | GetIndexParser | Parser | PlusParser | RegexpParser | SatisfiesParser | SetIndexParser | StringCaseInsensitiveParser)
+    def longest: (*untyped parsers) -> BestParser
+    def shortest: (*untyped parsers) -> BestParser
     alias shorter shortest
     alias longer longest
-    def any: -> untyped
-    def zero: -> untyped
-    def one: -> untyped
-    def range: (untyped from, untyped to, ?String msg) -> untyped
-    def throwp: (untyped symbol) -> untyped
-    def regexp: (Regexp ptn, ?String expected) -> untyped
-    def word: (?String expected) -> untyped
-    def integer: (?String expected) -> untyped
-    def number: (?String expected) -> untyped
-    def string_nocase: (untyped str, ?String expected) -> untyped
-    def token: (*untyped kinds) -> untyped
-    def whitespace: (?String expected) -> untyped
-    def whitespaces: (?String expected) -> untyped
+    def any: -> AnyParser
+    def zero: -> ZeroParser
+    def one: -> OneParser
+    def range: (untyped from, untyped to, ?String msg) -> SatisfiesParser
+    def throwp: (untyped symbol) -> ThrowParser
+    def regexp: (Regexp ptn, ?String expected) -> (AreParser | EofParser | GetIndexParser | Parser | PlusParser | RegexpParser | SatisfiesParser | SetIndexParser | StringCaseInsensitiveParser)
+    def word: (?String expected) -> (AreParser | EofParser | GetIndexParser | Parser | PlusParser | RegexpParser | SatisfiesParser | SetIndexParser | StringCaseInsensitiveParser)
+    def integer: (?String expected) -> (AreParser | EofParser | GetIndexParser | Parser | PlusParser | RegexpParser | SatisfiesParser | SetIndexParser | StringCaseInsensitiveParser)
+    def number: (?String expected) -> (AreParser | EofParser | GetIndexParser | Parser | PlusParser | RegexpParser | SatisfiesParser | SetIndexParser | StringCaseInsensitiveParser)
+    def string_nocase: (untyped str, ?String expected) -> (AreParser | EofParser | GetIndexParser | Parser | PlusParser | RegexpParser | SatisfiesParser | SetIndexParser | StringCaseInsensitiveParser)
+    def token: (*untyped kinds) -> SatisfiesParser
+    def whitespace: (?String expected) -> SatisfiesParser
+    def whitespaces: (?String expected) -> Many_Parser
     def comment_line: (untyped start) -> untyped
     def comment_block: (untyped open, untyped close) -> untyped
-    def lazy: -> untyped
-    def watch: -> untyped
-    def watchn: -> untyped
-    def map: -> untyped
-    def mapn: -> untyped
+    def lazy: -> LazyParser
+    def watch: -> OneParser
+    def watchn: -> OneParser
+    def map: -> OneParser
+    def mapn: -> OneParser
 
     private
     def as_regexp: (Regexp ptn) -> Regexp
@@ -334,28 +364,15 @@ module RParsec
     def as_list: (untyped vals) -> untyped
   end
 
-  class ParserMonad
-    def fail: (untyped msg) -> untyped
-    def value: (untyped v) -> untyped
-    def bind: (untyped v) -> untyped
-    def mplus: (untyped p1, untyped p2) -> untyped
-  end
-
   class FailureParser < Parser
-    @msg: bot
-
     def _parse: (untyped ctxt) -> untyped
   end
 
   class ValueParser < Parser
-    @value: bot
-
     def _parse: (untyped ctxt) -> untyped
   end
 
   class LazyParser < Parser
-    @block: bot
-
     def _parse: (untyped ctxt) -> untyped
   end
 
@@ -366,49 +383,41 @@ module RParsec
   end
 
   class ThrowParser < Parser
-    @symbol: bot
-
     def _parse: (untyped _ctxt) -> bot
   end
 
   class CatchParser < Parser
-    @symbol: bot
-    @parser: bot
-
     def _parse: (untyped ctxt) -> false
   end
 
   class PeekParser < Parser
-    @parser: bot
-
     def _parse: (untyped ctxt) -> bool
     def peek: -> PeekParser
   end
 
   class AtomParser < Parser
-    @parser: bot
-
     def _parse: (untyped ctxt) -> bool
     def atomize: -> AtomParser
   end
 
   class LookAheadSensitiveParser < Parser
-    @lookahead: Integer
+    @lookahead: bot
 
-    def initialize: (?Integer la) -> void
+    def initialize: (?Integer? la) -> void
     def visible: (untyped ctxt, untyped n) -> untyped
     def lookahead: (untyped n) -> LookAheadSensitiveParser
     def not: (?String msg) -> NotParser
   end
 
   class NotParser < LookAheadSensitiveParser
-    @parser: LookAheadSensitiveParser
+    @lookahead: Integer?
+    @parser: Parser
     @msg: String
 
-    def initialize: (LookAheadSensitiveParser parser, String msg, ?Integer la) -> void
+    def initialize: (Parser parser, String msg, ?Integer? la) -> void
     def _parse: (untyped ctxt) -> false
     def withLookahead: (untyped n) -> NotParser
-    def not: -> LookAheadSensitiveParser
+    def not: -> Parser
   end
 
   class ExpectParser < Parser
@@ -420,77 +429,55 @@ module RParsec
   end
 
   class PlusParser < LookAheadSensitiveParser
+    @lookahead: Integer?
     @alts: untyped
 
-    def initialize: (untyped alts, ?Integer la) -> void
+    def initialize: (untyped alts, ?Integer? la) -> void
     def _parse: (untyped ctxt) -> bool
     def withLookahead: (untyped n) -> PlusParser
-    def plus: (untyped other) -> (AltParser | Parser | PlusParser)
+    def plus: (untyped other) -> (AreParser | EofParser | GetIndexParser | Parser | PlusParser | RegexpParser | SatisfiesParser | SetIndexParser | StringCaseInsensitiveParser)
   end
 
   class AltParser < LookAheadSensitiveParser
+    @lookahead: Integer?
     @alts: untyped
 
     def initialize: (untyped alts, ?Integer la) -> void
     def _parse: (untyped ctxt) -> bool
     def withLookahead: (untyped n) -> AltParser
-    def |: (untyped other) -> (AltParser | Parser | PlusParser)
+    def |: (untyped other) -> (AreParser | EofParser | GetIndexParser | Parser | PlusParser | RegexpParser | SatisfiesParser | SetIndexParser | StringCaseInsensitiveParser)
   end
 
   class BestParser < Parser
-    @alts: bot
-    @longer: bot
-
     def _parse: (untyped ctxt) -> false
   end
 
   class BoundParser < Parser
-    @parser: bot
-    @proc: bot
-
     def _parse: (untyped ctxt) -> false
   end
 
   class BoundnParser < Parser
-    @parser: bot
-    @proc: bot
-
     def _parse: (untyped ctxt) -> false
   end
 
   class MapParser < Parser
-    @parser: bot
-    @proc: bot
-
     def _parse: (untyped ctxt) -> bool
   end
 
   class MapnParser < Parser
-    @parser: bot
-    @proc: bot
-
     def _parse: (untyped ctxt) -> bool
   end
 
   class SequenceParser < Parser
-    @proc: bot
-    @parsers: bot
-
     def _parse: (untyped ctxt) -> bool
     def seq: (untyped other) -> SequenceParser
   end
 
   class FollowedParser < Parser
-    @p1: bot
-    @p2: bot
-
     def _parse: (untyped ctxt) -> false
   end
 
   class SatisfiesParser < Parser
-    @pred: bot
-    @expected: bot
-
     def _parse: (untyped ctxt) -> untyped
   end
 
@@ -499,29 +486,18 @@ module RParsec
   end
 
   class EofParser < Parser
-    @msg: bot
-
     def _parse: (untyped ctxt) -> true
   end
 
   class RegexpParser < Parser
-    @ptn: bot
-    @msg: bot
-
     def _parse: (untyped ctxt) -> untyped
   end
 
   class AreParser < Parser
-    @vals: bot
-    @msg: bot
-
     def _parse: (untyped ctxt) -> untyped
   end
 
   class StringCaseInsensitiveParser < Parser
-    @str: bot
-    @msg: bot
-
     private
     def _downcase: (untyped c) -> untyped
 
@@ -530,95 +506,59 @@ module RParsec
   end
 
   class FragmentParser < Parser
-    @parser: bot
-
     def _parse: (untyped ctxt) -> false
   end
 
   class TokenParser < Parser
-    @parser: bot
-    @symbol: bot
-
     def _parse: (untyped ctxt) -> false
   end
 
   class NestedParser < Parser
-    @parser1: bot
-    @parser2: bot
-
-    def _parse: (untyped ctxt) -> bool
+    def _parse: (untyped ctxt) -> false
 
     private
-    def _run_nested: (untyped start, untyped ctxt, untyped src, nil parser) -> bool
+    def _run_nested: (untyped start, untyped ctxt, untyped src, untyped parser) -> bool
     def _get_index: (ParseContext ctxt) -> (Complex | Float | Integer | Rational)
-    def _run_parser: (nil parser, untyped old_ctxt, ParseContext new_ctxt) -> bool
+    def _run_parser: (untyped parser, untyped old_ctxt, ParseContext new_ctxt) -> bool
   end
 
   class WatchParser < Parser
-    @proc: bot
-
     def _parse: (untyped ctxt) -> true
   end
 
   class WatchnParser < Parser
-    @proc: bot
-
     def _parse: (untyped ctxt) -> true
   end
 
   class MapCurrentParser < Parser
-    @proc: bot
-
     def _parse: (untyped ctxt) -> true
   end
 
   class MapnCurrentParser < Parser
-    @proc: bot
-
     def _parse: (untyped ctxt) -> true
   end
 
   class Repeat_Parser < Parser
-    @times: bot
-    @parser: bot
-
     def _parse: (untyped ctxt) -> bool
   end
 
   class RepeatParser < Parser
-    @times: bot
-    @parser: bot
-
     def _parse: (untyped ctxt) -> false
   end
 
   class Many_Parser < Parser
-    @least: bot
-    @parser: bot
-
     def _parse: (untyped ctxt) -> bool
   end
 
   class ManyParser < Parser
-    @least: bot
-    @parser: bot
-
     def _parse: (untyped ctxt) -> false
   end
 
   class Some_Parser < Parser
-    @least: bot
-    @max: bot
-    @parser: bot
-
     def _parse: (untyped ctxt) -> bool
   end
 
   class SomeParser < Parser
-    @least: bot
-    @max: bot
-    @parser: bot
-
     def _parse: (untyped ctxt) -> false
   end
 
@@ -635,8 +575,6 @@ module RParsec
   end
 
   class SetIndexParser < Parser
-    @index: bot
-
     def _parse: (untyped ctxt) -> nil
   end
 
