@@ -4,7 +4,7 @@ require 'rparsec/misc'
 
 module RParsec
 
-  class CodeLocator
+  class CodeLocator # :nodoc:
     extend DefHelper
 
     def_readable :code
