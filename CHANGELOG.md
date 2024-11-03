@@ -8,6 +8,7 @@
 * Split operator table class to file.  `require
   "rparsec/operator_table"` to use it.
 * Move `Parsers` module to `lib/rparsec/parsers.rb`.
+* Add `Parser`'s `set_name` instance method.
 
 ## 1.1.0 - 2024-11-03
 
