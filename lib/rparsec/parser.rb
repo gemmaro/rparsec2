@@ -108,10 +108,10 @@ module RParsec
     end
 
     #
-    # a.mapn{|x,y|x+y} will first execute parser a, when it succeeds,
-    # the array result (if any) is expanded and passed as parameters
-    # to the associated block. The result of the block is then used
-    # as the parsing result.
+    # <tt>a.mapn { |x, y| x + y }</tt> will first execute parser +a+,
+    # when it succeeds, the array result (if any) is expanded and
+    # passed as parameters to the associated block.  The result of the
+    # block is then used as the parsing result.
     #
     def mapn(&block)
       return self unless block
