@@ -363,9 +363,9 @@ module RParsec
     end
 
     #
-    # For non-associative infix binary operator.
-    # _op_ has to return a Proc that takes two parameters, who
-    # are returned by the _self_ parser as operands.
+    # For non-associative infix binary operator.  +op+ has to return a
+    # +Proc+ that takes two parameters, who are returned by the +self+
+    # parser as operands.
     #
     def infixn(op)
       bind do |v1|
