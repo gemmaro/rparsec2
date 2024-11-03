@@ -1,14 +1,18 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require 'rparsec/functor_mixin'
 
 include RParsec
+
 class Proc
   include FunctorMixin
 end
+
 class Method
   include FunctorMixin
 end
+
 using FunctorMixin
 
 class FunctorTestCase < Test::Unit::TestCase

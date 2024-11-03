@@ -7,6 +7,8 @@
 * Enable frozen string literal.
 * Split operator table class to file.  `require
   "rparsec/operator_table"` to use it.
+* Split functor mixin module to a file.  `require
+  "rparsec/functor_mixin"` to use it.
 * Move `Parsers` module to `lib/rparsec/parsers.rb`.
 * Add `Parser`'s `set_name` instance method.
 
