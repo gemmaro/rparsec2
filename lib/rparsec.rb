@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 %w{
 parsers operators keywords expressions
 }.each {|lib| require "rparsec/#{lib}"}
