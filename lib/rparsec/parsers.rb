@@ -449,7 +449,7 @@ module RParsec
     end
   end
 
-  class Failures
+  class Failures # :nodoc:
     def self.add_error(err, e)
       return e if err.nil?
       return err if e.nil?
