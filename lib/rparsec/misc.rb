@@ -83,7 +83,7 @@ module Signature
 
   def __intercept_method_to_check_param_types__(sym, types)
     mtd = instance_method(sym)
-    helper = "_#{sym}_param_types_checked_helper".to_sym
+    helper = "_#{sym}_param_types_checked_helper"
     define_method(helper) do |*params|
       star_type, star_ind = nil, nil
       types.each_with_index do |t, i|
