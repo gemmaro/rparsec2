@@ -83,8 +83,7 @@ module Signature
 
   def __intercept_method_to_check_param_types__(sym, types)
     mtd = instance_method(sym)
-    helper = "_#{sym}_param_types_checked_helper"
-    define_method(helper) do |*params|
+    define_method(sym) do |*params, &block|
       star_type, star_ind = nil, nil
       types.each_with_index do |t, i|
         t = star_type unless star_type.nil?
@@ -99,10 +98,7 @@ module Signature
         end
       end
       TypeChecker.check_vararg_type star_type, params, sym, star_ind unless star_ind.nil?
-      mtd.bind(self)
-    end
-    define_method(sym) do |*params, &block|
-      send(helper, *params).call(*params, &block)
+      mtd.bind(self).call(*params, &block)
     end
   end
 end
