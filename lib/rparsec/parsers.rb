@@ -953,7 +953,7 @@ module RParsec
     end
   end
 
-  class ManyParser < Parser
+  class ManyParser < Parser # :nodoc:
     init :parser, :least
     def _parse ctxt
       result = []
