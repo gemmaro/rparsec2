@@ -156,8 +156,8 @@ module RParsec
     end
 
     #
-    # a.followed b will sequentially run a and b;
-    # result of a is preserved as the ultimate return value.
+    # <tt>a.followed b</tt> will sequentially run +a+ and +b+; result
+    # of a is preserved as the ultimate return value.
     #
     def followed(other)
       FollowedParser.new(self, other)
