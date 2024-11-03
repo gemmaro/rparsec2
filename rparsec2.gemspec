@@ -13,6 +13,17 @@ spec = Gem::Specification.new do |s|
   s.license = "BSD-3-Clause"
   s.files = FileList['lib/**/*.rb']
   s.require_paths = ['lib']
-  s.metadata['rubygems_mfa_required'] = 'true'
   s.required_ruby_version = ">=3.1"
+
+  homepage = "https://git.disroot.org/gemmaro/rparsec2"
+  s.homepage = homepage
+  s.metadata = {
+    'rubygems_mfa_required' => 'true',
+    'bug_tracker_uri'       => "#{homepage}/issues",
+    'changelog_uri'         => "#{homepage}/src/branch/main/CHANGELOG.md",
+    'documentation_uri'     => 'https://www.rubydoc.info/gems/rparsec2',
+    'homepage_uri'          => homepage,
+    'source_code_uri'       => homepage,
+    'wiki_uri'              => "#{homepage}/wiki",
+  }
 end
