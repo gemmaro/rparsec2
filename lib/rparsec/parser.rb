@@ -76,10 +76,12 @@ module RParsec
     #
     # Set name for the parser.  +self+ is returned.
     #
-    def setName(nm)
+    def set_name(nm)
       @name = nm
       self
     end
+
+    alias setName set_name
 
     #
     # a.map{|x|x+1} will first execute parser a, when it succeeds,
