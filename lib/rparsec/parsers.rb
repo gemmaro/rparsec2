@@ -686,7 +686,7 @@ module RParsec
     end
   end
 
-  class MapParser < Parser
+  class MapParser < Parser # :nodoc:
     init :parser, :proc
     def _parse ctxt
       return false unless @parser._parse(ctxt)
