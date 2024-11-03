@@ -426,11 +426,11 @@ module RParsec
     end
 
     #
-    # a.seq b will sequentially run a then b.
-    # The result of b is preserved as return value.
-    # If a block is associated, values returned by _a_ and _b_
-    # are passed into the block and the return value of
-    # the block is used as the final result of the parser.
+    # <tt>a.seq b</tt> will sequentially run +a+ then +b+.  The result
+    # of +b+ is preserved as return value.  If a +block+ is
+    # associated, values returned by +a+ and +b+ are passed into the
+    # +block+ and the return value of the +block+ is used as the final
+    # result of the parser.
     #
     def seq(other, &block)
       Parsers.sequence(self, other, &block)
