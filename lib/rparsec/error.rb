@@ -4,7 +4,7 @@ require 'rparsec/misc'
 
 module RParsec
 
-  class ParserException < StandardError
+  class ParserException < StandardError # :nodoc:
     extend DefHelper
     def_readable :index
   end
