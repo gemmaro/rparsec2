@@ -266,10 +266,10 @@ module RParsec
     end
 
     #
-    # To create a parser that repeats self for unlimited times,
-    # with the pattern recognized by _delim_ as separator that separates each occurrence
-    # and also possibly ends the pattern.
-    # Return values of self are collected in an array.
+    # To create a parser that repeats +self+ for unlimited times, with
+    # the pattern recognized by +delim+ as separator that separates
+    # each occurrence and also possibly ends the pattern.  Return
+    # values of +self+ are collected in an array.
     #
     def delimited delim
       delimited1(delim).plus value([])
