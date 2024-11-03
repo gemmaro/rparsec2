@@ -45,8 +45,8 @@ module RParsec
     end
 
     #
-    # Run the _map_ operation on the encapsulated object following the monad law.
-    # _bind_ is used to implement.
+    # Run the _map_ operation on the encapsulated object following the
+    # monad law.  #bind is used to implement.
     #
     def map(&mapper)
       bind do |v|
