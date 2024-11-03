@@ -58,8 +58,8 @@ module RParsec
     end
 
     #
-    # Create a Proc, which expects the two parameters
-    # in the reverse order of _block_.
+    # Create a +Proc+, which expects the two parameters in the reverse
+    # order of +block+.
     #
     def flip(&block)
       proc { |x, y| block.call(y, x) }
