@@ -141,10 +141,9 @@ module RParsec
     end
 
     #
-    # Create a Proc, when called,
-    # repeatedly call _block_ for _n_ times.
-    # At each iteration, return value from the previous iteration
-    # is used as parameter.
+    # Create a +Proc+, when called, repeatedly call +block+ for +n+
+    # times.  \At each iteration, return value from the previous
+    # iteration is used as parameter.
     #
     def power(n, &block)
       return const(nil) if n <= 0
