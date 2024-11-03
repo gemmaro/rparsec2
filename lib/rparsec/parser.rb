@@ -377,9 +377,9 @@ module RParsec
     end
 
     #
-    # For left-associative infix binary operator.
-    # _op_ has to return a Proc that takes two parameters, who
-    # are returned by the _self_ parser as operands.
+    # For left-associative infix binary operator.  +op+ has to return
+    # a +Proc+ that takes two parameters, who are returned by the
+    # +self+ parser as operands.
     #
     def infixl(op)
       Parsers.sequence(self, _infix_rest(op, self).many) do |v, rests|
