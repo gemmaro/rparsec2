@@ -757,7 +757,7 @@ module RParsec
     end
   end
 
-  class EofParser < Parser
+  class EofParser < Parser # :nodoc:
     init :msg
     def _parse ctxt
       return true if ctxt.eof
