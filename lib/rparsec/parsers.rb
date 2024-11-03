@@ -1042,6 +1042,6 @@ module RParsec
     end
   end
 
-  Nil = ValueParser.new(nil)
+  Nil = ValueParser.new(nil) # :nodoc:
 
 end # module
