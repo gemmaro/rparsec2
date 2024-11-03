@@ -882,7 +882,7 @@ module RParsec
     end
   end
 
-  class WatchParser < Parser
+  class WatchParser < Parser # :nodoc:
     init :proc
     def _parse ctxt
       @proc.call(ctxt.result)
