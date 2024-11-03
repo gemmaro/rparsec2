@@ -175,34 +175,11 @@ module RParsec
     def _locateEof: -> [Integer, Integer]
   end
 
-  module StringUtils
-    def self.starts_with?: (nil str, untyped sub) -> bool
-  end
-
   module DefHelper
     def def_ctor: (*:index | :kind | :text vars) -> untyped
     def def_readable: (*untyped vars) -> untyped
     def def_mutable: (*untyped vars) -> untyped
     def initialize: (*untyped params) -> void
-  end
-
-  module TypeChecker
-    extend TypeChecker
-
-    private
-    def nth: (Integer n) -> String
-
-    public
-    def check_arg_type: (singleton(Array) expected, untyped obj, untyped mtd, ?Integer n) -> nil
-    def check_arg_array_type: (untyped elem_type, untyped arg, untyped mtd, ?Integer n) -> untyped
-    def check_vararg_type: (untyped expected, untyped args, untyped mtd, ?Integer n) -> Range
-  end
-
-  module Signature
-    def def_sig: (:alt | :followed | :longest | :plus | :seq | :sequence | :shortest | :sum sym, *[singleton(Parser)] | singleton(Parser) types) -> untyped
-
-    private
-    def __intercept_method_to_check_param_types__: (:alt | :followed | :longest | :plus | :seq | :sequence | :shortest | :sum sym, [[singleton(Parser)] | singleton(Parser)] types) -> untyped
   end
 
   module Monad
@@ -235,7 +212,6 @@ module RParsec
   class Parser
     MyMonad: untyped
     extend DefHelper
-    extend Signature
     include Monad
     include Functors
     @monad: untyped
@@ -306,7 +282,6 @@ module RParsec
   module Parsers
     Whitespaces: String
     extend Parsers
-    extend Signature
 
     def failure: (untyped msg) -> untyped
     def value: (nil v) -> untyped
