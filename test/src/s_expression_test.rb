@@ -7,15 +7,19 @@ class SExpressionTestCase < ParserTestCase
   def delim
     whitespace.many_
   end
+
   def ignore parser
     parser << delim
   end
+
   def lparen
     ignore(char('('))
   end
+
   def rparen
     ignore(char(')'))
   end
+
   def parser
     expr = nil
     lazy_expr = lazy { expr }
@@ -28,6 +32,7 @@ class SExpressionTestCase < ParserTestCase
     end
     expr = delim >> (term | binary)
   end
+
   def test1
     assertParser('- (+ 1 * 2 2.0) (1)', 4, parser)
   end

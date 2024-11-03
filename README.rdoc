@@ -45,47 +45,7 @@ As s-expression is way simpler to parse than expressions with infix
 operators, we will build the parser without using
 Expressions[rdoc-ref:RParsec::Expressions] class:
 
-  include RParsec
-
-  class SExpressionTestCase < RUNIT::TestCase
-    include Parsers
-    include Functors
-
-    def delim
-      whitespace.many_
-    end
-
-    def ignore parser
-      parser << delim
-    end
-
-    def lparen
-      ignore(char('('))
-    end
-
-    def rparen
-      ignore(char(')'))
-    end
-
-    def parser
-      expr      = nil
-      lazy_expr = lazy { expr }
-      term      = number.map(&To_f) | lparen >> lazy_expr << rparen
-      binop     = char('+') >> Plus | char('-') >> Minus | char('*') >> Mul | char('/') >> Div
-      binop     = ignore binop
-      term      = ignore term
-
-      binary = sequence(binop, lazy_expr, lazy_expr) do |op, e1, e2|
-        op.call(e1, e2)
-      end
-
-      expr = delim >> (term | binary)
-    end
-
-    def test1
-      assert_equal(4, parser.parse('- + 1 (* 2 2.0) (1)'))
-    end
-  end
+  :include: test/src/s_expression_test.rb
 
 The code is pretty self-explanatory.  The only thing to note is that
 we had to manually skip whitespaces using the +ignore+
