@@ -17,10 +17,10 @@ class ParserTestCase < Test::Unit::TestCase
       parser.parse(code)
       assert_fail("error should have happened")
     rescue ParserException => e
-        assert_equal(index, e.index)
-        msg = expected
-        msg = add_encountered(msg, current(code, index)) << " at line #{line}, col #{col}." unless expected.include? 'at line'
-        assert_equal(msg, e.message)
+      assert_equal(index, e.index)
+      msg = expected
+      msg = add_encountered(msg, current(code, index)) << " at line #{line}, col #{col}." unless expected.include? 'at line'
+      assert_equal(msg, e.message)
     end
   end
   def assertGrammar(code, expected, lexer, grammar)
@@ -32,10 +32,10 @@ class ParserTestCase < Test::Unit::TestCase
       parser.parse(code)
       assert_fail("error should have happened")
     rescue ParserException => e
-        assert_equal(index, e.index)
-        msg = expected
-        msg = "#{msg}, #{token_name}" << " at line #{line}, col #{col}." unless expected.include? 'at line'
-        assert_equal(msg, e.message)
+      assert_equal(index, e.index)
+      msg = expected
+      msg = "#{msg}, #{token_name}" << " at line #{line}, col #{col}." unless expected.include? 'at line'
+      assert_equal(msg, e.message)
     end
   end
   def current(code, index)
