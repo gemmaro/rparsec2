@@ -221,7 +221,7 @@ module RParsec
     end
 
     #
-    # To create a parser that repeats self for at most _max_ times.
+    # To create a parser that repeats +self+ for at most +max+ times.
     # All return values are collected in an array.
     #
     def some(max)
