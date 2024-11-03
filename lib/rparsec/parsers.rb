@@ -381,14 +381,18 @@ module RParsec
 
     #
     # A parser that maps current parser result to a new result using
-    # the given block. If the current parser result is an array, the array
-    # elements are expanded and then passed as parameters to the block.
-    ##
-    # Different from Parser#mapn, this method does not need to be combined
-    # with any Parser object. It is rather an independent Parser object
-    # that maps the _current_ parser result.
-    ##
-    # parser1.mapn{|x,y|...} is equivalent to parser1 >> mapn{|x,y|...}
+    # the given +block+.  If the current parser result is an array,
+    # the array elements are expanded and then passed as parameters to
+    # the +block+.
+    #
+    # Different from Parser#mapn, this method does not need to be
+    # combined with any Parser object.  It is rather an independent
+    # Parser object that maps the _current_ parser result.
+    #
+    # <tt>parser1.mapn { |x, y| ... }</tt> is equivalent to
+    # <tt>parser1 >> mapn { |x, y| ... }</tt>.
+    #
+    # See also Parser#>>.
     #
     def mapn(&block)
       return one unless block
