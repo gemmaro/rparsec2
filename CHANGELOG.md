@@ -5,6 +5,8 @@
 * Remove runtime type checker and signature.
 * Removed `def_mutable` method.
 * Enable frozen string literal.
+* Split operator table class to file.  `require
+  "rparsec/operator_table"` to use it.
 
 ## 1.1.0 - 2024-11-03
 
