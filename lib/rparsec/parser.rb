@@ -74,8 +74,7 @@ module RParsec
     end
 
     #
-    # Set name for the parser.
-    # self is returned.
+    # Set name for the parser.  +self+ is returned.
     #
     def setName(nm)
       @name = nm
