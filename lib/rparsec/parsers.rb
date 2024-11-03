@@ -678,7 +678,7 @@ module RParsec
     end
   end
 
-  class BoundnParser < Parser
+  class BoundnParser < Parser # :nodoc:
     init :parser, :proc
     def _parse ctxt
       return false unless @parser._parse(ctxt)
