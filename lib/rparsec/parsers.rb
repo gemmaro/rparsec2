@@ -1018,7 +1018,7 @@ module RParsec
     end
   end
 
-  class OneParser < Parser
+  class OneParser < Parser # :nodoc:
     def _parse _ctxt
       true
     end
