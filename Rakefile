@@ -6,7 +6,9 @@ Rake::TestTask.new do |t|
 end
 
 RDoc::Task.new do |rdoc|
-  rdoc.rdoc_files.include("lib/**/*.rb")
+  readme = "README.rdoc"
+  rdoc.main = readme
+  rdoc.rdoc_files.include("lib/**/*.rb", readme)
   rdoc.generator = "hanna"
 end
 
