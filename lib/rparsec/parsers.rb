@@ -181,8 +181,8 @@ module RParsec
     end
 
     #
-    # A parser that tries all given alternative parsers
-    # and picks the one with the shortest match.
+    # A parser that tries all given alternative +parsers+ and picks
+    # the one with the shortest match.
     #
     def shortest(*parsers)
       BestParser.new(parsers, false)
