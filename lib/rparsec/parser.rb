@@ -286,8 +286,8 @@ module RParsec
     end
 
     #
-    # a | b will run b when a fails.
-    # b is auto-boxed to Parser when it is not of type Parser.
+    # <tt>a | b</tt> will run +b+ when +a+ fails.  +b+ is auto-boxed
+    # to Parser when it is not of type Parser.
     #
     def | other
       AltParser.new([self, autobox_parser(other)])
