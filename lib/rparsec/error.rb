@@ -24,7 +24,7 @@ module RParsec
     Precedence = 100
   end
 
-  class Expected < Failure
+  class Expected < Failure # :nodoc:
     Precedence = 100
   end
 
