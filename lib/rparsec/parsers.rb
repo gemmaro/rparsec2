@@ -348,13 +348,13 @@ module RParsec
     end
 
     #
-    # A parser that watches the current parser result without changing it.
-    # The following assert will succeed:
-    ##
-    # char(?a).repeat(2) >> watchn{|x,y|assert_equal([?a,?a], [x,y])}
-    ##
-    # Slightly different from _watch_, _watchn_ expands the current parser result
-    # before passing it into the associated block.
+    # A parser that watches the current parser result without changing
+    # it.  The following assert will succeed:
+    #
+    #   char(?a).repeat(2) >> watchn { |x, y| assert_equal([?a, ?a], [x, y]) }
+    #
+    # Slightly different from #watch, +watchn+ expands the current
+    # parser result before passing it into the associated block.
     #
     def watchn(&block)
       return one unless block
