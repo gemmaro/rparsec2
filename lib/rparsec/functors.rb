@@ -129,9 +129,8 @@ module RParsec
     end
 
     #
-    # Create a Proc, when called,
-    # repeatedly call _block_ for _n_ times.
-    # The same arguments are passed to each invocation.
+    # Create a +Proc+, when called, repeatedly call +block+ for +n+
+    # times.  The same arguments are passed to each invocation.
     #
     def repeat(n, &block)
       proc do |*args|
