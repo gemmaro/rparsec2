@@ -77,14 +77,14 @@ class PrefixExpr < Expr
   end
 end
 def cases_string cases, default, result
-    cases.each do |cond, val|
-      result << " when #{cond} then #{val}"
-    end
-    unless default.nil?
-      result << " else #{default}"
-    end
-    result << " end"
-    result
+  cases.each do |cond, val|
+    result << " when #{cond} then #{val}"
+  end
+  unless default.nil?
+    result << " else #{default}"
+  end
+  result << " end"
+  result
 end
 class SimpleCaseExpr < Expr
   def_readable :expr, :cases, :default
