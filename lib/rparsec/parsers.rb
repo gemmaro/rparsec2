@@ -221,7 +221,7 @@ module RParsec
     end
 
     #
-    # A parser that throws a symbol.
+    # A parser that throws a +symbol+.
     #
     def throwp(symbol)
       ThrowParser.new(symbol)
