@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'parser_test'
 require_relative 'sql'
 require_relative 'sql_parser'
