@@ -1024,7 +1024,7 @@ module RParsec
     end
   end
 
-  class ZeroParser < Parser
+  class ZeroParser < Parser # :nodoc:
     def _parse ctxt
       return ctxt.failure
     end
