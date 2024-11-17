@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 1.2.1 - 2024-11-17
+
+This is a maintenance release.
+
+* Update document link in gemspec.
+
 ## 1.2.0 - 2024-11-04
 
 * Remove runtime type checker and signature.
