@@ -1,0 +1,623 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>RParsec::Functors</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+RParsec::Functors
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../files/lib/rparsec/functors_rb.html">lib/rparsec/functors.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<p>This module provides frequently used functors.</p>
+</div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Class</h3>
+<ol>
+<li><a href="#method-c-make_curry">make_curry</a></li>
+<li><a href="#method-c-make_reverse_curry">make_reverse_curry</a></li>
+</ol>
+<h3>Public Instance</h3>
+<ol>
+<li><a href="#method-i-compose">compose</a></li>
+<li><a href="#method-i-const">const</a></li>
+<li><a href="#method-i-curry">curry</a></li>
+<li><a href="#method-i-flip">flip</a></li>
+<li><a href="#method-i-nth">nth</a></li>
+<li><a href="#method-i-power">power</a></li>
+<li><a href="#method-i-repeat">repeat</a></li>
+<li><a href="#method-i-reverse_curry">reverse_curry</a></li>
+<li><a href="#method-i-reverse_uncurry">reverse_uncurry</a></li>
+<li><a href="#method-i-uncurry">uncurry</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='section'>
+<div id='constants-list'>
+<h2>Constants</h2>
+<div class='name-list'>
+<table summary='Constants'>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>And</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x, y| x && y }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>At</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x, y| x[y] }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>BitAnd</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x, y| x & y }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Call</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x, y| x.call(y) }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Compare</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x, y| x <=> y }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Dec</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x| x - 1 }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Div</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x, y| x / y }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Eq</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x, y| x == y }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Feed</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x, y| y.call(x) }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Fst</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x, _| x }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Ge</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x, y| x >= y }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Gt</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x, y| x > y }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Id</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x| x }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Idn</td>
+<td>=</td>
+<td class='context-item-value'>proc { |*x| x }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Inc</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x| x + 1 }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Le</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x, y| x <= y }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Lt</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x, y| x < y }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Match</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x, y| x =~ y }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Minus</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x, y| x - y }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Mod</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x, y| x % y }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Mul</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x, y| x * y }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Ne</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x, y| x != y }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Neg</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x| -x }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Not</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x, _y| !x }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Or</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x, y| x || y }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Plus</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x, y| x + y }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Power</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x, y| x**y }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Snd</td>
+<td>=</td>
+<td class='context-item-value'>proc { |_, x| x }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Succ</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x| x.succ }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>To_a</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x| x.to_a }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>To_f</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x| x.to_f }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>To_i</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x| x.to_i }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>To_s</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x| x.to_s }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>To_sym</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x| x.to_sym }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Union</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x, y| x | y }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>Xor</td>
+<td>=</td>
+<td class='context-item-value'>proc { |x, y| x ^ y }</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+</table>
+</div>
+</div>
+<div id='methods'>
+<h2>Public Class methods</h2>
+<div class='method public-class' id='method-method-c-make_curry'>
+<a name='method-c-make_curry'></a>
+<div class='synopsis'>
+<span class='name'>make_curry</span><span class='arguments'>(arity, &block)</span>
+
+</div>
+<div class='description'>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-make_curry-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-make_curry-source'><span class="ruby-comment"># File lib/rparsec/functors.rb, line 160</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">make_curry</span>(<span class="ruby-identifier">arity</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">block</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">arity</span> <span class="ruby-operator">&lt;=</span> <span class="ruby-value">1</span>
+  <span class="ruby-identifier">proc</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">make_curry</span>(<span class="ruby-identifier">arity</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-operator">*</span><span class="ruby-identifier">rest</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">rest</span>.<span class="ruby-identifier">insert</span>(<span class="ruby-value">0</span>, <span class="ruby-identifier">x</span>))
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-class' id='method-method-c-make_reverse_curry'>
+<a name='method-c-make_reverse_curry'></a>
+<div class='synopsis'>
+<span class='name'>make_reverse_curry</span><span class='arguments'>(arity, &block)</span>
+
+</div>
+<div class='description'>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-make_reverse_curry-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-make_reverse_curry-source'><span class="ruby-comment"># File lib/rparsec/functors.rb, line 169</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">make_reverse_curry</span>(<span class="ruby-identifier">arity</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">block</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">arity</span> <span class="ruby-operator">&lt;=</span> <span class="ruby-value">1</span>
+  <span class="ruby-identifier">proc</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">make_reverse_curry</span>(<span class="ruby-identifier">arity</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-operator">*</span><span class="ruby-identifier">rest</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">rest</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">x</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<h2>Public Instance methods</h2>
+<div class='method public-instance' id='method-method-i-compose'>
+<a name='method-i-compose'></a>
+<div class='synopsis'>
+<span class='name'>compose</span><span class='arguments'>(f1, f2)</span>
+
+</div>
+<div class='description'>
+
+<p>Create a <code>Proc</code>, when called, the parameter is first passed into <code>f2</code>, <code>f1</code> is called in turn with the return value from <code>f2</code>.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-compose-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-compose-source'><span class="ruby-comment"># File lib/rparsec/functors.rb, line 72</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">compose</span>(<span class="ruby-identifier">f1</span>, <span class="ruby-identifier">f2</span>)
+  <span class="ruby-identifier">proc</span> { <span class="ruby-operator">|</span><span class="ruby-operator">*</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f1</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">f2</span>.<span class="ruby-identifier">call</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">x</span>)) }
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-const'>
+<a name='method-i-const'></a>
+<div class='synopsis'>
+<span class='name'>const</span><span class='arguments'>(v)</span>
+
+</div>
+<div class='description'>
+
+<p>Get a <code>Proc</code>, when called, always return the given value.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-const-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-const-source'><span class="ruby-comment"># File lib/rparsec/functors.rb, line 49</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">const</span>(<span class="ruby-identifier">v</span>)
+  <span class="ruby-identifier">proc</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">_</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> }
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-curry'>
+<a name='method-i-curry'></a>
+<div class='synopsis'>
+<span class='name'>curry</span><span class='arguments'>(arity, &block)</span>
+
+</div>
+<div class='description'>
+
+<p>Create a <code>Proc</code> that’s curriable.  When curried, parameters are passed in from left to right. i.e. <code>curry(closure).call(a).call(b)</code> is quivalent to <code>closure.call(a,b)</code>.  <code>block</code> is encapsulated under the hood to perform the actual job when currying is done.  <code>arity</code> explicitly specifies the number of parameters to curry.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-curry-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-curry-source'><span class="ruby-comment"># File lib/rparsec/functors.rb, line 84</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">curry</span>(<span class="ruby-identifier">arity</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-identifier">fail</span> <span class="ruby-string">&quot;cannot curry for unknown arity&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">arity</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">0</span>
+  <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">make_curry</span>(<span class="ruby-identifier">arity</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-flip'>
+<a name='method-i-flip'></a>
+<div class='synopsis'>
+<span class='name'>flip</span><span class='arguments'>(&block)</span>
+
+</div>
+<div class='description'>
+
+<p>Create a <code>Proc</code>, which expects the two parameters in the reverse order of <code>block</code>.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-flip-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-flip-source'><span class="ruby-comment"># File lib/rparsec/functors.rb, line 64</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">flip</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-identifier">proc</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">x</span>, <span class="ruby-identifier">y</span><span class="ruby-operator">|</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">y</span>, <span class="ruby-identifier">x</span>) }
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-nth'>
+<a name='method-i-nth'></a>
+<div class='synopsis'>
+<span class='name'>nth</span><span class='arguments'>(n)</span>
+
+</div>
+<div class='description'>
+
+<p>Get a <code>Proc</code>, when called, return the <code>n</code>th parameter.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-nth-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-nth-source'><span class="ruby-comment"># File lib/rparsec/functors.rb, line 56</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">nth</span>(<span class="ruby-identifier">n</span>)
+  <span class="ruby-identifier">proc</span> { <span class="ruby-operator">|</span><span class="ruby-operator">*</span><span class="ruby-identifier">args</span><span class="ruby-operator">|</span> <span class="ruby-identifier">args</span>[<span class="ruby-identifier">n</span>] }
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-power'>
+<a name='method-i-power'></a>
+<div class='synopsis'>
+<span class='name'>power</span><span class='arguments'>(n, &block)</span>
+
+</div>
+<div class='description'>
+
+<p>Create a <code>Proc</code>, when called, repeatedly call <code>block</code> for <code>n</code> times.  At each iteration, return value from the previous iteration is used as parameter.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-power-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-power-source'><span class="ruby-comment"># File lib/rparsec/functors.rb, line 148</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">power</span>(<span class="ruby-identifier">n</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">const</span>(<span class="ruby-keyword">nil</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">n</span> <span class="ruby-operator">&lt;=</span> <span class="ruby-value">0</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">block</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">n</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+  <span class="ruby-identifier">proc</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-operator">*</span><span class="ruby-identifier">args</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+    (<span class="ruby-identifier">n</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>).<span class="ruby-identifier">times</span> { <span class="ruby-identifier">result</span> = <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">result</span>) }
+    <span class="ruby-identifier">result</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-repeat'>
+<a name='method-i-repeat'></a>
+<div class='synopsis'>
+<span class='name'>repeat</span><span class='arguments'>(n, &block)</span>
+
+</div>
+<div class='description'>
+
+<p>Create a <code>Proc</code>, when called, repeatedly call <code>block</code> for <code>n</code> times.  The same arguments are passed to each invocation.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-repeat-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-repeat-source'><span class="ruby-comment"># File lib/rparsec/functors.rb, line 135</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">repeat</span>(<span class="ruby-identifier">n</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-identifier">proc</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-operator">*</span><span class="ruby-identifier">args</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-keyword">nil</span>
+    <span class="ruby-identifier">n</span>.<span class="ruby-identifier">times</span> { <span class="ruby-identifier">result</span> = <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>) }
+    <span class="ruby-identifier">result</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-reverse_curry'>
+<a name='method-i-reverse_curry'></a>
+<div class='synopsis'>
+<span class='name'>reverse_curry</span><span class='arguments'>(arity, &block)</span>
+
+</div>
+<div class='description'>
+
+<p>Create a <code>Proc</code> that’s curriable.  When curried, parameters are passed in from right to left. i.e. <code>reverse_curry(closure).call(a).call(b)</code> is quivalent to <code>closure.call(b, a)</code>.  <code>block</code> is encapsulated under the hood to perform the actual job when currying is done.  <code>arity</code> explicitly specifies the number of parameters to curry.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-reverse_curry-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-reverse_curry-source'><span class="ruby-comment"># File lib/rparsec/functors.rb, line 98</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">reverse_curry</span>(<span class="ruby-identifier">arity</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-identifier">fail</span> <span class="ruby-string">&quot;cannot curry for unknown arity&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">arity</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">0</span>
+  <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">make_reverse_curry</span>(<span class="ruby-identifier">arity</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-reverse_uncurry'>
+<a name='method-i-reverse_uncurry'></a>
+<div class='synopsis'>
+<span class='name'>reverse_uncurry</span><span class='arguments'>(&block)</span>
+
+</div>
+<div class='description'>
+
+<p>Uncurry a reverse curried closure.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-reverse_uncurry-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-reverse_uncurry-source'><span class="ruby-comment"># File lib/rparsec/functors.rb, line 120</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">reverse_uncurry</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">block</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">arity</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+  <span class="ruby-identifier">proc</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-operator">*</span><span class="ruby-identifier">args</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-identifier">block</span>
+    <span class="ruby-identifier">args</span>.<span class="ruby-identifier">reverse_each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">result</span> = <span class="ruby-identifier">result</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">a</span>)
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">result</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-uncurry'>
+<a name='method-i-uncurry'></a>
+<div class='synopsis'>
+<span class='name'>uncurry</span><span class='arguments'>(&block)</span>
+
+</div>
+<div class='description'>
+
+<p>Uncurry a curried closure.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-uncurry-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-uncurry-source'><span class="ruby-comment"># File lib/rparsec/functors.rb, line 106</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">uncurry</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">block</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">arity</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+  <span class="ruby-identifier">proc</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-operator">*</span><span class="ruby-identifier">args</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-identifier">block</span>
+    <span class="ruby-identifier">args</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">result</span> = <span class="ruby-identifier">result</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">a</span>)
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">result</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/jeremyevans/hanna"><strong>Hanna</strong> RDoc template</a>
+</div>
+</body>
+</html>

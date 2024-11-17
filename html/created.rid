@@ -1,0 +1,23 @@
+Sun, 17 Nov 2024 14:02:47 +0900
+lib/rparsec.rb	Sun, 17 Nov 2024 14:02:35 +0900
+lib/rparsec/context.rb	Sun, 17 Nov 2024 14:02:35 +0900
+lib/rparsec/error.rb	Sun, 17 Nov 2024 14:02:35 +0900
+lib/rparsec/expressions.rb	Sun, 17 Nov 2024 14:02:35 +0900
+lib/rparsec/functor_mixin.rb	Sun, 17 Nov 2024 14:02:35 +0900
+lib/rparsec/functors.rb	Sun, 17 Nov 2024 14:02:35 +0900
+lib/rparsec/id_monad.rb	Sun, 17 Nov 2024 14:02:35 +0900
+lib/rparsec/keywords.rb	Sun, 17 Nov 2024 14:02:35 +0900
+lib/rparsec/locator.rb	Sun, 17 Nov 2024 14:02:35 +0900
+lib/rparsec/misc.rb	Sun, 17 Nov 2024 14:02:35 +0900
+lib/rparsec/monad.rb	Sun, 17 Nov 2024 14:02:35 +0900
+lib/rparsec/operator_table.rb	Sun, 17 Nov 2024 14:02:35 +0900
+lib/rparsec/operators.rb	Sun, 17 Nov 2024 14:02:35 +0900
+lib/rparsec/parser.rb	Sun, 17 Nov 2024 14:02:35 +0900
+lib/rparsec/parser_monad.rb	Sun, 17 Nov 2024 14:02:35 +0900
+lib/rparsec/parsers.rb	Sun, 17 Nov 2024 14:02:35 +0900
+lib/rparsec/token.rb	Sun, 17 Nov 2024 14:02:35 +0900
+README.rdoc	Sun, 17 Nov 2024 14:02:35 +0900
+doc/overview.rdoc	Sun, 17 Nov 2024 14:02:35 +0900
+doc/sql.rdoc	Sun, 17 Nov 2024 14:02:35 +0900
+doc/tips.rdoc	Sun, 17 Nov 2024 14:02:35 +0900
+CHANGELOG.md	Sun, 17 Nov 2024 14:02:35 +0900

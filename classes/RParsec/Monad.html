@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>RParsec::Monad</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+RParsec::Monad
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../files/lib/rparsec/monad_rb.html">lib/rparsec/monad.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<p>module for <a href="Monad.html"><code>Monad</code></a></p>
+</div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Instance</h3>
+<ol>
+<li><a href="#method-i-bind">bind</a></li>
+<li><a href="#method-i-initMonad">initMonad</a></li>
+<li><a href="#method-i-map">map</a></li>
+<li><a href="#method-i-plus">plus</a></li>
+<li><a href="#method-i-seq">seq</a></li>
+<li><a href="#attribute-i-this">this</a></li>
+<li><a href="#method-i-value">value</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='section'>
+<div id='attribute-list'>
+<h2 class='section-bar'>Attributes</h2>
+<div class='name-list'>
+<table>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>
+<a name='attribute-i-this'>this</a>
+</td>
+<td class='context-item-value'>[R]</td>
+<td class='context-item-desc'></td>
+</tr>
+</table>
+</div>
+</div>
+<div id='methods'>
+<h2>Public Instance methods</h2>
+<div class='method public-instance' id='method-method-i-bind'>
+<a name='method-i-bind'></a>
+<div class='synopsis'>
+<span class='name'>bind</span><span class='arguments'>(&binder)</span>
+
+</div>
+<div class='description'>
+
+<p>Run the <em>bind</em> operation on the encapsulated object following the monad law.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-bind-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-bind-source'><span class="ruby-comment"># File lib/rparsec/monad.rb, line 30</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">bind</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">binder</span>)
+  <span class="ruby-ivar">@monad</span>.<span class="ruby-identifier">bind</span>(<span class="ruby-ivar">@this</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">binder</span>)
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-initMonad'>
+<a name='method-i-initMonad'></a>
+<div class='synopsis'>
+<span class='name'>initMonad</span><span class='arguments'>(m, v)</span>
+
+</div>
+<div class='description'>
+
+<p>To initialize with a monad implementation and an object that obeys the monad law.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-initMonad-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-initMonad-source'><span class="ruby-comment"># File lib/rparsec/monad.rb, line 14</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initMonad</span>(<span class="ruby-identifier">m</span>, <span class="ruby-identifier">v</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-string">&#39;monad cannot be nil&#39;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-ivar">@monad</span> = <span class="ruby-identifier">m</span>;
+  <span class="ruby-ivar">@this</span> = <span class="ruby-identifier">v</span>;
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-map'>
+<a name='method-i-map'></a>
+<div class='synopsis'>
+<span class='name'>map</span><span class='arguments'>(&mapper)</span>
+
+</div>
+<div class='description'>
+
+<p>Run the <em>map</em> operation on the encapsulated object following the monad law.  <a href="Monad.html#method-i-bind"><code>bind</code></a> is used to implement.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-map-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-map-source'><span class="ruby-comment"># File lib/rparsec/monad.rb, line 51</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">mapper</span>)
+  <span class="ruby-identifier">bind</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-identifier">mapper</span>.<span class="ruby-identifier">call</span> <span class="ruby-identifier">v</span>;
+    <span class="ruby-identifier">value</span>(<span class="ruby-identifier">result</span>);
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-plus'>
+<a name='method-i-plus'></a>
+<div class='synopsis'>
+<span class='name'>plus</span><span class='arguments'>(other)</span>
+
+</div>
+<div class='description'>
+
+<p>Run the <em>plus</em> operation on the encapsulated object following the MonadPlus law.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-plus-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-plus-source'><span class="ruby-comment"># File lib/rparsec/monad.rb, line 61</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">plus</span> <span class="ruby-identifier">other</span>
+  <span class="ruby-ivar">@monad</span>.<span class="ruby-identifier">mplus</span>(<span class="ruby-ivar">@this</span>, <span class="ruby-identifier">other</span>.<span class="ruby-identifier">this</span>)
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-seq'>
+<a name='method-i-seq'></a>
+<div class='synopsis'>
+<span class='name'>seq</span><span class='arguments'>(other)</span>
+
+</div>
+<div class='description'>
+
+<p>Run the <em>seq</em> operation on the encapsulated object following the monad law.  If <code>seq</code> is not defined by the monad impl, use <a href="Monad.html#method-i-bind"><code>bind</code></a> to implement.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-seq-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-seq-source'><span class="ruby-comment"># File lib/rparsec/monad.rb, line 39</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">seq</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@monad</span>.<span class="ruby-identifier">respond_to?</span> <span class="ruby-value">:seq</span>
+    <span class="ruby-ivar">@monad</span>.<span class="ruby-identifier">seq</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">bind</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">_x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">other</span> }
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-value'>
+<a name='method-i-value'></a>
+<div class='synopsis'>
+<span class='name'>value</span><span class='arguments'>(v)</span>
+
+</div>
+<div class='description'>
+
+<p>To create a value based on the monad impl.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-value-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-value-source'><span class="ruby-comment"># File lib/rparsec/monad.rb, line 23</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">value</span> <span class="ruby-identifier">v</span>
+  <span class="ruby-ivar">@monad</span>.<span class="ruby-identifier">value</span> <span class="ruby-identifier">v</span>
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/jeremyevans/hanna"><strong>Hanna</strong> RDoc template</a>
+</div>
+</body>
+</html>

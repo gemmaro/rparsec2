@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>README.rdoc</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>README.rdoc
+</h1>
+<div class='paths'>
+README.rdoc
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2024-11-17 14:02:35 +0900</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-rparsec">rparsec<span><a href="#label-rparsec">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p>rparsec is a parser combinator library in Ruby. This is a port of Jparsec, written in Java.</p>
+
+<h2 id="label-Demo">Demo<span><a href="#label-Demo">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<h3 id="label-Calculator">Calculator<span><a href="#label-Calculator">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<p>The following is the Ruby version of calculator.</p>
+
+<pre class="ruby"><span class="ruby-identifier">require</span> <span class="ruby-string">&#39;rparsec&#39;</span>
+
+<span class="ruby-identifier">include</span> <span class="ruby-constant">RParsec</span>
+
+<span class="ruby-keyword">class</span> <span class="ruby-constant">Calculator</span>
+  <span class="ruby-identifier">include</span> <span class="ruby-constant">Parsers</span>
+  <span class="ruby-identifier">include</span> <span class="ruby-constant">Functors</span>
+
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">parser</span>
+    <span class="ruby-identifier">ops</span> = <span class="ruby-constant">OperatorTable</span>.<span class="ruby-identifier">new</span>
+            .<span class="ruby-identifier">infixl</span>(<span class="ruby-identifier">char</span>(<span class="ruby-value">?+</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-constant">Plus</span>,  <span class="ruby-value">20</span>)
+            .<span class="ruby-identifier">infixl</span>(<span class="ruby-identifier">char</span>(<span class="ruby-value">?-</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-constant">Minus</span>, <span class="ruby-value">20</span>)
+            .<span class="ruby-identifier">infixl</span>(<span class="ruby-identifier">char</span>(<span class="ruby-value">?*</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-constant">Mul</span>,   <span class="ruby-value">40</span>)
+            .<span class="ruby-identifier">infixl</span>(<span class="ruby-identifier">char</span>(<span class="ruby-value">?/</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-constant">Div</span>,   <span class="ruby-value">40</span>)
+            .<span class="ruby-identifier">prefix</span>(<span class="ruby-identifier">char</span>(<span class="ruby-value">?-</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-constant">Neg</span>,   <span class="ruby-value">60</span>)
+    <span class="ruby-identifier">expr</span> = <span class="ruby-keyword">nil</span>
+    <span class="ruby-identifier">term</span> = <span class="ruby-identifier">integer</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-constant">To_i</span>) <span class="ruby-operator">|</span> <span class="ruby-identifier">char</span>(<span class="ruby-string">&#39;(&#39;</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">lazy</span> { <span class="ruby-identifier">expr</span> } <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">char</span>(<span class="ruby-string">&#39;)&#39;</span>)
+    <span class="ruby-identifier">delim</span> = <span class="ruby-identifier">whitespace</span>.<span class="ruby-identifier">many_</span>
+    <span class="ruby-identifier">expr</span> = <span class="ruby-identifier">delim</span> <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-constant">Expressions</span>.<span class="ruby-identifier">build</span>(<span class="ruby-identifier">term</span>, <span class="ruby-identifier">ops</span>, <span class="ruby-identifier">delim</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-constant">Calculator</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">parser</span>.<span class="ruby-identifier">parse</span> <span class="ruby-string">&#39;1+2*(3-1)&#39;</span> <span class="ruby-comment"># =&gt; 5</span>
+</pre>
+
+<p>As simple as that!</p>
+
+<h3 id="label-S-expression">S-expression<span><a href="#label-S-expression">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<p>The above example utilizes the pre-built <a href="../classes/RParsec/Expressions.html">Expressions</a> class to help building expression parser.  Another example is for a simpler s-expression parser (in lisp syntax, <code>- (+ 1 (* 2 2)) (1)</code> sort of thing). As s-expression is way simpler to parse than expressions with infix operators, we will build the parser without using <a href="../classes/RParsec/Expressions.html">Expressions</a> class:</p>
+
+<pre class="ruby"><span class="ruby-identifier">require</span> <span class="ruby-string">&quot;test_helper&quot;</span>
+<span class="ruby-identifier">require</span> <span class="ruby-string">&quot;rparsec/expressions&quot;</span>
+
+<span class="ruby-keyword">class</span> <span class="ruby-constant">SExpressionTestCase</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ParserTestCase</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">delim</span>
+    <span class="ruby-identifier">whitespace</span>.<span class="ruby-identifier">many_</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">ignore</span> <span class="ruby-identifier">parser</span>
+    <span class="ruby-identifier">parser</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">delim</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">lparen</span>
+    <span class="ruby-identifier">ignore</span>(<span class="ruby-identifier">char</span>(<span class="ruby-string">&#39;(&#39;</span>))
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">rparen</span>
+    <span class="ruby-identifier">ignore</span>(<span class="ruby-identifier">char</span>(<span class="ruby-string">&#39;)&#39;</span>))
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">parser</span>
+    <span class="ruby-identifier">expr</span> = <span class="ruby-keyword">nil</span>
+    <span class="ruby-identifier">lazy_expr</span> = <span class="ruby-identifier">lazy</span> { <span class="ruby-identifier">expr</span> }
+    <span class="ruby-identifier">term</span> = <span class="ruby-identifier">number</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-constant">To_f</span>) <span class="ruby-operator">|</span> (<span class="ruby-identifier">lparen</span> <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">lazy_expr</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">rparen</span>)
+    <span class="ruby-identifier">binop</span> = (<span class="ruby-identifier">char</span>(<span class="ruby-string">&#39;+&#39;</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-constant">Plus</span>) <span class="ruby-operator">|</span> (<span class="ruby-identifier">char</span>(<span class="ruby-string">&#39;-&#39;</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-constant">Minus</span>) <span class="ruby-operator">|</span> (<span class="ruby-identifier">char</span>(<span class="ruby-string">&#39;*&#39;</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-constant">Mul</span>) <span class="ruby-operator">|</span> (<span class="ruby-identifier">char</span>(<span class="ruby-string">&#39;/&#39;</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-constant">Div</span>)
+    <span class="ruby-identifier">binop</span> = <span class="ruby-identifier">ignore</span> <span class="ruby-identifier">binop</span>
+    <span class="ruby-identifier">term</span> = <span class="ruby-identifier">ignore</span> <span class="ruby-identifier">term</span>
+    <span class="ruby-identifier">binary</span> = <span class="ruby-identifier">sequence</span>(<span class="ruby-identifier">binop</span>, <span class="ruby-identifier">lazy_expr</span>, <span class="ruby-identifier">lazy_expr</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">op</span>, <span class="ruby-identifier">e1</span>, <span class="ruby-identifier">e2</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">op</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">e1</span>, <span class="ruby-identifier">e2</span>)
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">expr</span> = <span class="ruby-identifier">delim</span> <span class="ruby-operator">&gt;&gt;</span> (<span class="ruby-identifier">term</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">binary</span>)
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">test1</span>
+    <span class="ruby-identifier">assertParser</span>(<span class="ruby-string">&#39;- (+ 1 * 2 2.0) (1)&#39;</span>, <span class="ruby-value">4</span>, <span class="ruby-identifier">parser</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>The code is pretty self-explanatory.  The only thing to note is that we had to manually skip whitespaces using the <code>ignore</code> function. (Whitespace skipping can be more elegant if we do a 2-phase parsing, where lexer takes care of them before grammar rule kicks in. Such use is demonstrated in detail in the test code.)</p>
+
+<h2 id="label-Installation">Installation<span><a href="#label-Installation">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<pre class="ruby"><span class="ruby-identifier">gem</span> <span class="ruby-identifier">install</span> <span class="ruby-identifier">rparsec2</span>
+</pre>
+
+<h2 id="label-Reference">Reference<span><a href="#label-Reference">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<p>This file was written according to the original and archived <a target="_top" href="https://web.archive.org/web/20150522210425/https://docs.codehaus.org/display/JPARSEC/Ruby+Parsec">rparsec project page</a> written by Ben Yu.</p>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/jeremyevans/hanna"><strong>Hanna</strong> RDoc template</a>
+</div>
+</body>
+</html>

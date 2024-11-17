@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>CHANGELOG.md</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>CHANGELOG.md
+</h1>
+<div class='paths'>
+CHANGELOG.md
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2024-11-17 14:02:35 +0900</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-rparsec+Change+Log">rparsec Change Log<span><a href="#label-rparsec+Change+Log">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<h2 id="label-Unreleased">Unreleased<span><a href="#label-Unreleased">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<h2 id="label-1.2.0+-+2024-11-04">1.2.0 - 2024-11-04<span><a href="#label-1.2.0+-+2024-11-04">&para;</a> <a href="#top">&uarr;</a></span></h2>
+<ul><li>
+<p>Remove runtime type checker and signature.</p>
+</li><li>
+<p>Removed <code>def_mutable</code> method.</p>
+</li><li>
+<p>Enable frozen string literal.</p>
+</li><li>
+<p>Split operator table class to file. <code>require  &quot;rparsec/operator_table&quot;</code> to use it.</p>
+</li><li>
+<p>Split functor mixin module to a file. <code>require  &quot;rparsec/functor_mixin&quot;</code> to use it.</p>
+</li><li>
+<p>Move <code>Parsers</code> module to <code>lib/rparsec/parsers.rb</code>.</p>
+</li><li>
+<p>Add <code>Parser</code>‘s <code>set_name</code> instance method.</p>
+</li></ul>
+
+<h2 id="label-1.1.0+-+2024-11-03">1.1.0 - 2024-11-03<span><a href="#label-1.1.0+-+2024-11-03">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<p>Changes from 1.0:</p>
+<ul><li>
+<p>Support Ruby 3.1 or later.</p>
+</li><li>
+<p>Add documentation.</p>
+</li><li>
+<p>Add the BSD license file according to the <a target="_top" href="https://web.archive.org/web/20140515214123/https://rubyforge.org/projects/rparsec/">rparsec project page</a> on the archived RubyForge site.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/jeremyevans/hanna"><strong>Hanna</strong> RDoc template</a>
+</div>
+</body>
+</html>

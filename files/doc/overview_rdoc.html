@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>overview.rdoc</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>overview.rdoc
+</h1>
+<div class='paths'>
+doc/overview.rdoc
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2024-11-17 14:02:35 +0900</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-Overview">Overview<span><a href="#label-Overview">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p>Though rparsec API is quite easy to use, it still helps if one has an overview of how rparsec works and be wary of some gotchas.  In this article I’ll try to answer questions that might be fequently asked.</p>
+
+<h2 id="label-How+do+I+start-3F">How do I start?<span><a href="#label-How+do+I+start-3F">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<p>With rparsec, one creates <a href="../../classes/RParsec/Parser.html">Parser</a> object in terms of the production rule of the grammar.  Once a <a href="../../classes/RParsec/Parser.html">Parser</a> object is created, it can be used as in:</p>
+
+<pre class="ruby"><span class="ruby-identifier">parse_result</span> = <span class="ruby-identifier">parser</span>.<span class="ruby-identifier">parse</span> <span class="ruby-string">&quot;your code goes here&quot;</span>
+</pre>
+
+<p>Depending on your need, this <code>parse_result</code> can be either the calculation result (as in the calculator example), or an abstract syntax tree (as in the SQL parser example).</p>
+
+<p>So how do you create <a href="../../classes/RParsec/Parser.html">Parser</a> object?  Check out <a href="../../classes/RParsec/Parsers.html">Parsers</a> module.  It has everything for you to start with.</p>
+
+<p>You may very possibly want to include <a href="../../classes/RParsec/Parsers.html">Parsers</a> module into your parser module/class. (You can of course not include <a href="../../classes/RParsec/Parsers.html">Parsers</a> module and just use individual methods as in <code>Parsers.char(?a)</code>, <code>Parsers.token(:word)</code> etc.  It is just way more convenient if the repetition of <a href="../../classes/RParsec/Parsers.html">Parsers</a> can be avoided.)</p>
+
+<h2 id="label-How+does+rparsec+work-3F">How does rparsec work?<span><a href="#label-How+does+rparsec+work-3F">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<p>A <a href="../../classes/RParsec/Parser.html">Parser</a> object accepts any input that wacks and quacks like a string or an array, with <code>[]</code> and <code>length</code> methods.</p>
+
+<p>Each <a href="../../classes/RParsec/Parser.html">Parser</a> object encapsulates a piece of parsing logic, that when executed, will read the current inputs and optionally adjusts the cursor.</p>
+
+<p><a href="../../classes/RParsec/Parsers.html#method-i-satisfies">Parsers#satisfies</a> uses the associated predicate to check if the current input satisfies the requirement.  And if it does, advances the cursor for one step.</p>
+
+<p><a href="../../classes/RParsec/Parsers.html#method-i-char">Parsers#char</a>, <a href="../../classes/RParsec/Parsers.html#method-i-among">Parsers#among</a>, <a href="../../classes/RParsec/Parsers.html#method-i-range">Parsers#range</a> are all derived from <a href="../../classes/RParsec/Parsers.html#method-i-satisfies">satisfies</a>.</p>
+
+<p><a href="../../classes/RParsec/Parsers.html#method-i-string">Parsers#string</a>, <a href="../../classes/RParsec/Parsers.html#method-i-string_nocase">Parsers#string_nocase</a> matches the given string literal, case sensitively or insensitively.</p>
+
+<p><a href="../../classes/RParsec/Parsers.html#method-i-regexp">Parsers#regexp</a> uses a regular expression pattern to match the current input.</p>
+
+<p>All parsers mentioned above are character level parsers.  They check the current string input and are typically used in the lexing phase (if you choose to do lexing/parsing as two phases.  It is not required to have two phases though.)</p>
+
+<p>It is relatively more straight-forward to use the 1-phase approach, where all parsers work on the string level (as in the calculator example).  However, when the grammar rule scales up and when performance is a concern, 2-phase approach should be used to speed things up and better isolate lexical/syntactical rules.</p>
+
+<p>And suppose you want to do 2-phase parsing, lexcial analysis should result in tokens. The <a href="../../classes/RParsec/Parser.html#method-i-token">Parser#token</a> method is responsible for converting the current string result to a token identified by the symbol specified. This token will then be recognized during the second phase (syntactical analysis) by the <a href="../../classes/RParsec/Parsers.html#method-i-token">Parsers#token</a> method.</p>
+
+<p>Syntactic parsers (created by <a href="../../classes/RParsec/Parsers.html#method-i-token">Parsers#token</a>, <code>Keywords#[]</code> or <code>Operators#[]</code> accept as input an array of tokens.  This array of tokens are typically generated by some lexical parsers.</p>
+
+<p>The API to chain lexical parser and syntactical parser together is <a href="../../classes/RParsec/Parser.html#method-i-nested">Parser#nested</a> where syntactical parser is nested within the lexical parser (that results in a token array).</p>
+
+<p>For the simplest case,</p>
+
+<pre class="ruby"><span class="ruby-identifier">word</span>.<span class="ruby-identifier">token</span>(<span class="ruby-value">:word</span>).<span class="ruby-identifier">lexeme</span>
+</pre>
+
+<p>will create a lexer that results in an array of word tokens.  And</p>
+
+<pre class="ruby"><span class="ruby-identifier">word</span>.<span class="ruby-identifier">token</span>(<span class="ruby-value">:word</span>).<span class="ruby-identifier">lexeme</span>.<span class="ruby-identifier">nested</span>(<span class="ruby-identifier">syntax_parser</span>)
+</pre>
+
+<p>chains a syntactical parser as nested within the lexer so that the lexer result is passed as input to the syntactic parser.</p>
+
+<h2 id="label-What+are+the+step+1-2-3+in+creating+a+typical+parser-3F">What are the step 1-2-3 in creating a typical parser?<span><a href="#label-What+are+the+step+1-2-3+in+creating+a+typical+parser-3F">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<h3 id="label-Step+1-3A+Lexer">Step 1: Lexer<span><a href="#label-Step+1-3A+Lexer">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<p>A typical language contains keyword, operators and number literal, string literal and regular words.</p>
+
+<p><a href="../../classes/RParsec/Parsers.html#method-i-integer">Parsers#integer</a> and <a href="../../classes/RParsec/Parsers.html#method-i-integer">Parsers#number</a> can be used to scan integer/number; string literal is better handled by <a href="../../classes/RParsec/Parsers.html#method-i-regexp">Parsers#regexp</a> (use <a href="../../classes/RParsec/Parser.html#method-i-map">Parser#map</a> to convert the matched string literal and to deal with quotes/escapes.)</p>
+
+<p>Keyword is easily handled by <a href="../../classes/RParsec/Keywords.html">Keywords</a> helper class.  Typically regular words can also be handled by this class.</p>
+
+<p>Operator is handled by <a href="../../classes/RParsec/Operators.html">Operators</a> class. Pass it all the operators you want to support, and it will take care of ambiguities such that <code>==</code> is parsed as <code>==</code>, not two <code>=</code> operators.</p>
+
+<p>Once all lexers are ready, combine them together as in:</p>
+
+<pre class="ruby"><span class="ruby-identifier">operators</span> = <span class="ruby-constant">Operators</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">%w{+ - * / ++ --}</span>)
+<span class="ruby-identifier">keywords</span>  = <span class="ruby-constant">Keywords</span>.<span class="ruby-identifier">case_sensitive</span>(<span class="ruby-node">%w{if then else end}</span>)
+<span class="ruby-identifier">num</span>       = <span class="ruby-identifier">number</span>.<span class="ruby-identifier">token</span>(<span class="ruby-value">:number</span>)
+<span class="ruby-identifier">lexer</span>     = <span class="ruby-identifier">operators</span>.<span class="ruby-identifier">lexer</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">keywords</span>.<span class="ruby-identifier">lexer</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">num</span>
+</pre>
+
+<p>Use the <a href="../../classes/RParsec/Parser.html#method-i-lexeme">lexeme</a> method to skip whitespaces and comments and collect the tokens as an array:</p>
+
+<pre class="ruby"><span class="ruby-identifier">lexeme</span> = <span class="ruby-identifier">lexer</span>.<span class="ruby-identifier">lexeme</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">eof</span>
+</pre>
+
+<p>Note, we use <code>&lt;&lt; eof</code> to assert that after all tokens are read, <a href="../../classes/RParsec/Parsers.html#method-i-eof">eof</a> directly follows (meaning, all inputs are consumed.  <code>&lt;&lt;</code> operator reads as “followed by”).</p>
+
+<h2 id="label-Step+2-3A+atomic+syntactic+parsers">Step 2: atomic syntactic parsers<span><a href="#label-Step+2-3A+atomic+syntactic+parsers">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<p>To start syntactic parser that accepts the token array created by the lexer, we need to first recognize the tokens we created.</p>
+
+<p>Number and string literal will be recognized by <code>Parsers#token(:number)</code> and <code>Parsers#token(:stringlit)</code> (assuming <code>:stringlit</code> was used as the token identifier for string literal).</p>
+
+<p>To recognize the <code>++</code> operator, we use</p>
+
+<pre class="ruby"><span class="ruby-identifier">operators</span>[<span class="ruby-value">:&quot;++&quot;</span>]
+</pre>
+
+<p>To recognize <code>if</code> keyword, we use</p>
+
+<pre class="ruby"><span class="ruby-identifier">keywords</span>[<span class="ruby-value">:if</span>]
+</pre>
+
+<h2 id="label-Step+3-3A+production+rule">Step 3: production rule<span><a href="#label-Step+3-3A+production+rule">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<p>The last step is to build the parser following production rules.  The alternative operator <code>|</code> and sequential operator <code>&gt;&gt;</code>, <code>&lt;&lt;</code> are used most frequently to model production rules.</p>
+
+<p><a href="../../classes/RParsec/Parser.html#method-i-many">Parser#many</a> combinator models the “kleen star” construct in BNF.</p>
+
+<p><a href="../../classes/RParsec/Parsers.html#method-i-map">Parsers#map</a> and <a href="../../classes/RParsec/Parsers.html#method-i-sequence">Parsers#sequence</a> are the two most used combinators to associate semantic actions to syntactic rules. For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">p_a</span> = <span class="ruby-identifier">parser_a</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span><span class="ruby-identifier">create_a_expression</span> <span class="ruby-identifier">a</span>}
+<span class="ruby-identifier">p_bcd</span> = <span class="ruby-identifier">sequence</span>(<span class="ruby-identifier">parser_b</span>, <span class="ruby-identifier">parser_c</span>, <span class="ruby-identifier">parser_d</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">b</span>,<span class="ruby-identifier">c</span>,<span class="ruby-identifier">d</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">create_bcd_expression</span> <span class="ruby-identifier">b</span>, <span class="ruby-identifier">c</span>, <span class="ruby-identifier">d</span>
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>When production rule involves recursion (as in almost any expression parser), the <a href="../../classes/RParsec/Parsers.html#method-i-lazy">Parsers#lazy</a> can be used to get around.  The usage is as simple as:</p>
+
+<pre>expr = ... lazy { expr } ...</pre>
+
+<p>As in most recursive descent parsers, left-recursion is a nightmare. Beware not to write a rparsec parser like this:</p>
+
+<pre class="ruby"><span class="ruby-identifier">expr</span> = <span class="ruby-identifier">sequence</span>(<span class="ruby-identifier">lazy</span>{<span class="ruby-identifier">expr</span>}, <span class="ruby-identifier">operators</span>[<span class="ruby-value">:&quot;+&quot;</span>], <span class="ruby-identifier">num</span>)
+</pre>
+
+<p>It will fail with stack overflow!</p>
+
+<p>A less obvious left-recursion is a production rule that looks like:</p>
+
+<pre class="ruby"><span class="ruby-identifier">expr</span> = <span class="ruby-identifier">sequence</span>(<span class="ruby-identifier">operator</span>[<span class="ruby-value">:&quot;-&quot;</span>].<span class="ruby-identifier">many</span>, <span class="ruby-identifier">lazy</span>{<span class="ruby-identifier">expr</span>})
+</pre>
+
+<p>As <a href="../../classes/RParsec/Parser.html#method-i-many">many</a> can occur 0 times, we have a potential left recursion here.</p>
+
+<p>I regret that I don’t know enough to attack this problem.  But rparsec does provide a nice work-around.  Most of the time left recursion stems from left associative binary operator.  And rparsec has operator precedence grammar support that can build the production rule for you. Just declare the operators and their precedence, associativity in an <a href="../../classes/RParsec/OperatorTable.html">OperatorTable</a> and let <a href="../../classes/RParsec/Expressions.html">Expressions</a> class does the work. (refer to the calculator example).</p>
+
+<p>Operator table is probably more useful than you might expect it to be. It can even be used for senario not as obvious as the arithmetic or logical operators.  Indeed, any operation that takes one or two participants and result in a new one may take advantage of operator table.  The SQL <code>union</code> and <code>union all</code> syntax, for example, can be modeled as a binary operator too.</p>
+<hr>
+
+<p>Originally written by Ben Yu at <a target="_top" href="https://web.archive.org/web/20150522220551/https://docs.codehaus.org/display/JPARSEC/rparsec+overview">rparsec overview</a>.</p>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/jeremyevans/hanna"><strong>Hanna</strong> RDoc template</a>
+</div>
+</body>
+</html>

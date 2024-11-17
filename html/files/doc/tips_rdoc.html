@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>tips.rdoc</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>tips.rdoc
+</h1>
+<div class='paths'>
+doc/tips.rdoc
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2024-11-17 14:02:35 +0900</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-Tips">Tips<span><a href="#label-Tips">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p>Similar to any higher order combinator framework, rparsec program is not real easy to debug.  When error does happen, especially when the production rule is complex, tracing down the error may take considerable amount of time.  Though I do not think debugging rparsec is any harder than debugging parser generators, this is an undebatable problem that we should face.</p>
+
+<p>My experience in using rparsec (and jparsec too), is that <strong>test driven development</strong> <em>really</em> helps.  It is unfortunately hard to debug a complex parser object, but it is much easier for a small vanilla one.  If the whole parser program is built with test cases that tests every tiny piece of logic, detecting and debugging an error becomes a much easier task.</p>
+
+<p>Start from writing unit test case for every production rule before implementing it.  Run the test case, see the red bar, and then implement the production rule to turn it to green.</p>
+
+<p>That said, when you do encounter errors, here’re a few things to check up.</p>
+<table class="rdoc-list note-list"><tbody><tr><td class='label'>Lookahead</td><td>
+<p><a href="../../classes/RParsec/Parsers.html#method-i-sum">Parsers#sum</a> and <a href="../../classes/RParsec/Monad.html#method-i-plus">Parser#plus</a> are subject to the default look-ahead value.  Suppose if any of the alternative parser fails with some input consumption, the rest of the alternatives will not get the chance to run. The solution is to use the <code>|</code> operator or <a href="rodc-ref:RParsec::Parsers#alt">Parsers#alt</a>.  They will try all the alternatives until a success regardless of input consumption. <a href="../../classes/RParsec/Parser.html#method-i-atomize">Parser#atomize</a> or Parser#lookahead are also tools to get around this problem.</p>
+</td></tr><tr><td class='label'>Ambiguity</td><td>
+<p>Suppose we have both <code>integer</code> and <code>number</code> that parses integral literal and decimal literal. <code>(integer|number) &lt;&lt; eof</code> will fail given the input of <code>1.0</code> because <code>integer|number</code> will first try <em>integer</em>, which successfully recognizes the input <code>1</code>.  And since the first alternative succeeded, the <em>number</em> parser will not get a chance to run.  Later when we try to run <em>eof</em> against the remaining <code>.0</code>, we get an error.  Solution would be either place <code>number</code> as the first alterantive, or to use <code>longer(integer, number)</code> which will try both alternative and prefer the one with longer match.</p>
+</td></tr><tr><td class='label'>Consistency</td><td>
+<p>Make sure the token identifier you use in the syntactic parser matches the one used in lexecial analysis.  If you use different identifier for number token and integer token, don’t expect <code>token(:number)</code> will match <code>:integer</code> tokens. Regular words are by default identified by <code>:word</code>.</p>
+</td></tr><tr><td class='label'>Right input</td><td>
+<p>When your syntactic parser complains something like <code>&#39;c&#39; encountered</code>, where <code>c</code> is the first character of the current word (<code>copy</code> for example), it is quite possible that you are feeding it string as input, not the desired token array.</p>
+</td></tr></tbody></table>
+
+<p>Utilities that may help in troubleshooting:</p>
+
+<p><a href="../../classes/RParsec/Parsers.html#method-i-watch">Parsers#watch</a> can be used to print trace message as well as monitor the current input. <a href="../../classes/RParsec/Parsers.html#method-i-get_index">Parsers#get_index</a> is a parser that reads the index number of the current input, with which you can know where the you are.</p>
+<hr>
+
+<p>Originally written by Ben Yu at <a target="_top" href="https://web.archive.org/web/20150522220548/https://docs.codehaus.org/display/JPARSEC/rparsec+tips">rparsec tips</a>.</p>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/jeremyevans/hanna"><strong>Hanna</strong> RDoc template</a>
+</div>
+</body>
+</html>

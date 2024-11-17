@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>RParsec::OperatorTable</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>class</span>
+RParsec::OperatorTable
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../files/lib/rparsec/operator_table_rb.html">lib/rparsec/operator_table.rb</a>
+</li>
+</ol>
+<div class='parent'>
+Superclass:
+<strong>Object</strong>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<p>This class holds information about operator precedences and associativities.  <a href="OperatorTable.html#method-i-prefix"><code>prefix</code></a>, <a href="OperatorTable.html#method-i-postfix"><code>postfix</code></a>, <a href="OperatorTable.html#method-i-infixl"><code>infixl</code></a>, <a href="OperatorTable.html#method-i-infixr"><code>infixr</code></a>, <a href="OperatorTable.html#method-i-infixn"><code>infixn</code></a> can be called to register operators.</p>
+</div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Class</h3>
+<ol>
+<li><a href="#method-c-new">new</a></li>
+</ol>
+<h3>Public Instance</h3>
+<ol>
+<li><a href="#method-i-infixl">infixl</a></li>
+<li><a href="#method-i-infixn">infixn</a></li>
+<li><a href="#method-i-infixr">infixr</a></li>
+<li><a href="#method-i-postfix">postfix</a></li>
+<li><a href="#method-i-prefix">prefix</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='section'>
+<div id='methods'>
+<h2>Public Class methods</h2>
+<div class='method public-class' id='method-method-c-new'>
+<a name='method-c-new'></a>
+<div class='synopsis'>
+<span class='name'>new</span><span class='arguments'>()</span>
+
+</div>
+<div class='description'>
+
+<p>To create an <a href="OperatorTable.html"><code>OperatorTable</code></a> instance.  If a block is given, it is invoked to do post-instantiation.  For example:</p>
+
+<pre class="ruby"><span class="ruby-constant">OperatorTable</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tbl</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">tbl</span>.<span class="ruby-identifier">infixl</span>(<span class="ruby-identifier">char</span>(<span class="ruby-value">?+</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-constant">Plus</span>, <span class="ruby-value">10</span>)
+  <span class="ruby-identifier">tbl</span>.<span class="ruby-identifier">infixl</span>(<span class="ruby-identifier">char</span>(<span class="ruby-value">?-</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-constant">Minus</span>, <span class="ruby-value">10</span>)
+  <span class="ruby-identifier">tbl</span>.<span class="ruby-identifier">infixl</span>(<span class="ruby-identifier">char</span>(<span class="ruby-value">?*</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-constant">Mul</span>, <span class="ruby-value">20</span>)
+  <span class="ruby-identifier">tbl</span>.<span class="ruby-identifier">infixl</span>(<span class="ruby-identifier">char</span>(<span class="ruby-value">?/</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-constant">Div</span>, <span class="ruby-value">20</span>)
+  <span class="ruby-identifier">tbl</span>.<span class="ruby-identifier">prefix</span>(<span class="ruby-identifier">char</span>(<span class="ruby-value">?-</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-constant">Neg</span>, <span class="ruby-value">50</span>)
+<span class="ruby-keyword">end</span>
+</pre>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-new-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-new-source'><span class="ruby-comment"># File lib/rparsec/operator_table.rb, line 33</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">new</span>
+  <span class="ruby-identifier">this</span> = <span class="ruby-identifier">allocate</span>
+  <span class="ruby-identifier">this</span>.<span class="ruby-identifier">reinit</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>
+    <span class="ruby-keyword">yield</span> <span class="ruby-identifier">this</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">this</span>
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<h2>Public Instance methods</h2>
+<div class='method public-instance' id='method-method-i-infixl'>
+<a name='method-i-infixl'></a>
+<div class='synopsis'>
+<span class='name'>infixl</span><span class='arguments'>(op, precedence)</span>
+
+</div>
+<div class='description'>
+
+<p>Defines a left associative infix operator that returns a binary <code>Proc</code> object with a precedence associated. Returns <code>self</code>.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-infixl-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-infixl-source'><span class="ruby-comment"># File lib/rparsec/operator_table.rb, line 62</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">infixl</span>(<span class="ruby-identifier">op</span>, <span class="ruby-identifier">precedence</span>)
+  <span class="ruby-identifier">add</span>(<span class="ruby-value">:infixl</span>, <span class="ruby-identifier">op</span>, <span class="ruby-identifier">precedence</span>)
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-infixn'>
+<a name='method-i-infixn'></a>
+<div class='synopsis'>
+<span class='name'>infixn</span><span class='arguments'>(op, precedence)</span>
+
+</div>
+<div class='description'>
+
+<p>Defines a non-associative infix operator that returns a binary <code>Proc</code> object with a precedence associated. Returns <code>self</code>.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-infixn-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-infixn-source'><span class="ruby-comment"># File lib/rparsec/operator_table.rb, line 78</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">infixn</span>(<span class="ruby-identifier">op</span>, <span class="ruby-identifier">precedence</span>)
+  <span class="ruby-identifier">add</span>(<span class="ruby-value">:infixn</span>, <span class="ruby-identifier">op</span>, <span class="ruby-identifier">precedence</span>)
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-infixr'>
+<a name='method-i-infixr'></a>
+<div class='synopsis'>
+<span class='name'>infixr</span><span class='arguments'>(op, precedence)</span>
+
+</div>
+<div class='description'>
+
+<p>Defines a right associative infix operator that returns a binary <code>Proc</code> object with a precedence associated. Returns <code>self</code>.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-infixr-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-infixr-source'><span class="ruby-comment"># File lib/rparsec/operator_table.rb, line 70</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">infixr</span>(<span class="ruby-identifier">op</span>, <span class="ruby-identifier">precedence</span>)
+  <span class="ruby-identifier">add</span>(<span class="ruby-value">:infixr</span>, <span class="ruby-identifier">op</span>, <span class="ruby-identifier">precedence</span>)
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-postfix'>
+<a name='method-i-postfix'></a>
+<div class='synopsis'>
+<span class='name'>postfix</span><span class='arguments'>(op, precedence)</span>
+
+</div>
+<div class='description'>
+
+<p>Defines a postfix operator that returns a unary <code>Proc</code> object with a precedence associated. Returns <code>self</code>.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-postfix-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-postfix-source'><span class="ruby-comment"># File lib/rparsec/operator_table.rb, line 54</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">postfix</span>(<span class="ruby-identifier">op</span>, <span class="ruby-identifier">precedence</span>)
+  <span class="ruby-identifier">add</span>(<span class="ruby-value">:postfix</span>, <span class="ruby-identifier">op</span>, <span class="ruby-identifier">precedence</span>)
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-prefix'>
+<a name='method-i-prefix'></a>
+<div class='synopsis'>
+<span class='name'>prefix</span><span class='arguments'>(op, precedence)</span>
+
+</div>
+<div class='description'>
+
+<p>Defines a prefix operator that returns a unary <code>Proc</code> object with a precedence associated. Returns <code>self</code>.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-prefix-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-prefix-source'><span class="ruby-comment"># File lib/rparsec/operator_table.rb, line 46</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">prefix</span>(<span class="ruby-identifier">op</span>, <span class="ruby-identifier">precedence</span>)
+  <span class="ruby-identifier">add</span>(<span class="ruby-value">:prefix</span>, <span class="ruby-identifier">op</span>, <span class="ruby-identifier">precedence</span>)
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/jeremyevans/hanna"><strong>Hanna</strong> RDoc template</a>
+</div>
+</body>
+</html>

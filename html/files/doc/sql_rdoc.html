@@ -1,0 +1,359 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>sql.rdoc</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>sql.rdoc
+</h1>
+<div class='paths'>
+doc/sql.rdoc
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2024-11-17 14:02:35 +0900</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-SQL+parser+in+rparsec">SQL parser in rparsec<span><a href="#label-SQL+parser+in+rparsec">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p>Powered by Ruby syntax, parser written in rparsec can be very concise. You have seen how easy the calculator and s-expression parser is.  In this article we will demonstrate a more practical parser that parses SQL-like language.</p>
+
+<p>Informally, the syntax supported are:</p>
+<ul><li>
+<p>number literal</p>
+</li><li>
+<p>string literal (quoted by single quote and escaped by double single quote)</p>
+</li><li>
+<p>variables starting with a <code>$</code> character.</p>
+</li><li>
+<p>Line commment indicated by a <code>#</code>.</p>
+</li><li>
+<p>Standard SQL constructs such as <code>select</code>, <code>from</code>, <code>where</code>, <code>group by</code>, <code>order by</code>, <code>union</code></p>
+</li><li>
+<p>Joins such as <code>inner join</code>, <code>left join</code>, <code>right join</code>, <code>full join</code>, <code>cross join</code></p>
+</li><li>
+<p>Expression with <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code> operators.</p>
+</li><li>
+<p><code>case-when-else-end</code> expression in Ruby syntax.</p>
+</li><li>
+<p>Comparisons such as <code>=</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code> etc.</p>
+</li><li>
+<p><code>and</code>, <code>or</code>, <code>not</code></p>
+</li><li>
+<p><code>in</code>, <code>not in</code>, <code>exists</code>, <code>not exists</code>, <code>between</code>, <code>not between</code></p>
+</li><li>
+<p>Group compasison as in <code>(a,b)=(1,2)</code></p>
+</li><li>
+<p>Table alias</p>
+</li><li>
+<p>Words quoted within <code>[]</code>.</p>
+</li></ul>
+
+<p>The following code is the full parser:</p>
+
+<pre class="ruby"><span class="ruby-identifier">require</span> <span class="ruby-string">&quot;rparsec/keywords&quot;</span>
+<span class="ruby-identifier">require</span> <span class="ruby-string">&quot;rparsec/operators&quot;</span>
+<span class="ruby-identifier">require</span> <span class="ruby-string">&quot;rparsec/expressions&quot;</span>
+<span class="ruby-identifier">require</span> <span class="ruby-string">&quot;rparsec/operator_table&quot;</span>
+
+<span class="ruby-identifier">include</span> <span class="ruby-constant">RParsec</span>
+
+<span class="ruby-keyword">class</span> <span class="ruby-constant">Method</span>
+  <span class="ruby-identifier">include</span> <span class="ruby-constant">FunctorMixin</span>
+<span class="ruby-keyword">end</span>
+<span class="ruby-keyword">class</span> <span class="ruby-constant">Proc</span>
+  <span class="ruby-identifier">include</span> <span class="ruby-constant">FunctorMixin</span>
+<span class="ruby-keyword">end</span>
+<span class="ruby-identifier">using</span> <span class="ruby-constant">FunctorMixin</span>
+
+<span class="ruby-keyword">module</span> <span class="ruby-constant">SqlParser</span>
+  <span class="ruby-identifier">include</span> <span class="ruby-constant">Functors</span>
+  <span class="ruby-identifier">include</span> <span class="ruby-constant">Parsers</span>
+  <span class="ruby-identifier">extend</span> <span class="ruby-constant">Parsers</span>
+  <span class="ruby-constant">MyKeywords</span> = <span class="ruby-constant">Keywords</span>.<span class="ruby-identifier">case_insensitive</span>(<span class="ruby-node">%w{
+    select from where group by having order desc asc
+    inner left right full outer inner join on cross
+    union all distinct as exists in between limit
+    case when then else end and or not true false
+  }</span>)
+  <span class="ruby-constant">MyOperators</span> = <span class="ruby-constant">Operators</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">%w{+ - * / % = &gt; &lt; &gt;= &lt;= &lt;&gt; != : ( ) . ,}</span>)
+  <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">operators</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">ops</span>)
+    <span class="ruby-identifier">result</span> = []
+    <span class="ruby-identifier">ops</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">op</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> (<span class="ruby-constant">MyOperators</span>[<span class="ruby-identifier">op</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">op</span>.<span class="ruby-identifier">to_sym</span>)
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">sum</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">result</span>)
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-constant">Comparators</span> = <span class="ruby-identifier">operators</span>(<span class="ruby-operator">*</span><span class="ruby-node">%w{= &gt; &lt; &gt;= &lt;= &lt;&gt; !=}</span>)
+  <span class="ruby-constant">StringLiteral</span> = (<span class="ruby-identifier">char</span>(<span class="ruby-value">?&#39;</span>) <span class="ruby-operator">&gt;&gt;</span> (<span class="ruby-identifier">not_char</span>(<span class="ruby-value">?&#39;</span>) <span class="ruby-operator">|</span> <span class="ruby-identifier">str</span>(<span class="ruby-string">&quot;&#39;&#39;&quot;</span>)).<span class="ruby-identifier">many_</span>.<span class="ruby-identifier">fragment</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">char</span>(<span class="ruby-value">?&#39;</span>)).
+    <span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">raw</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">raw</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp">/&#39;&#39;/</span>, <span class="ruby-string">&quot;&#39;&quot;</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-constant">QuotedName</span> = <span class="ruby-identifier">char</span>(<span class="ruby-value">?[</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">not_char</span>(<span class="ruby-value">?]</span>).<span class="ruby-identifier">many_</span>.<span class="ruby-identifier">fragment</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">char</span>(<span class="ruby-value">?]</span>)
+  <span class="ruby-constant">Variable</span> = <span class="ruby-identifier">char</span>(<span class="ruby-value">?$</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">word</span>
+  <span class="ruby-constant">MyLexer</span> = <span class="ruby-identifier">number</span>.<span class="ruby-identifier">token</span>(<span class="ruby-value">:number</span>) <span class="ruby-operator">|</span> <span class="ruby-constant">StringLiteral</span>.<span class="ruby-identifier">token</span>(<span class="ruby-value">:string</span>) <span class="ruby-operator">|</span> <span class="ruby-constant">Variable</span>.<span class="ruby-identifier">token</span>(<span class="ruby-value">:var</span>) <span class="ruby-operator">|</span> <span class="ruby-constant">QuotedName</span>.<span class="ruby-identifier">token</span>(<span class="ruby-value">:word</span>) <span class="ruby-operator">|</span>
+    <span class="ruby-constant">MyKeywords</span>.<span class="ruby-identifier">lexer</span> <span class="ruby-operator">|</span> <span class="ruby-constant">MyOperators</span>.<span class="ruby-identifier">lexer</span>
+  <span class="ruby-constant">MyLexeme</span> = <span class="ruby-constant">MyLexer</span>.<span class="ruby-identifier">lexeme</span>(<span class="ruby-identifier">whitespaces</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">comment_line</span>(<span class="ruby-string">&#39;#&#39;</span>)) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">eof</span>
+
+  <span class="ruby-comment">######################################### utilities #########################################</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">keyword</span>
+    <span class="ruby-constant">MyKeywords</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">operator</span>
+    <span class="ruby-constant">MyOperators</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">comma</span>
+    <span class="ruby-identifier">operator</span>[<span class="ruby-string">&#39;,&#39;</span>]
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">list</span> <span class="ruby-identifier">expr</span>
+    <span class="ruby-identifier">paren</span>(<span class="ruby-identifier">expr</span>.<span class="ruby-identifier">delimited</span>(<span class="ruby-identifier">comma</span>))
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">word</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">nil?</span>
+      <span class="ruby-identifier">token</span>(<span class="ruby-value">:word</span>, <span class="ruby-operator">&amp;</span><span class="ruby-constant">Id</span>)
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">token</span>(<span class="ruby-value">:word</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">paren</span> <span class="ruby-identifier">parser</span>
+    <span class="ruby-identifier">operator</span>[<span class="ruby-string">&#39;(&#39;</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">parser</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">operator</span>[<span class="ruby-string">&#39;)&#39;</span>]
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">ctor</span> <span class="ruby-identifier">cls</span>
+    <span class="ruby-identifier">cls</span>.<span class="ruby-identifier">method</span> <span class="ruby-value">:new</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">rctor</span> <span class="ruby-identifier">cls</span>, <span class="ruby-identifier">arity</span> = <span class="ruby-value">2</span>
+    <span class="ruby-identifier">ctor</span>(<span class="ruby-identifier">cls</span>).<span class="ruby-identifier">reverse_curry</span> <span class="ruby-identifier">arity</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-comment">################################### predicate parser #############################</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">logical_operator</span> <span class="ruby-identifier">op</span>
+    <span class="ruby-identifier">proc</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span><span class="ruby-operator">|</span> <span class="ruby-constant">CompoundPredicate</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">op</span>, <span class="ruby-identifier">b</span>) }
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">make_predicate</span> <span class="ruby-identifier">expr</span>, <span class="ruby-identifier">rel</span>
+    <span class="ruby-identifier">expr_list</span> = <span class="ruby-identifier">list</span> <span class="ruby-identifier">expr</span>
+    <span class="ruby-identifier">comparison</span> = <span class="ruby-identifier">make_comparison_predicate</span> <span class="ruby-identifier">expr</span>, <span class="ruby-identifier">rel</span>
+    <span class="ruby-identifier">group_comparison</span> = <span class="ruby-identifier">sequence</span>(<span class="ruby-identifier">expr_list</span>, <span class="ruby-constant">Comparators</span>, <span class="ruby-identifier">expr_list</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">ctor</span>(<span class="ruby-constant">GroupComparisonPredicate</span>))
+    <span class="ruby-identifier">bool</span> = <span class="ruby-keyword">nil</span>
+    <span class="ruby-identifier">lazy_bool</span> = <span class="ruby-identifier">lazy</span> { <span class="ruby-identifier">bool</span> }
+    <span class="ruby-identifier">bool_term</span> = (<span class="ruby-identifier">keyword</span>[<span class="ruby-value">:true</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-keyword">true</span>) <span class="ruby-operator">|</span> (<span class="ruby-identifier">keyword</span>[<span class="ruby-value">:false</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-keyword">false</span>) <span class="ruby-operator">|</span>
+      <span class="ruby-identifier">comparison</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">group_comparison</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">paren</span>(<span class="ruby-identifier">lazy_bool</span>) <span class="ruby-operator">|</span>
+      <span class="ruby-identifier">make_exists</span>(<span class="ruby-identifier">rel</span>) <span class="ruby-operator">|</span> <span class="ruby-identifier">make_not_exists</span>(<span class="ruby-identifier">rel</span>)
+    <span class="ruby-identifier">bool_table</span> = <span class="ruby-constant">OperatorTable</span>.<span class="ruby-identifier">new</span>.
+      <span class="ruby-identifier">infixl</span>(<span class="ruby-identifier">keyword</span>[<span class="ruby-value">:or</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">logical_operator</span>(<span class="ruby-value">:or</span>), <span class="ruby-value">20</span>).
+      <span class="ruby-identifier">infixl</span>(<span class="ruby-identifier">keyword</span>[<span class="ruby-value">:and</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">logical_operator</span>(<span class="ruby-value">:and</span>), <span class="ruby-value">30</span>).
+      <span class="ruby-identifier">prefix</span>(<span class="ruby-identifier">keyword</span>[<span class="ruby-value">:not</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">ctor</span>(<span class="ruby-constant">NotPredicate</span>), <span class="ruby-value">40</span>)
+    <span class="ruby-identifier">bool</span> = <span class="ruby-constant">Expressions</span>.<span class="ruby-identifier">build</span>(<span class="ruby-identifier">bool_term</span>, <span class="ruby-identifier">bool_table</span>)
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">make_exists</span> <span class="ruby-identifier">rel</span>
+    <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:exists</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">rel</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">ctor</span>(<span class="ruby-constant">ExistsPredicate</span>))
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">make_not_exists</span> <span class="ruby-identifier">rel</span>
+    <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:not</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:exists</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">rel</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">ctor</span>(<span class="ruby-constant">NotExistsPredicate</span>))
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">make_in</span> <span class="ruby-identifier">expr</span>
+    <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:in</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">list</span>(<span class="ruby-identifier">expr</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">rctor</span>(<span class="ruby-constant">InPredicate</span>))
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">make_not_in</span> <span class="ruby-identifier">expr</span>
+    <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:not</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:in</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">list</span>(<span class="ruby-identifier">expr</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">rctor</span>(<span class="ruby-constant">NotInPredicate</span>))
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">make_in_relation</span> <span class="ruby-identifier">rel</span>
+    <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:in</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">rel</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">rctor</span>(<span class="ruby-constant">InRelationPredicate</span>))
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">make_not_in_relation</span> <span class="ruby-identifier">rel</span>
+    <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:not</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:in</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">rel</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">rctor</span>(<span class="ruby-constant">NotInRelationPredicate</span>))
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">make_between</span> <span class="ruby-identifier">expr</span>
+    <span class="ruby-identifier">make_between_clause</span>(<span class="ruby-identifier">expr</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">ctor</span>(<span class="ruby-constant">BetweenPredicate</span>))
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">make_not_between</span> <span class="ruby-identifier">expr</span>
+    <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:not</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">make_between_clause</span>(<span class="ruby-identifier">expr</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">ctor</span>(<span class="ruby-constant">NotBetweenPredicate</span>))
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">make_comparison_predicate</span> <span class="ruby-identifier">expr</span>, <span class="ruby-identifier">rel</span>
+    <span class="ruby-identifier">comparison</span> = <span class="ruby-identifier">sequence</span>(<span class="ruby-constant">Comparators</span>, <span class="ruby-identifier">expr</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">op</span>, <span class="ruby-identifier">e2</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">proc</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">e1</span><span class="ruby-operator">|</span> <span class="ruby-constant">ComparePredicate</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">e1</span>, <span class="ruby-identifier">op</span>, <span class="ruby-identifier">e2</span>) }
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">in_clause</span> = <span class="ruby-identifier">make_in</span> <span class="ruby-identifier">expr</span>
+    <span class="ruby-identifier">not_in_clause</span> = <span class="ruby-identifier">make_not_in</span> <span class="ruby-identifier">expr</span>
+    <span class="ruby-identifier">in_relation</span> = <span class="ruby-identifier">make_in_relation</span> <span class="ruby-identifier">rel</span>
+    <span class="ruby-identifier">not_in_relation</span> = <span class="ruby-identifier">make_not_in_relation</span> <span class="ruby-identifier">rel</span>
+    <span class="ruby-identifier">between</span> = <span class="ruby-identifier">make_between</span> <span class="ruby-identifier">expr</span>
+    <span class="ruby-identifier">not_between</span> = <span class="ruby-identifier">make_not_between</span> <span class="ruby-identifier">expr</span>
+    <span class="ruby-identifier">compare_with</span> = <span class="ruby-identifier">comparison</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">in_clause</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">not_in_clause</span> <span class="ruby-operator">|</span>
+        <span class="ruby-identifier">in_relation</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">not_in_relation</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">between</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">not_between</span>
+    <span class="ruby-identifier">sequence</span>(<span class="ruby-identifier">expr</span>, <span class="ruby-identifier">compare_with</span>, <span class="ruby-operator">&amp;</span><span class="ruby-constant">Feed</span>)
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">make_between_clause</span> <span class="ruby-identifier">expr</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">maker</span>
+    <span class="ruby-identifier">factory</span> = <span class="ruby-identifier">proc</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">a</span>, <span class="ruby-identifier">_</span>, <span class="ruby-identifier">b</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">proc</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">maker</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">v</span>, <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>) }
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">variant1</span> = <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:between</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">paren</span>(<span class="ruby-identifier">sequence</span>(<span class="ruby-identifier">expr</span>, <span class="ruby-identifier">comma</span>, <span class="ruby-identifier">expr</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">factory</span>))
+    <span class="ruby-identifier">variant2</span> = <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:between</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">sequence</span>(<span class="ruby-identifier">expr</span>, <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:and</span>], <span class="ruby-identifier">expr</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">factory</span>)
+    <span class="ruby-identifier">variant1</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">variant2</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment">################################ expression parser ###############################</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">calculate_simple_cases</span>(<span class="ruby-identifier">val</span>, <span class="ruby-identifier">cases</span>, <span class="ruby-identifier">default</span>)
+    <span class="ruby-constant">SimpleCaseExpr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">val</span>, <span class="ruby-identifier">cases</span>, <span class="ruby-identifier">default</span>)
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">calculate_full_cases</span>(<span class="ruby-identifier">cases</span>, <span class="ruby-identifier">default</span>)
+    <span class="ruby-constant">CaseExpr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">cases</span>, <span class="ruby-identifier">default</span>)
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">make_expression</span> <span class="ruby-identifier">predicate</span>, <span class="ruby-identifier">_rel</span>
+    <span class="ruby-identifier">expr</span> = <span class="ruby-keyword">nil</span>
+    <span class="ruby-identifier">lazy_expr</span> = <span class="ruby-identifier">lazy</span> { <span class="ruby-identifier">expr</span> }
+    <span class="ruby-identifier">simple_case</span> = <span class="ruby-identifier">sequence</span>(<span class="ruby-identifier">keyword</span>[<span class="ruby-value">:when</span>], <span class="ruby-identifier">lazy_expr</span>, <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:then</span>], <span class="ruby-identifier">lazy_expr</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">_</span>, <span class="ruby-identifier">cond</span>, <span class="ruby-identifier">_</span>, <span class="ruby-identifier">val</span><span class="ruby-operator">|</span>
+      [<span class="ruby-identifier">cond</span>, <span class="ruby-identifier">val</span>]
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">full_case</span> = <span class="ruby-identifier">sequence</span>(<span class="ruby-identifier">keyword</span>[<span class="ruby-value">:when</span>], <span class="ruby-identifier">predicate</span>, <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:then</span>], <span class="ruby-identifier">lazy_expr</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">_</span>, <span class="ruby-identifier">cond</span>, <span class="ruby-identifier">_</span>, <span class="ruby-identifier">val</span><span class="ruby-operator">|</span>
+      [<span class="ruby-identifier">cond</span>, <span class="ruby-identifier">val</span>]
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">default_case</span> = (<span class="ruby-identifier">keyword</span>[<span class="ruby-value">:else</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">lazy_expr</span>).<span class="ruby-identifier">optional</span>
+    <span class="ruby-identifier">simple_when_then</span> = <span class="ruby-identifier">sequence</span>(<span class="ruby-identifier">lazy_expr</span>, <span class="ruby-identifier">simple_case</span>.<span class="ruby-identifier">many</span>, <span class="ruby-identifier">default_case</span>,
+      <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:end</span>]) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">val</span>, <span class="ruby-identifier">cases</span>, <span class="ruby-identifier">default</span>, <span class="ruby-identifier">_</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">calculate_simple_cases</span>(<span class="ruby-identifier">val</span>, <span class="ruby-identifier">cases</span>, <span class="ruby-identifier">default</span>)
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">full_when_then</span> = <span class="ruby-identifier">sequence</span>(<span class="ruby-identifier">full_case</span>.<span class="ruby-identifier">many</span>, <span class="ruby-identifier">default_case</span>, <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:end</span>]) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">cases</span>, <span class="ruby-identifier">default</span>, <span class="ruby-identifier">_</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">calculate_full_cases</span>(<span class="ruby-identifier">cases</span>, <span class="ruby-identifier">default</span>)
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">case_expr</span> = <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:case</span>] <span class="ruby-operator">&gt;&gt;</span> (<span class="ruby-identifier">simple_when_then</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">full_when_then</span>)
+    <span class="ruby-identifier">wildcard</span> = <span class="ruby-identifier">operator</span>[<span class="ruby-value">:*</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-constant">WildcardExpr</span><span class="ruby-operator">::</span><span class="ruby-constant">Instance</span>
+    <span class="ruby-identifier">lit</span> = <span class="ruby-identifier">token</span>(<span class="ruby-value">:number</span>, <span class="ruby-value">:string</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">ctor</span>(<span class="ruby-constant">LiteralExpr</span>)) <span class="ruby-operator">|</span> <span class="ruby-identifier">token</span>(<span class="ruby-value">:var</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">ctor</span>(<span class="ruby-constant">VarExpr</span>))
+    <span class="ruby-identifier">atom</span> = <span class="ruby-identifier">lit</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">wildcard</span> <span class="ruby-operator">|</span>
+      <span class="ruby-identifier">sequence</span>(<span class="ruby-identifier">word</span>, <span class="ruby-identifier">operator</span>[<span class="ruby-string">&#39;.&#39;</span>], <span class="ruby-identifier">word</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">wildcard</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">owner</span>, <span class="ruby-identifier">_</span>, <span class="ruby-identifier">col</span><span class="ruby-operator">|</span> <span class="ruby-constant">QualifiedColumnExpr</span>.<span class="ruby-identifier">new</span> <span class="ruby-identifier">owner</span>, <span class="ruby-identifier">col</span> } <span class="ruby-operator">|</span>
+      <span class="ruby-identifier">word</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">ctor</span>(<span class="ruby-constant">WordExpr</span>))
+    <span class="ruby-identifier">term</span> = <span class="ruby-identifier">atom</span> <span class="ruby-operator">|</span> (<span class="ruby-identifier">operator</span>[<span class="ruby-string">&#39;(&#39;</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">lazy_expr</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">operator</span>[<span class="ruby-string">&#39;)&#39;</span>]) <span class="ruby-operator">|</span> <span class="ruby-identifier">case_expr</span>
+    <span class="ruby-identifier">table</span> = <span class="ruby-constant">OperatorTable</span>.<span class="ruby-identifier">new</span>.
+      <span class="ruby-identifier">infixl</span>(<span class="ruby-identifier">operator</span>[<span class="ruby-string">&#39;+&#39;</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-constant">Plus</span>, <span class="ruby-value">20</span>).
+      <span class="ruby-identifier">infixl</span>(<span class="ruby-identifier">operator</span>[<span class="ruby-string">&#39;-&#39;</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-constant">Minus</span>, <span class="ruby-value">20</span>).
+      <span class="ruby-identifier">infixl</span>(<span class="ruby-identifier">operator</span>[<span class="ruby-string">&#39;*&#39;</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-constant">Mul</span>, <span class="ruby-value">30</span>).
+      <span class="ruby-identifier">infixl</span>(<span class="ruby-identifier">operator</span>[<span class="ruby-string">&#39;/&#39;</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-constant">Div</span>, <span class="ruby-value">30</span>).
+      <span class="ruby-identifier">infixl</span>(<span class="ruby-identifier">operator</span>[<span class="ruby-string">&#39;%&#39;</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-constant">Mod</span>, <span class="ruby-value">30</span>).
+      <span class="ruby-identifier">prefix</span>(<span class="ruby-identifier">operator</span>[<span class="ruby-string">&#39;-&#39;</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-constant">Neg</span>, <span class="ruby-value">50</span>)
+    <span class="ruby-identifier">expr</span> = <span class="ruby-constant">Expressions</span>.<span class="ruby-identifier">build</span>(<span class="ruby-identifier">term</span>, <span class="ruby-identifier">table</span>)
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment">################################ relation parser ###############################</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">make_relation</span> <span class="ruby-identifier">expr</span>, <span class="ruby-identifier">pred</span>
+    <span class="ruby-identifier">exprs</span> = <span class="ruby-identifier">expr</span>.<span class="ruby-identifier">delimited1</span>(<span class="ruby-identifier">comma</span>)
+    <span class="ruby-identifier">relation</span> = <span class="ruby-keyword">nil</span>
+    <span class="ruby-identifier">lazy_relation</span> = <span class="ruby-identifier">lazy</span> { <span class="ruby-identifier">relation</span> }
+    <span class="ruby-identifier">term_relation</span> = <span class="ruby-identifier">word</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">w</span><span class="ruby-operator">|</span> <span class="ruby-constant">TableRelation</span>.<span class="ruby-identifier">new</span> <span class="ruby-identifier">w</span> } <span class="ruby-operator">|</span> (<span class="ruby-identifier">operator</span>[<span class="ruby-string">&#39;(&#39;</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">lazy_relation</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">operator</span>[<span class="ruby-string">&#39;)&#39;</span>])
+    <span class="ruby-identifier">sub_relation</span> = <span class="ruby-identifier">sequence</span>(<span class="ruby-identifier">term_relation</span>, (<span class="ruby-identifier">keyword</span>[<span class="ruby-value">:as</span>].<span class="ruby-identifier">optional</span> <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">word</span>).<span class="ruby-identifier">optional</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">rel</span>, <span class="ruby-identifier">name</span><span class="ruby-operator">|</span>
+      <span class="ruby-keyword">case</span> <span class="ruby-keyword">when</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword">then</span> <span class="ruby-identifier">rel</span> <span class="ruby-keyword">else</span> <span class="ruby-constant">AliasRelation</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">rel</span>, <span class="ruby-identifier">name</span>) <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">joined_relation</span> = <span class="ruby-identifier">sub_relation</span>.<span class="ruby-identifier">postfix</span>(<span class="ruby-identifier">join_maker</span>(<span class="ruby-identifier">lazy</span> { <span class="ruby-identifier">joined_relation</span> }, <span class="ruby-identifier">pred</span>))
+    <span class="ruby-identifier">where_clause</span> = <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:where</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">pred</span>
+    <span class="ruby-identifier">order_element</span> = <span class="ruby-identifier">sequence</span>(<span class="ruby-identifier">expr</span>, ((<span class="ruby-identifier">keyword</span>[<span class="ruby-value">:asc</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-keyword">true</span>) <span class="ruby-operator">|</span> (<span class="ruby-identifier">keyword</span>[<span class="ruby-value">:desc</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-keyword">false</span>)).<span class="ruby-identifier">optional</span>(<span class="ruby-keyword">true</span>),
+      <span class="ruby-operator">&amp;</span><span class="ruby-identifier">ctor</span>(<span class="ruby-constant">OrderElement</span>))
+    <span class="ruby-identifier">order_elements</span> = <span class="ruby-identifier">order_element</span>.<span class="ruby-identifier">separated1</span>(<span class="ruby-identifier">comma</span>)
+    <span class="ruby-identifier">exprs</span> = <span class="ruby-identifier">expr</span>.<span class="ruby-identifier">separated1</span>(<span class="ruby-identifier">comma</span>)
+    <span class="ruby-identifier">order_by_clause</span> = <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:order</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:by</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">order_elements</span>
+    <span class="ruby-identifier">group_by</span> = <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:group</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:by</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">exprs</span>
+    <span class="ruby-identifier">group_by_clause</span> = <span class="ruby-identifier">sequence</span>(<span class="ruby-identifier">group_by</span>, (<span class="ruby-identifier">keyword</span>[<span class="ruby-value">:having</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">pred</span>).<span class="ruby-identifier">optional</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">ctor</span>(<span class="ruby-constant">GroupByClause</span>))
+    <span class="ruby-identifier">relation</span> = <span class="ruby-identifier">sub_relation</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">sequence</span>(<span class="ruby-identifier">keyword</span>[<span class="ruby-value">:select</span>],
+      <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:distinct</span>].<span class="ruby-identifier">optional</span>(<span class="ruby-keyword">false</span>), <span class="ruby-identifier">exprs</span>,
+      <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:from</span>], <span class="ruby-identifier">joined_relation</span>,
+      <span class="ruby-identifier">where_clause</span>.<span class="ruby-identifier">optional</span>, <span class="ruby-identifier">group_by_clause</span>.<span class="ruby-identifier">optional</span>, <span class="ruby-identifier">order_by_clause</span>.<span class="ruby-identifier">optional</span>
+    ) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">_</span>, <span class="ruby-identifier">distinct</span>, <span class="ruby-identifier">projected</span>, <span class="ruby-identifier">_</span>, <span class="ruby-identifier">from</span>, <span class="ruby-identifier">where</span>, <span class="ruby-identifier">groupby</span>, <span class="ruby-identifier">orderby</span><span class="ruby-operator">|</span>
+      <span class="ruby-constant">SelectRelation</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">projected</span>, <span class="ruby-identifier">distinct</span>, <span class="ruby-identifier">from</span>, <span class="ruby-identifier">where</span>, <span class="ruby-identifier">groupby</span>, <span class="ruby-identifier">orderby</span>)
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">relation</span> = <span class="ruby-identifier">sequence</span>(<span class="ruby-identifier">relation</span>, (<span class="ruby-identifier">keyword</span>[<span class="ruby-value">:limit</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">token</span>(<span class="ruby-value">:number</span>, <span class="ruby-operator">&amp;</span><span class="ruby-constant">To_i</span>)).<span class="ruby-identifier">optional</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">rel</span>, <span class="ruby-identifier">limit</span><span class="ruby-operator">|</span>
+      <span class="ruby-keyword">case</span> <span class="ruby-keyword">when</span> <span class="ruby-identifier">limit</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword">then</span> <span class="ruby-identifier">rel</span> <span class="ruby-keyword">else</span> <span class="ruby-constant">LimitRelation</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">rel</span>, <span class="ruby-identifier">limit</span>) <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">relation</span> = <span class="ruby-identifier">relation</span>.<span class="ruby-identifier">infixl</span>(<span class="ruby-identifier">union_maker</span>)
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">union_maker</span>
+    <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:union</span>] <span class="ruby-operator">&gt;&gt;</span> ((<span class="ruby-identifier">keyword</span>[<span class="ruby-value">:all</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-keyword">true</span>) <span class="ruby-operator">|</span> <span class="ruby-keyword">false</span>).<span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">all</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">proc</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">r1</span>, <span class="ruby-identifier">r2</span><span class="ruby-operator">|</span> <span class="ruby-constant">UnionRelation</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">r1</span>, <span class="ruby-identifier">all</span>, <span class="ruby-identifier">r2</span>) }
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">join_maker</span> <span class="ruby-identifier">rel</span>, <span class="ruby-identifier">pred</span>
+    <span class="ruby-identifier">crossjoin</span> = <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:cross</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:join</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">rel</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">rctor</span>(<span class="ruby-constant">CrossJoinRelation</span>))
+    <span class="ruby-identifier">leftjoin</span> = <span class="ruby-identifier">outer_join</span> <span class="ruby-value">:left</span>
+    <span class="ruby-identifier">rightjoin</span> = <span class="ruby-identifier">outer_join</span> <span class="ruby-value">:right</span>
+    <span class="ruby-identifier">fulljoin</span> = <span class="ruby-identifier">outer_join</span> <span class="ruby-value">:full</span>
+    <span class="ruby-identifier">innerjoin</span> = <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:inner</span>].<span class="ruby-identifier">optional</span> <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:join</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-value">:inner</span>
+    <span class="ruby-identifier">join_with_condition</span> = <span class="ruby-identifier">sequence</span>(<span class="ruby-identifier">sum</span>(<span class="ruby-identifier">leftjoin</span>, <span class="ruby-identifier">rightjoin</span>, <span class="ruby-identifier">fulljoin</span>, <span class="ruby-identifier">innerjoin</span>), <span class="ruby-identifier">rel</span>,
+      <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:on</span>], <span class="ruby-identifier">pred</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">kind</span>, <span class="ruby-identifier">r</span>, <span class="ruby-identifier">_</span>, <span class="ruby-identifier">on</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">proc</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">r0</span><span class="ruby-operator">|</span> <span class="ruby-constant">JoinRelation</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">kind</span>, <span class="ruby-identifier">r0</span>, <span class="ruby-identifier">r</span>, <span class="ruby-identifier">on</span>) }
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">sum</span>(<span class="ruby-identifier">crossjoin</span>, <span class="ruby-identifier">join_with_condition</span>)
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">outer_join</span> <span class="ruby-identifier">kind</span>
+    <span class="ruby-identifier">keyword</span>[<span class="ruby-identifier">kind</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:outer</span>].<span class="ruby-identifier">optional</span> <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">keyword</span>[<span class="ruby-value">:join</span>] <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">kind</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment">########################## put together ###############################</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">expression</span>
+    <span class="ruby-identifier">assemble</span>[<span class="ruby-value">0</span>]
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">relation</span>
+    <span class="ruby-identifier">assemble</span>[<span class="ruby-value">2</span>]
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">predicate</span>
+    <span class="ruby-identifier">assemble</span>[<span class="ruby-value">1</span>]
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">assemble</span>
+    <span class="ruby-identifier">pred</span> = <span class="ruby-keyword">nil</span>
+    <span class="ruby-identifier">rel</span> = <span class="ruby-keyword">nil</span>
+    <span class="ruby-identifier">lazy_predicate</span> = <span class="ruby-identifier">lazy</span> { <span class="ruby-identifier">pred</span> }
+    <span class="ruby-identifier">lazy_rel</span> = <span class="ruby-identifier">lazy</span> { <span class="ruby-identifier">rel</span> }
+    <span class="ruby-identifier">expr</span> = <span class="ruby-identifier">make_expression</span> <span class="ruby-identifier">lazy_predicate</span>, <span class="ruby-identifier">lazy_rel</span>
+    <span class="ruby-identifier">pred</span> = <span class="ruby-identifier">make_predicate</span> <span class="ruby-identifier">expr</span>, <span class="ruby-identifier">lazy_rel</span>
+    <span class="ruby-identifier">rel</span> = <span class="ruby-identifier">make_relation</span> <span class="ruby-identifier">expr</span>, <span class="ruby-identifier">pred</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-identifier">expr</span>, <span class="ruby-identifier">pred</span>, <span class="ruby-identifier">rel</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">make</span> <span class="ruby-identifier">parser</span>
+    <span class="ruby-constant">MyLexeme</span>.<span class="ruby-identifier">nested</span>(<span class="ruby-identifier">parser</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">eof</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>To get a parser for relation, we can write</p>
+
+<pre class="ruby"><span class="ruby-identifier">relation_parser</span> = <span class="ruby-constant">SqlParser</span><span class="ruby-operator">::</span><span class="ruby-identifier">make</span>(<span class="ruby-constant">SqlParser</span><span class="ruby-operator">::</span><span class="ruby-identifier">relation</span>)
+</pre>
+
+<p>where <code>SqlParser::relation</code> is the grammar parser and <code>SqlParser::make</code> connects it to the lexer.</p>
+<hr>
+
+<p>Originally written by Ben Yu at <a target="_top" href="https://web.archive.org/web/20150522220546/https://docs.codehaus.org/display/JPARSEC/SQL+parser+in+rparsec">SQL parser in rparsec</a>.</p>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/jeremyevans/hanna"><strong>Hanna</strong> RDoc template</a>
+</div>
+</body>
+</html>
