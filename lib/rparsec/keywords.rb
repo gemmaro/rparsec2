@@ -25,9 +25,7 @@ module RParsec
     #
     # Do we lex case sensitively?
     #
-    def case_sensitive?
-      @case_sensitive
-    end
+    def case_sensitive? = @case_sensitive
 
     #
     # To create an instance that lexes the given keywords case
@@ -100,18 +98,17 @@ module RParsec
         ind = tok.index
         key = canonical_name(text)
         my_symbol = word_map[key]
-        case when my_symbol.nil? then tok
-          else Token.new(my_symbol, text, ind) end
+        my_symbol.nil? ? tok : Token.new(my_symbol, text, ind)
       end
     end
 
     def canonical_name(name)
-      case when @case_sensitive then name else name.downcase end
+      @case_sensitive ? name : name.downcase
     end
 
     def copy_words(words, case_sensitive)
       words.map do |w|
-        case when case_sensitive then w.dup else w.downcase end
+        case_sensitive ? w.dup : w.downcase
       end
     end
   end
