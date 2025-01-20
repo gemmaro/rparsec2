@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+## 1.3.0 - 2025-01-20
+
+* Remove unused precedence constants from the failure class and the expected
+  class.
+* Remove identity monad.
+* Remove set-name method of parser class.
+* Use data class for token class.
+* Remove define-constructor method.
+* Rename define-helper filename.
+* Remove define-helper for parser class.
+* Split parser classes into files.
+* Split failures class.
+
 ## 1.2.1 - 2024-11-17
 
 This is a maintenance release.
