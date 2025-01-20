@@ -17,9 +17,7 @@ module RParsec
     attr_reader :index, :input
     attr_writer :index
 
-    def msg
-      return @msg.to_s
-    end
+    def msg = @msg.to_s
   end
 
   Expected = Class.new(Failure) # :nodoc:
