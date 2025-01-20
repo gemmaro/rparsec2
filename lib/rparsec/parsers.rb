@@ -87,9 +87,9 @@ module RParsec
     def char(c)
       if c.kind_of? Integer
         nm = c.chr
-        is(c, "'#{nm}' expected").setName(nm)
+        is(c, "'#{nm}' expected").tap { |p| p.name = nm }
       else
-        is(c[0], "'#{c}' expected").setName(c)
+        is(c[0], "'#{c}' expected").tap { |p| p.name = c }
       end
     end
 
@@ -99,9 +99,9 @@ module RParsec
     def not_char(c)
       if c.kind_of? Integer
         nm = c.chr
-        isnt(c, "'#{nm}' unexpected").setName("~#{nm}")
+        isnt(c, "'#{nm}' unexpected").tap { |p| p.name = "~#{nm}" }
       else
-        isnt(c[0], "'#{c}' unexpected").setName("~#{c}")
+        isnt(c[0], "'#{c}' unexpected").tap { |p| p.name = "~#{c}" }
       end
     end
 
@@ -109,7 +109,7 @@ module RParsec
     # A parser that succeeds when there's no input available.
     #
     def eof(expected = "EOF expected")
-      EofParser.new(expected).setName('EOF')
+      EofParser.new(expected).tap { |p| p.name = "EOF" }
     end
 
     #
@@ -134,7 +134,7 @@ module RParsec
     # A parser that matches the given string.
     #
     def string(str, msg = "\"#{str}\" expected")
-      are(str, msg).setName(str)
+      are(str, msg).tap { |p| p.name = str }
     end
 
     #
@@ -162,14 +162,14 @@ module RParsec
     # A parser that returns the current input index (starting from 0).
     #
     def get_index
-      GetIndexParser.new.setName('get_index')
+      GetIndexParser.new.tap { |p| p.name = 'get_index' }
     end
 
     #
     # A parser that moves the current input pointer to a certain index.
     #
     def set_index ind
-      SetIndexParser.new(ind).setName('set_index')
+      SetIndexParser.new(ind).tap { |p| p.name = "set_index" }
     end
 
     #
@@ -234,7 +234,7 @@ module RParsec
     # The matched string is consumed and returned as result.
     #
     def regexp(ptn, expected = "/#{ptn}/ expected")
-      RegexpParser.new(as_regexp(ptn), expected).setName(expected)
+      RegexpParser.new(as_regexp(ptn), expected).tap { |p| p.name = expected }
     end
 
     #
@@ -266,7 +266,7 @@ module RParsec
     # A parser that matches the given string, case insensitively.
     #
     def string_nocase(str, expected = "'#{str}' expected")
-      StringCaseInsensitiveParser.new(str, expected).setName(str)
+      StringCaseInsensitiveParser.new(str, expected).tap { |p| p.name = str }
     end
 
     #
@@ -615,7 +615,7 @@ module RParsec
       PlusParser.new(@alts, n)
     end
     def plus other
-      PlusParser.new(@alts.dup << other, @lookahead).setName(name)
+      PlusParser.new(@alts.dup << other, @lookahead).tap { |p| p.name = name }
     end
   end
 
@@ -651,7 +651,7 @@ module RParsec
       AltParser.new(@alts, n)
     end
     def | other
-      AltParser.new(@alts.dup << autobox_parser(other)).setName(name)
+      AltParser.new(@alts.dup << autobox_parser(other)).tap { |p| p.name = name }
     end
   end
 

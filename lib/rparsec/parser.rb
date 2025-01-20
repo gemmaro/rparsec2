@@ -85,16 +85,6 @@ module RParsec
     end
 
     #
-    # Set name for the parser.  +self+ is returned.
-    #
-    def set_name(nm)
-      @name = nm
-      self
-    end
-
-    alias setName set_name
-
-    #
     # <tt>a.map { |x| x + 1 }</tt> will first execute parser +a+, when
     # it succeeds, the associated block is executed to transform the
     # result to a new value (increment it in this case).
@@ -134,14 +124,14 @@ module RParsec
     # input consumption is undone.
     #
     def atomize
-      AtomParser.new(self).setName(@name)
+      AtomParser.new(self).tap { |p| p.name = @name }
     end
 
     #
     # Create a new parser that looks at inputs whthout consuming them.
     #
     def peek
-      PeekParser.new(self).setName(@name)
+      PeekParser.new(self).tap { |p| p.name = @name }
     end
 
     #
