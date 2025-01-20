@@ -16,8 +16,8 @@ module RParsec
       @msg = message
     end
 
-    attr_reader :index, :input
-    attr_writer :index
+    attr_reader :input
+    attr_accessor :index
 
     def msg = @msg.to_s
   end
