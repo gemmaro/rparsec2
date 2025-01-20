@@ -47,8 +47,14 @@ module RParsec
 
     def _display_current_input(input, _code, _index)
       return 'EOF' if input.nil?
-      c = input
-      case c when Integer then "'" << c << "'" when Token then c.text else c.to_s end
+      case (c = input)
+      when Integer
+        "'" << c << "'"
+      when Token
+        c.text
+      else
+        c.to_s
+      end
     end
 
     def _add_encountered_error(msg, encountered)
