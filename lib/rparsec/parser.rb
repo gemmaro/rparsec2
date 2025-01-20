@@ -144,6 +144,7 @@ module RParsec
     def not(msg = "#{self} unexpected")
       NotParser.new(self, msg)
     end
+    alias ~ not
 
     #
     # To create a parser that does "look ahead" for _n_ inputs.
@@ -168,6 +169,7 @@ module RParsec
     def followed(other)
       FollowedParser.new(self, other)
     end
+    alias << followed
 
     #
     # To create a parser that repeats +self+ for a minimum +min+
@@ -184,6 +186,7 @@ module RParsec
         Some_Parser.new(self, min, max)
       end
     end
+    alias * repeat_
 
     #
     # To create a parser that repeats +self+ for a minimum +min+
@@ -459,10 +462,6 @@ module RParsec
     def _infix_rest(operator, operand)
       Parsers.sequence(operator, operand, &Idn)
     end
-
-    alias ~ not
-    alias << followed
-    alias * repeat_
 
     def _parse(_ctxt)
       false
