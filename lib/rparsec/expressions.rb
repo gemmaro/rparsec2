@@ -50,26 +50,11 @@ module RParsec
       end
 
       def apply_operator(term, op, kind, delim)
+        Associativities.include?(kind) or raise ArgumentError, "unknown associativity: #{kind}"
+
         term = ignore_rest(term, delim)
         op = ignore_rest(op, delim)
-        # we could use send here,
-        # but explicit case stmt is more straight forward and less coupled with names.
-        # performance might be another benefit,
-        # though it is not clear whether meta-code is indeed slower than regular ones at all.
-        case kind
-        when :prefix
-          term.prefix(op)
-        when :postfix
-          term.postfix(op)
-        when :infixl
-          term.infixl(op)
-        when :infixr
-          term.infixr(op)
-        when :infixn
-          term.infixn(op)
-        else
-          raise ArgumentError, "unknown associativity: #{kind}"
-        end
+        term.send(kind, op)
       end
 
       def ignore_rest(parser, delim)
