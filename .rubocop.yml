@@ -4,3 +4,6 @@ AllCops:
   TargetRubyVersion: 3.1
   NewCops: enable
   DisabledByDefault: true
+
+Style/ParallelAssignment:
+  Enabled: true

@@ -9,7 +9,9 @@ module RParsec
     attr_writer :error, :index, :result
 
     def initialize(src, index=0, error=nil)
-      @src, @index, @error = src, index, error
+      @src = src
+      @index = index
+      @error = error
       @scanner = nil
     end
 

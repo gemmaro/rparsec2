@@ -216,7 +216,8 @@ module RParsec
     # A parser that succeeds if the current input is within a certain range.
     #
     def range(from, to, msg = "#{as_char from}..#{as_char to} expected")
-      from, to = as_num(from), as_num(to)
+      from = as_num(from)
+      to = as_num(to)
       satisfies(msg) { |c| c <= to && c >= from }
     end
 
@@ -471,7 +472,8 @@ module RParsec
       end
 
       def compare_error(e1, e2)
-        e1, e2 = get_first_element(e1), get_first_element(e2)
+        e1 = get_first_element(e1)
+        e2 = get_first_element(e2)
         return -1 if e1.index < e2.index
         return 1 if e1.index > e2.index
         0
@@ -553,7 +555,9 @@ module RParsec
   class NotParser < LookAheadSensitiveParser # :nodoc:
     def initialize(parser, msg, la = 1)
       super(la)
-      @parser, @msg, @name = parser, msg, "~#{parser.name}"
+      @parser = parser
+      @msg = msg
+      @name = "~#{parser.name}"
     end
     def _parse ctxt
       ind = ctxt.index
@@ -575,7 +579,9 @@ module RParsec
   class ExpectParser < Parser # :nodoc:
     def initialize(parser, msg)
       super()
-      @parser, @msg, @name = parser, msg, msg
+      @parser = parser
+      @msg = msg
+      @name = msg
     end
     def _parse ctxt
       ind = ctxt.index
@@ -591,10 +597,13 @@ module RParsec
       @alts = alts
     end
     def _parse ctxt
-      ind, result, err = ctxt.index, ctxt.result, ctxt.error
+      ind = ctxt.index
+      result = ctxt.result
+      err = ctxt.error
       for p in @alts
         ctxt.reset_error
-        ctxt.index, ctxt.result = ind, result
+        ctxt.index = ind
+        ctxt.result = result
         return true if p._parse(ctxt)
         return false unless visible(ctxt, ind)
         err = Failures.add_error(err, ctxt.error)
@@ -614,20 +623,28 @@ module RParsec
   class AltParser < LookAheadSensitiveParser # :nodoc:
     def initialize(alts, la = 1)
       super(la)
-      @alts, @lookahead = alts, la
+      @alts = alts
+      @lookahead = la
     end
     def _parse ctxt
-      ind, result, err = ctxt.index, ctxt.result, ctxt.error
-      err_ind, err_pos = -1, -1
+      ind = ctxt.index
+      result = ctxt.result
+      err = ctxt.error
+      err_ind = -1
+      err_pos = -1
       for p in @alts
         ctxt.reset_error
-        ctxt.index, ctxt.result = ind, result
+        ctxt.index = ind
+        ctxt.result = result
         return true if p._parse(ctxt)
         if ctxt.error.index > err_pos
-          err, err_ind, err_pos = ctxt.error, ctxt.index, ctxt.error.index
+          err = ctxt.error
+          err_ind = ctxt.index
+          err_pos = ctxt.error.index
         end
       end
-      ctxt.index, ctxt.error = err_ind, err
+      ctxt.index = err_ind
+      ctxt.error = err
       return false
     end
     def withLookahead(n)
@@ -642,20 +659,28 @@ module RParsec
   class BestParser < Parser # :nodoc:
     init :alts, :longer
     def _parse ctxt
-      best_result, best_ind = nil, -1
-      err_ind, err_pos = -1, -1
-      ind, result, err = ctxt.index, ctxt.result, ctxt.error
+      best_result = nil
+      best_ind = -1
+      err_ind = -1
+      err_pos = -1
+      ind = ctxt.index
+      result = ctxt.result
+      err = ctxt.error
       for p in @alts
         ctxt.reset_error
-        ctxt.index, ctxt.result = ind, result
+        ctxt.index = ind
+        ctxt.result = result
         if p._parse(ctxt)
-          err, now_ind = nil, ctxt.index
+          err = nil
+          now_ind = ctxt.index
           if best_ind == -1 || (now_ind != best_ind && @longer == (now_ind > best_ind))
-            best_result, best_ind = ctxt.result, now_ind
+            best_result = ctxt.result
+            best_ind = now_ind
           end
         elsif best_ind < 0 # no good match found yet.
           if ctxt.error.index > err_pos
-            err_ind, err_pos = ctxt.index, ctxt.error.index
+            err_ind = ctxt.index
+            err_pos = ctxt.error.index
           end
           err = Failures.add_error(err, ctxt.error)
         end
@@ -664,7 +689,8 @@ module RParsec
         ctxt.index = best_ind
         return ctxt.retn(best_result)
       else
-        ctxt.error, ctxt.index = err, err_ind
+        ctxt.error = err
+        ctxt.index = err_ind
         return false
       end
     end

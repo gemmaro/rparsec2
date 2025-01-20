@@ -57,7 +57,9 @@ module RParsec
 
     # scanner has to return a string
     def initialize(words, case_sensitive, default_lexer, keyword_symbol, &block)
-      @default_lexer, @case_sensitive, @keyword_symbol = default_lexer, case_sensitive, keyword_symbol
+      @default_lexer = default_lexer
+      @case_sensitive = case_sensitive
+      @keyword_symbol = keyword_symbol
       # this guarantees that we have copy of the words array and all the word strings.
       words = copy_words(words, case_sensitive)
       @name_map = {}
@@ -94,7 +96,8 @@ module RParsec
 
     def make_lexer(default_lexer, word_map)
       default_lexer.map do |tok|
-        text, ind = tok.text, tok.index
+        text = tok.text
+        ind = tok.index
         key = canonical_name(text)
         my_symbol = word_map[key]
         case when my_symbol.nil? then tok

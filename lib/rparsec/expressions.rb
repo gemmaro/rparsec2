@@ -50,7 +50,8 @@ module RParsec
       end
 
       def apply_operator(term, op, kind, delim)
-        term, op = ignore_rest(term, delim), ignore_rest(op, delim)
+        term = ignore_rest(term, delim)
+        op = ignore_rest(op, delim)
         # we could use send here,
         # but explicit case stmt is more straight forward and less coupled with names.
         # performance might be another benefit,

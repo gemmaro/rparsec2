@@ -11,7 +11,9 @@ module RParsec
 
   class Failure # :nodoc:
     def initialize(ind, input, message = nil)
-      @index, @input, @msg = ind, input, message
+      @index = ind
+      @input = input
+      @msg = message
     end
 
     attr_reader :index, :input

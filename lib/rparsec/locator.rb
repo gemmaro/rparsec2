@@ -13,12 +13,14 @@ module RParsec
 
     def locate(ind)
       return _locateEof if ind >= code.length
-      line, col = 1, 1
+      line = 1
+      col = 1
       return line, col if ind <= 0
       for i in (0...ind)
         c = code[i]
         if c == LF
-          line, col = line + 1, 1
+          line = line + 1
+          col = 1
         else
           col = col + 1
         end
@@ -27,10 +29,12 @@ module RParsec
     end
 
     def _locateEof
-      line, col = 1, 1
+      line = 1
+      col = 1
       code.each_byte do |c|
         if c == LF.ord
-          line, col = line + 1, 1
+          line = line + 1
+          col = 1
         else
           col = col + 1
         end
