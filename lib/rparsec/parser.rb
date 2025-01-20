@@ -17,7 +17,6 @@ module RParsec
   class Parser
     include Functors
     include Monad
-    extend DefHelper
     MyMonad = ParserMonad.new
     attr_accessor :name
 
