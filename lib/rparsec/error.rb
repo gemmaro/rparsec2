@@ -20,12 +20,8 @@ module RParsec
     def msg
       return @msg.to_s
     end
-
-    Precedence = 100
   end
 
-  class Expected < Failure # :nodoc:
-    Precedence = 100
-  end
+  Expected = Class.new(Failure) # :nodoc:
 
 end # module
