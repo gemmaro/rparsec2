@@ -8,8 +8,8 @@ module RParsec
   module DefHelper # :nodoc:
     def def_ctor(*vars)
       define_method(:initialize) do |*params|
-        vars.each_with_index do |var, i|
-          instance_variable_set("@" + var.to_s, params[i])
+        vars.zip(params) do |var, param|
+          instance_variable_set("@#{var}", param)
         end
       end
     end
