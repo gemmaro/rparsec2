@@ -9,8 +9,8 @@ module RParsec
   class ParseContext
     @scanner: StringScanner?
 
-    attr_accessor error: nil
     attr_reader src: [untyped]
+    attr_accessor error: nil
     attr_accessor index: Complex | Float | Integer | Rational
     attr_accessor result: untyped
     def initialize: ([untyped] src, ?Integer index, ?nil error) -> void

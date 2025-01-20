@@ -5,8 +5,8 @@ require 'strscan'
 module RParsec
 
   class ParseContext # :nodoc:
-    attr_reader :error, :src, :index, :result
-    attr_writer :error, :index, :result
+    attr_reader :src
+    attr_accessor :error, :index, :result
 
     def initialize(src, index=0, error=nil)
       @src = src
