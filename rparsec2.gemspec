@@ -15,7 +15,7 @@ spec = Gem::Specification.new do |s|
   s.license = "BSD-3-Clause"
   s.files = FileList['lib/**/*.rb']
   s.require_paths = ['lib']
-  s.required_ruby_version = ">=3.1"
+  s.required_ruby_version = ">=3.2"
 
   s.homepage = homepage = "https://git.disroot.org/gemmaro/rparsec2"
   s.metadata = {

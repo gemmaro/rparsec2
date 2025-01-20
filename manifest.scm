@@ -31,6 +31,6 @@ with RubyGems and Rake tasks.")
     (license license:expat)))
 
 (concatenate-manifests (list (packages->manifest (list ruby-hanna))
-                             (specifications->manifest (list "ruby@3.1"
+                             (specifications->manifest (list "ruby@3.2"
                                                              "ruby-rubocop"
                                                              "ruby-simplecov"))))

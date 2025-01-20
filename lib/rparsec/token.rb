@@ -7,39 +7,22 @@ module RParsec
   #
   # Represents a token during lexical analysis.
   #
+  # kind  :: The type of the token
+  # text  :: The text of the matched range
+  # index :: The starting index of the matched range
+  #
+  Token = Data.define(:kind, :text, :index)
+
   class Token
-    extend DefHelper
-
-    def_ctor :kind, :text, :index
-
-    #
-    # The type of the token
-    #
-    attr_reader :kind
-
-    #
-    # The text of the matched range
-    #
-    attr_reader :text
-
-    #
-    # The starting index of the matched range
-    #
-    attr_reader :index
-
     #
     # The length of the token.
     #
-    def length
-      @text.length
-    end
+    def length = @text.length
 
     #
     # String representation of the token.
     #
-    def to_s
-      "#{@kind}: #{@text}"
-    end
+    def to_s = "#{@kind}: #{@text}"
   end
 
 end # module
