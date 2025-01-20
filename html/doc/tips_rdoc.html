@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>tips - RDoc Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+  var index_rel_prefix = "../";
+</script>
+
+<script src="../js/navigation.js" defer></script>
+<script src="../js/search.js" defer></script>
+<script src="../js/search_index.js" defer></script>
+<script src="../js/searcher.js" defer></script>
+<script src="../js/darkfish.js" defer></script>
+
+<link href="../css/fonts.css" rel="stylesheet">
+<link href="../css/rdoc.css" rel="stylesheet">
+
+
+<body id="top" role="document" class="file">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../table_of_contents.html#pages">Pages</a>
+    <a href="../table_of_contents.html#classes">Classes</a>
+    <a href="../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search (/) for a class, method, ..." spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="project-metadata">
+    
+<div id="fileindex-section" class="nav-section">
+  <h3>Pages</h3>
+
+  <ul class="link-list">
+    <li><a href="../CHANGELOG_md.html">CHANGELOG</a>
+    <li><a href="../README_rdoc.html">README</a>
+    <li><details open><summary>doc</summary>
+    <ul class="link-list">
+      <li><a href="../doc/overview_rdoc.html">overview</a>
+      <li><a href="../doc/sql_rdoc.html">sql</a>
+      <li><a href="../doc/tips_rdoc.html">tips</a>
+    </ul></details>
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-label="Page doc/tips.rdoc">
+
+<h1 id="label-Tips">Tips<span><a href="#label-Tips">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p>Similar to any higher order combinator framework, rparsec program is not real easy to debug.  When error does happen, especially when the production rule is complex, tracing down the error may take considerable amount of time.  Though I do not think debugging rparsec is any harder than debugging parser generators, this is an undebatable problem that we should face.</p>
+
+<p>My experience in using rparsec (and jparsec too), is that <strong>test driven development</strong> <em>really</em> helps.  It is unfortunately hard to debug a complex parser object, but it is much easier for a small vanilla one.  If the whole parser program is built with test cases that tests every tiny piece of logic, detecting and debugging an error becomes a much easier task.</p>
+
+<p>Start from writing unit test case for every production rule before implementing it.  Run the test case, see the red bar, and then implement the production rule to turn it to green.</p>
+
+<p>That said, when you do encounter errors, here’re a few things to check up.</p>
+<table class="rdoc-list note-list"><tbody><tr><td class='label'>Lookahead</td><td>
+<p><a href="../RParsec/Parsers.html#method-i-sum">Parsers#sum</a> and <a href="../RParsec/Monad.html#method-i-plus">Parser#plus</a> are subject to the default look-ahead value.  Suppose if any of the alternative parser fails with some input consumption, the rest of the alternatives will not get the chance to run. The solution is to use the <code>|</code> operator or <a href="rodc-ref:RParsec::Parsers#alt">Parsers#alt</a>.  They will try all the alternatives until a success regardless of input consumption. <a href="../RParsec/Parser.html#method-i-atomize">Parser#atomize</a> or Parser#lookahead are also tools to get around this problem.</p>
+</td></tr><tr><td class='label'>Ambiguity</td><td>
+<p>Suppose we have both <code>integer</code> and <code>number</code> that parses integral literal and decimal literal. <code>(integer|number) &lt;&lt; eof</code> will fail given the input of <code>1.0</code> because <code>integer|number</code> will first try <em>integer</em>, which successfully recognizes the input <code>1</code>.  And since the first alternative succeeded, the <em>number</em> parser will not get a chance to run.  Later when we try to run <em>eof</em> against the remaining <code>.0</code>, we get an error.  Solution would be either place <code>number</code> as the first alterantive, or to use <code>longer(integer, number)</code> which will try both alternative and prefer the one with longer match.</p>
+</td></tr><tr><td class='label'>Consistency</td><td>
+<p>Make sure the token identifier you use in the syntactic parser matches the one used in lexecial analysis.  If you use different identifier for number token and integer token, don’t expect <code>token(:number)</code> will match <code>:integer</code> tokens. Regular words are by default identified by <code>:word</code>.</p>
+</td></tr><tr><td class='label'>Right input</td><td>
+<p>When your syntactic parser complains something like <code>&#39;c&#39; encountered</code>, where <code>c</code> is the first character of the current word (<code>copy</code> for example), it is quite possible that you are feeding it string as input, not the desired token array.</p>
+</td></tr></tbody></table>
+
+<p>Utilities that may help in troubleshooting:</p>
+
+<p><a href="../RParsec/Parsers.html#method-i-watch">Parsers#watch</a> can be used to print trace message as well as monitor the current input. <a href="../RParsec/Parsers.html#method-i-get_index">Parsers#get_index</a> is a parser that reads the index number of the current input, with which you can know where the you are.</p>
+<hr>
+
+<p>Originally written by Ben Yu at <a href="https://web.archive.org/web/20150522220548/https://docs.codehaus.org/display/JPARSEC/rparsec+tips">rparsec tips</a>.</p>
+
+</main>
+
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="https://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="https://ruby.github.io/rdoc/">RDoc</a> 6.7.0.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

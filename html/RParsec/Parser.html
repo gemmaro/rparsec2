@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>class RParsec::Parser - RDoc Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+  var index_rel_prefix = "../";
+</script>
+
+<script src="../js/navigation.js" defer></script>
+<script src="../js/search.js" defer></script>
+<script src="../js/search_index.js" defer></script>
+<script src="../js/searcher.js" defer></script>
+<script src="../js/darkfish.js" defer></script>
+
+<link href="../css/fonts.css" rel="stylesheet">
+<link href="../css/rdoc.css" rel="stylesheet">
+
+
+<body id="top" role="document" class="class">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../table_of_contents.html#pages">Pages</a>
+    <a href="../table_of_contents.html#classes">Classes</a>
+    <a href="../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search (/) for a class, method, ..." spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    
+<div id="parent-class-section" class="nav-section">
+  <h3>Parent</h3>
+
+  <p class="link">Object
+</div>
+
+    
+<div id="includes-section" class="nav-section">
+  <h3>Included Modules</h3>
+
+  <ul class="link-list">
+    <li><a class="include" href="Functors.html">RParsec::Functors</a>
+    <li><a class="include" href="Monad.html">RParsec::Monad</a>
+  </ul>
+</div>
+
+    
+    
+<!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    <li ><a href="#method-c-new">::new</a>
+    <li ><a href="#method-i-2A">#*</a>
+    <li ><a href="#method-i-3C-3C">#&lt;&lt;</a>
+    <li ><a href="#method-i-3E-3E">#&gt;&gt;</a>
+    <li ><a href="#method-i-atomize">#atomize</a>
+    <li ><a href="#method-i-bindn">#bindn</a>
+    <li ><a href="#method-i-catchp">#catchp</a>
+    <li ><a href="#method-i-delimited">#delimited</a>
+    <li ><a href="#method-i-delimited1">#delimited1</a>
+    <li ><a href="#method-i-expect">#expect</a>
+    <li ><a href="#method-i-followed">#followed</a>
+    <li ><a href="#method-i-fragment">#fragment</a>
+    <li ><a href="#method-i-infixl">#infixl</a>
+    <li ><a href="#method-i-infixn">#infixn</a>
+    <li ><a href="#method-i-infixr">#infixr</a>
+    <li ><a href="#method-i-lexeme">#lexeme</a>
+    <li ><a href="#method-i-many">#many</a>
+    <li ><a href="#method-i-many_">#many_</a>
+    <li ><a href="#method-i-map">#map</a>
+    <li ><a href="#method-i-mapn">#mapn</a>
+    <li ><a href="#method-i-nested">#nested</a>
+    <li ><a href="#method-i-not">#not</a>
+    <li ><a href="#method-i-optional">#optional</a>
+    <li ><a href="#method-i-parse">#parse</a>
+    <li ><a href="#method-i-peek">#peek</a>
+    <li ><a href="#method-i-postfix">#postfix</a>
+    <li ><a href="#method-i-prefix">#prefix</a>
+    <li ><a href="#method-i-repeat">#repeat</a>
+    <li ><a href="#method-i-repeat_">#repeat_</a>
+    <li ><a href="#method-i-separated">#separated</a>
+    <li ><a href="#method-i-separated1">#separated1</a>
+    <li ><a href="#method-i-seq">#seq</a>
+    <li ><a href="#method-i-some">#some</a>
+    <li ><a href="#method-i-some_">#some_</a>
+    <li ><a href="#method-i-to_s">#to_s</a>
+    <li ><a href="#method-i-token">#token</a>
+    <li ><a href="#method-i-7C">#|</a>
+    <li ><a href="#method-i-~">#~</a>
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="class-RParsec::Parser">
+  <h1 id="class-RParsec::Parser" class="class">
+    class RParsec::Parser
+  </h1>
+
+  <section class="description">
+    
+<p>Represents a parser that parses a certain grammar rule.</p>
+
+  </section>
+
+  <section id="5Buntitled-5D" class="documentation-section">
+
+
+    <section class="constants-list">
+      <header>
+        <h3>Constants</h3>
+      </header>
+      <dl>
+        <dt id="MyMonad">MyMonad
+        <dd>
+      </dl>
+    </section>
+
+    <section class="attribute-method-details" class="method-section">
+      <header>
+        <h3>Attributes</h3>
+      </header>
+
+      <div id="attribute-i-name" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">name</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        </div>
+      </div>
+    </section>
+
+
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+      <div id="method-c-new" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">new</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          
+
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 43</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>
+  <span class="ruby-identifier">initMonad</span>(<span class="ruby-constant">MyMonad</span>, <span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+    </section>
+
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+      <div id="method-i-2A" class="method-detail method-alias">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">*</span><span
+              class="method-args">(min, max = min)</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          
+
+        </div>
+
+
+        <div class="aliases">
+          Alias for: <a href="Parser.html#method-i-repeat_">repeat_</a>
+        </div>
+      </div>
+
+      <div id="method-i-3C-3C" class="method-detail method-alias">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">&lt;&lt;</span><span
+              class="method-args">(other)</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          
+
+        </div>
+
+
+        <div class="aliases">
+          Alias for: <a href="Parser.html#method-i-followed">followed</a>
+        </div>
+      </div>
+
+      <div id="method-i-3E-3E" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">&gt;&gt;</span><span
+              class="method-args">(other)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>Similar to <a href="Parser.html#method-i-seq"><code>seq</code></a>.  <code>other</code> is auto-boxed if it is not of type <a href="Parser.html"><code>Parser</code></a>.</p>
+
+          <div class="method-source-code" id="3E-3E-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 446</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">&gt;&gt;</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-identifier">seq</span>(<span class="ruby-identifier">autobox_parser</span>(<span class="ruby-identifier">other</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-atomize" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">atomize</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>Create a new parser that’s atomic, meaning that when it fails, input consumption is undone.</p>
+
+          <div class="method-source-code" id="atomize-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 125</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">atomize</span>
+  <span class="ruby-constant">AtomParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>).<span class="ruby-identifier">tap</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span> <span class="ruby-identifier">p</span>.<span class="ruby-identifier">name</span> = <span class="ruby-ivar">@name</span> }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-bindn" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">bindn</span><span
+              class="method-args">(&amp;block)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p><code>self</code> is first executed, the parser result is then passed as parameter to the associated <code>block</code>, which evaluates to another <a href="Parser.html"><code>Parser</code></a> object at runtime.  This new <a href="Parser.html"><code>Parser</code></a> object is then executed to get the final parser result.</p>
+
+<p>Different from <a href="Monad.html#method-i-bind"><code>bind</code></a>, parser result of <code>self</code> will be expanded first if it is an array.</p>
+
+          <div class="method-source-code" id="bindn-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 105</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">bindn</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">block</span>
+  <span class="ruby-constant">BoundnParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">block</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-catchp" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">catchp</span><span
+              class="method-args">(symbol)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p><code>a.catchp(:somesymbol)</code> will catch the <code>:somesymbol</code> thrown by <code>a</code>.</p>
+
+          <div class="method-source-code" id="catchp-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 311</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">catchp</span>(<span class="ruby-identifier">symbol</span>)
+  <span class="ruby-constant">CatchParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">symbol</span>, <span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-delimited" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">delimited</span><span
+              class="method-args">(delim)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>To create a parser that repeats <code>self</code> for unlimited times, with the pattern recognized by <code>delim</code> as separator that separates each occurrence and also possibly ends the pattern.  Return values of <code>self</code> are collected in an array.</p>
+
+          <div class="method-source-code" id="delimited-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 279</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">delimited</span> <span class="ruby-identifier">delim</span>
+  <span class="ruby-identifier">delimited1</span>(<span class="ruby-identifier">delim</span>).<span class="ruby-identifier">plus</span> <span class="ruby-identifier">value</span>([])
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-delimited1" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">delimited1</span><span
+              class="method-args">(delim)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>To create a parser that repeats <code>self</code> for unlimited times, with the pattern recognized by <code>delim</code> as separator that separates each occurrence and also possibly ends the pattern.  <code>self</code> has to match for at least once.  Return values of <code>self</code> are collected in an array.</p>
+
+          <div class="method-source-code" id="delimited1-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 265</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">delimited1</span> <span class="ruby-identifier">delim</span>
+  <span class="ruby-identifier">rest</span> = <span class="ruby-identifier">delim</span> <span class="ruby-operator">&gt;&gt;</span> (<span class="ruby-keyword">self</span>.<span class="ruby-identifier">plus</span> <span class="ruby-constant">Parsers</span>.<span class="ruby-identifier">throwp</span>(<span class="ruby-value">:__end_delimiter__</span>))
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">bind</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">v0</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">result</span> = [<span class="ruby-identifier">v0</span>]
+    (<span class="ruby-identifier">rest</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">v</span> }).<span class="ruby-identifier">many_</span>.<span class="ruby-identifier">catchp</span>(<span class="ruby-value">:__end_delimiter__</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">value</span>(<span class="ruby-identifier">result</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-expect" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">expect</span><span
+              class="method-args">(msg)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>To create a parser that fails with a given error message.</p>
+
+          <div class="method-source-code" id="expect-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 156</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">expect</span> <span class="ruby-identifier">msg</span>
+  <span class="ruby-constant">ExpectParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">msg</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-followed" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">followed</span><span
+              class="method-args">(other)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p><code>a.followed b</code> will sequentially run <code>a</code> and <code>b</code>; result of a is preserved as the ultimate return value.</p>
+
+          <div class="method-source-code" id="followed-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 164</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">followed</span>(<span class="ruby-identifier">other</span>)
+  <span class="ruby-constant">FollowedParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+        <div class="aliases">
+          Also aliased as: <a href="Parser.html#method-i-3C-3C">&lt;&lt;</a>
+        </div>
+
+      </div>
+
+      <div id="method-i-fragment" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">fragment</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p><code>a.fragment</code> will return the string matched by <code>a</code>.</p>
+
+          <div class="method-source-code" id="fragment-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 318</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">fragment</span>
+  <span class="ruby-constant">FragmentParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-infixl" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">infixl</span><span
+              class="method-args">(op)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>For left-associative infix binary operator.  <code>op</code> has to return a <code>Proc</code> that takes two parameters, who are returned by the <code>self</code> parser as operands.</p>
+
+          <div class="method-source-code" id="infixl-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 389</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">infixl</span>(<span class="ruby-identifier">op</span>)
+  <span class="ruby-constant">Parsers</span>.<span class="ruby-identifier">sequence</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">_infix_rest</span>(<span class="ruby-identifier">op</span>, <span class="ruby-keyword">self</span>).<span class="ruby-identifier">many</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">v</span>, <span class="ruby-identifier">rests</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">rests</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">f</span>, <span class="ruby-identifier">v1</span> = <span class="ruby-operator">*</span><span class="ruby-identifier">r</span>
+      <span class="ruby-identifier">v</span> = <span class="ruby-identifier">f</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">v</span>, <span class="ruby-identifier">v1</span>)
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">v</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-infixn" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">infixn</span><span
+              class="method-args">(op)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>For non-associative infix binary operator.  <code>op</code> has to return a <code>Proc</code> that takes two parameters, who are returned by the <code>self</code> parser as operands.</p>
+
+          <div class="method-source-code" id="infixn-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 375</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">infixn</span>(<span class="ruby-identifier">op</span>)
+  <span class="ruby-identifier">bind</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">v1</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">bin</span> = <span class="ruby-constant">Parsers</span>.<span class="ruby-identifier">sequence</span>(<span class="ruby-identifier">op</span>, <span class="ruby-keyword">self</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span>, <span class="ruby-identifier">v2</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">f</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">v1</span>, <span class="ruby-identifier">v2</span>)
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">bin</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">value</span>(<span class="ruby-identifier">v1</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-infixr" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">infixr</span><span
+              class="method-args">(op)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>For right-associative infix binary operator.  <code>op</code> has to return a <code>Proc</code> that takes two parameters, who are returned by the <code>self</code> parser as operands.</p>
+
+          <div class="method-source-code" id="infixr-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 404</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">infixr</span>(<span class="ruby-identifier">op</span>)
+  <span class="ruby-constant">Parsers</span>.<span class="ruby-identifier">sequence</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">_infix_rest</span>(<span class="ruby-identifier">op</span>, <span class="ruby-keyword">self</span>).<span class="ruby-identifier">many</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">v</span>, <span class="ruby-identifier">rests</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">rests</span>.<span class="ruby-identifier">empty?</span>
+      <span class="ruby-identifier">v</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">f</span>, <span class="ruby-identifier">seed</span> = <span class="ruby-operator">*</span><span class="ruby-identifier">rests</span>.<span class="ruby-identifier">last</span>
+      <span class="ruby-keyword">for</span> <span class="ruby-identifier">i</span> <span class="ruby-keyword">in</span> (<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-identifier">rests</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>)
+        <span class="ruby-identifier">cur</span> = <span class="ruby-identifier">rests</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">-</span> <span class="ruby-value">2</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">i</span>
+        <span class="ruby-identifier">f1</span>, <span class="ruby-identifier">v1</span> = <span class="ruby-operator">*</span><span class="ruby-identifier">rests</span>[<span class="ruby-identifier">cur</span>]
+        <span class="ruby-identifier">seed</span> = <span class="ruby-identifier">f</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">v1</span>, <span class="ruby-identifier">seed</span>)
+        <span class="ruby-identifier">f</span> = <span class="ruby-identifier">f1</span>
+      <span class="ruby-keyword">end</span>
+      <span class="ruby-identifier">f</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">v</span>, <span class="ruby-identifier">seed</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-lexeme" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">lexeme</span><span
+              class="method-args">(delim = Parsers.whitespaces)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p><code>a.lexeme(delim)</code> will parse <code>a</code> for 0 or more times and ignore all patterns recognized by <code>delim</code>.  Values returned by <code>a</code> are collected in an array.</p>
+
+          <div class="method-source-code" id="lexeme-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 335</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">lexeme</span>(<span class="ruby-identifier">delim</span> = <span class="ruby-constant">Parsers</span>.<span class="ruby-identifier">whitespaces</span>)
+  <span class="ruby-identifier">delim</span> = <span class="ruby-identifier">delim</span>.<span class="ruby-identifier">many_</span>
+  <span class="ruby-identifier">delim</span> <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">delimited</span>(<span class="ruby-identifier">delim</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-many" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">many</span><span
+              class="method-args">(least = 0)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>To create a parser that repeats <code>self</code> for at least <code>least</code> times.  All return values are collected in an array.</p>
+
+          <div class="method-source-code" id="many-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 214</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">many</span>(<span class="ruby-identifier">least</span> = <span class="ruby-value">0</span>)
+  <span class="ruby-constant">ManyParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">least</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-many_" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">many_</span><span
+              class="method-args">(least = 0)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>To create a parser that repeats <code>self</code> for at least <code>least</code> times.  <code>parser.many_</code> is equivalent to bnf notation <code>parser*</code>.  Only the return value of the last execution is preserved.</p>
+
+          <div class="method-source-code" id="many_-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 206</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">many_</span>(<span class="ruby-identifier">least</span> = <span class="ruby-value">0</span>)
+  <span class="ruby-constant">Many_Parser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">least</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-map" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">map</span><span
+              class="method-args">(&amp;block)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p><code>a.map { |x| x + 1 }</code> will first execute parser <code>a</code>, when it succeeds, the associated block is executed to transform the result to a new value (increment it in this case).</p>
+
+          <div class="method-source-code" id="map-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 91</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">block</span>
+  <span class="ruby-constant">MapParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">block</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-mapn" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">mapn</span><span
+              class="method-args">(&amp;block)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p><code>a.mapn { |x, y| x + y }</code> will first execute parser <code>a</code>, when it succeeds, the array result (if any) is expanded and passed as parameters to the associated block.  The result of the block is then used as the parsing result.</p>
+
+          <div class="method-source-code" id="mapn-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 116</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">mapn</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">block</span>
+  <span class="ruby-constant">MapnParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">block</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-nested" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">nested</span><span
+              class="method-args">(parser)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p><code>a.nested b</code> will feed the token array returned by parser <code>a</code> to parser <code>b</code> for a nested parsing.</p>
+
+          <div class="method-source-code" id="nested-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 326</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">nested</span>(<span class="ruby-identifier">parser</span>)
+  <span class="ruby-constant">NestedParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">parser</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-not" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">not</span><span
+              class="method-args">(msg = &quot;</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>To create a new parser that succeed only if <code>self</code> fails.</p>
+
+          <div class="method-source-code" id="not-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 139</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">not</span>(<span class="ruby-identifier ruby-title">msg</span> = <span class="ruby-node">&quot;#{self} unexpected&quot;</span>)
+  <span class="ruby-constant">NotParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">msg</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+        <div class="aliases">
+          Also aliased as: <a href="Parser.html#method-i-~">~</a>
+        </div>
+
+      </div>
+
+      <div id="method-i-optional" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">optional</span><span
+              class="method-args">(default = nil)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p><code>a.optional(default)</code> is equivalent to <code>a.plus(value(default))</code>.  See also <a href="Monad.html#method-i-plus"><code>plus</code></a> and <a href="Monad.html#method-i-value"><code>value</code></a>.</p>
+
+          <div class="method-source-code" id="optional-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 303</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">optional</span>(<span class="ruby-identifier">default</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">plus</span>(<span class="ruby-identifier">value</span>(<span class="ruby-identifier">default</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-parse" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">parse</span><span
+              class="method-args">(src)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>parses a string.</p>
+
+          <div class="method-source-code" id="parse-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 75</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">parse</span>(<span class="ruby-identifier">src</span>)
+  <span class="ruby-identifier">ctxt</span> = <span class="ruby-constant">ParseContext</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">src</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">ctxt</span>.<span class="ruby-identifier">result</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">_parse</span> <span class="ruby-identifier">ctxt</span>
+  <span class="ruby-identifier">ctxt</span>.<span class="ruby-identifier">prepare_error</span>
+  <span class="ruby-identifier">locator</span> = <span class="ruby-constant">CodeLocator</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">src</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">ParserException</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">ctxt</span>.<span class="ruby-identifier">error</span>.<span class="ruby-identifier">index</span>),
+    <span class="ruby-identifier">_add_location_to_error</span>(<span class="ruby-identifier">locator</span>, <span class="ruby-identifier">ctxt</span>,
+      <span class="ruby-identifier">_add_encountered_error</span>(<span class="ruby-identifier">ctxt</span>.<span class="ruby-identifier">to_msg</span>,
+         <span class="ruby-identifier">_display_current_input</span>(<span class="ruby-identifier">ctxt</span>.<span class="ruby-identifier">error</span>.<span class="ruby-identifier">input</span>, <span class="ruby-identifier">src</span>, <span class="ruby-identifier">ctxt</span>.<span class="ruby-identifier">index</span>)), <span class="ruby-identifier">src</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-peek" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">peek</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>Create a new parser that looks at inputs whthout consuming them.</p>
+
+          <div class="method-source-code" id="peek-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 132</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">peek</span>
+  <span class="ruby-constant">PeekParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>).<span class="ruby-identifier">tap</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span> <span class="ruby-identifier">p</span>.<span class="ruby-identifier">name</span> = <span class="ruby-ivar">@name</span> }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-postfix" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">postfix</span><span
+              class="method-args">(op)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>For postfix unary operator.  <code>a.postfix op</code> will run parser <code>a</code> for once and then <code>op</code> for 0 or more times.  <code>op</code> should return a <code>Proc</code> that accepts one parameter.  <code>Proc</code> objects returned by <code>op</code> is then fed with the value returned by <code>a</code> from left to right.  The final result is returned as return value.</p>
+
+          <div class="method-source-code" id="postfix-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 363</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">postfix</span>(<span class="ruby-identifier">op</span>)
+  <span class="ruby-constant">Parsers</span>.<span class="ruby-identifier">sequence</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">op</span>.<span class="ruby-identifier">many</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">v</span>, <span class="ruby-identifier">funcs</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">funcs</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> = <span class="ruby-identifier">f</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">v</span>) }
+    <span class="ruby-identifier">v</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-prefix" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">prefix</span><span
+              class="method-args">(op)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>For prefix unary operator.  <code>a.prefix op</code> will run parser <code>op</code> for 0 or more times and eventually run parser <code>a</code> for one time.  <code>op</code> should return a <code>Proc</code> that accepts one parameter. <code>Proc</code> objects returned by <code>op</code> is then fed with the value returned by <code>a</code> from right to left.  The final result is returned as return value.</p>
+
+          <div class="method-source-code" id="prefix-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 348</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">prefix</span>(<span class="ruby-identifier">op</span>)
+  <span class="ruby-constant">Parsers</span>.<span class="ruby-identifier">sequence</span>(<span class="ruby-identifier">op</span>.<span class="ruby-identifier">many</span>, <span class="ruby-keyword">self</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">funcs</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">funcs</span>.<span class="ruby-identifier">reverse_each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> = <span class="ruby-identifier">f</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">v</span>) }
+    <span class="ruby-identifier">v</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-repeat" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">repeat</span><span
+              class="method-args">(min, max = min)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>To create a parser that repeats <code>self</code> for a minimum <code>min</code> times, and maximally <code>max</code> times.  All return values are collected in an array.</p>
+
+          <div class="method-source-code" id="repeat-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 191</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">repeat</span>(<span class="ruby-identifier">min</span>, <span class="ruby-identifier">max</span> = <span class="ruby-identifier">min</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-constant">Parsers</span>.<span class="ruby-identifier">failure</span>(<span class="ruby-node">&quot;min=#{min}, max=#{max}&quot;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">min</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">max</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">min</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">max</span>
+    <span class="ruby-constant">RepeatParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">max</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-constant">SomeParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">min</span>, <span class="ruby-identifier">max</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-repeat_" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">repeat_</span><span
+              class="method-args">(min, max = min)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>To create a parser that repeats <code>self</code> for a minimum <code>min</code> times, and maximally <code>max</code> times.  Only the return value of the last execution is preserved.</p>
+
+          <div class="method-source-code" id="repeat_-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 174</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">repeat_</span>(<span class="ruby-identifier">min</span>, <span class="ruby-identifier">max</span> = <span class="ruby-identifier">min</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-constant">Parsers</span>.<span class="ruby-identifier">failure</span>(<span class="ruby-node">&quot;min=#{min}, max=#{max}&quot;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">min</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">max</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">min</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">max</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-constant">Parsers</span>.<span class="ruby-identifier">one</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">max</span> <span class="ruby-operator">&lt;=</span> <span class="ruby-value">0</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">max</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+    <span class="ruby-constant">Repeat_Parser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">max</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-constant">Some_Parser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">min</span>, <span class="ruby-identifier">max</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+        <div class="aliases">
+          Also aliased as: <a href="Parser.html#method-i-2A">*</a>
+        </div>
+
+      </div>
+
+      <div id="method-i-separated" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">separated</span><span
+              class="method-args">(delim)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>To create a parser that repeats <code>self</code> for unlimited times, with the pattern recognized by <code>delim</code> as separator that separates each occurrence.  Return values of <code>self</code> are collected in an array.</p>
+
+          <div class="method-source-code" id="separated-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 254</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">separated</span> <span class="ruby-identifier">delim</span>
+  <span class="ruby-identifier">separated1</span>(<span class="ruby-identifier">delim</span>).<span class="ruby-identifier">plus</span> <span class="ruby-identifier">value</span>([])
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-separated1" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">separated1</span><span
+              class="method-args">(delim)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>To create a parser that repeats <code>self</code> for unlimited times, with the pattern recognized by <code>delim</code> as separator that separates each occurrence.  <code>self</code> has to match for at least once.  Return values of self are collected in an array.</p>
+
+          <div class="method-source-code" id="separated1-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 240</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">separated1</span> <span class="ruby-identifier">delim</span>
+  <span class="ruby-identifier">rest</span> = <span class="ruby-identifier">delim</span> <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-keyword">self</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">bind</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">v0</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">result</span> = [<span class="ruby-identifier">v0</span>]
+    (<span class="ruby-identifier">rest</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">v</span> }).<span class="ruby-identifier">many_</span> <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">value</span>(<span class="ruby-identifier">result</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-seq" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">seq</span><span
+              class="method-args">(other, &amp;block)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p><code>a.seq b</code> will sequentially run <code>a</code> then <code>b</code>.  The result of <code>b</code> is preserved as return value.  If a <code>block</code> is associated, values returned by <code>a</code> and <code>b</code> are passed into the <code>block</code> and the return value of the <code>block</code> is used as the final result of the parser.</p>
+
+          <div class="method-source-code" id="seq-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 438</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">seq</span>(<span class="ruby-identifier">other</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-constant">Parsers</span>.<span class="ruby-identifier">sequence</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-some" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">some</span><span
+              class="method-args">(max)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>To create a parser that repeats <code>self</code> for at most <code>max</code> times. All return values are collected in an array.</p>
+
+          <div class="method-source-code" id="some-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 230</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">some</span>(<span class="ruby-identifier">max</span>)
+  <span class="ruby-identifier">repeat</span>(<span class="ruby-value">0</span>, <span class="ruby-identifier">max</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-some_" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">some_</span><span
+              class="method-args">(max)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>To create a parser that repeats <code>self</code> for at most <code>max</code> times. Only the return value of the last execution is preserved.</p>
+
+          <div class="method-source-code" id="some_-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 222</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">some_</span>(<span class="ruby-identifier">max</span>)
+  <span class="ruby-identifier">repeat_</span>(<span class="ruby-value">0</span>, <span class="ruby-identifier">max</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-to_s" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">to_s</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>String representation</p>
+
+          <div class="method-source-code" id="to_s-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 286</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_s</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">name</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">to_s</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-token" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">token</span><span
+              class="method-args">(kind)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p><code>a.token(:word_token)</code> will return a <a href="Token.html"><code>Token</code></a> object when <code>a</code> succeeds.  The matched string (or the string returned by <code>a</code>, if any) is encapsulated in the token, together with the <code>:word_token</code> symbol and the starting index of the match.</p>
+
+          <div class="method-source-code" id="token-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 427</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">token</span>(<span class="ruby-identifier">kind</span>)
+  <span class="ruby-constant">TokenParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">kind</span>, <span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-7C" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">|</span><span
+              class="method-args">(other)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p><code>a | b</code> will run <code>b</code> when <code>a</code> fails.  <code>b</code> is auto-boxed to <a href="Parser.html"><code>Parser</code></a> when it is not of type <a href="Parser.html"><code>Parser</code></a>.</p>
+
+          <div class="method-source-code" id="7C-source">
+            <pre><span class="ruby-comment"># File lib/rparsec/parser.rb, line 295</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">|</span> <span class="ruby-identifier">other</span>
+  <span class="ruby-constant">AltParser</span>.<span class="ruby-identifier">new</span>([<span class="ruby-keyword">self</span>, <span class="ruby-identifier">autobox_parser</span>(<span class="ruby-identifier">other</span>)])
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-~" class="method-detail method-alias">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">~</span><span
+              class="method-args">(msg = &quot;</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          
+
+        </div>
+
+
+        <div class="aliases">
+          Alias for: <a href="Parser.html#method-i-not">not</a>
+        </div>
+      </div>
+
+    </section>
+
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="https://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="https://ruby.github.io/rdoc/">RDoc</a> 6.7.0.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+
