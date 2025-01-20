@@ -162,9 +162,7 @@ module RParsec
   end
 
   module DefHelper
-    def def_ctor: (*:index | :kind | :text vars) -> untyped
     def def_readable: (*untyped vars) -> untyped
-    def initialize: (*untyped params) -> void
   end
 
   module Monad
@@ -579,11 +577,9 @@ module RParsec
   end
 
   class Token
-    extend DefHelper
+    @text: bot
+    @kind: bot
 
-    attr_reader kind: bot
-    attr_reader text: bot
-    attr_reader index: untyped
     def length: -> untyped
     def to_s: -> String
   end
