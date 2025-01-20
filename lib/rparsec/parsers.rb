@@ -476,7 +476,6 @@ module RParsec
       return err if cmp > 0
       return e if cmp < 0
       err
-      # merge_error(err, e)
     end
 
     class << self
@@ -498,13 +497,6 @@ module RParsec
       end
     end
   end
-
-  ###############################################
-  #def merge_error(e1, e2)
-  #  return e1 << e2 if e1.kind_of?(Array)
-  #  [e1,e2]
-  #end
-  ###############################################
 
   Nil = ValueParser.new(nil) # :nodoc:
 
