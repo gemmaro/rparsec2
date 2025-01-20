@@ -9,27 +9,20 @@ module RParsec
     # Create a +Proc+, which expects the two parameters in the reverse
     # order of +self+.
     #
-    def flip
-      Functors.flip(&self)
-    end
+    def flip = Functors.flip(&self)
 
     #
     # Create a +Proc+, when called, the parameter is first passed into
     # +other+, +self+ is called in turn with the return value from
     # +other+.
     #
-    def compose(other)
-      Functors.compose(self, other)
-    end
-
+    def compose(other) = Functors.compose(self, other)
     alias << compose
 
     #
     # <tt>a >> b</tt> is equivalent to <tt>b << a</tt>.  See also #<<.
     #
-    def >>(other)
-      other << self
-    end
+    def >>(other) = other << self
 
     #
     # Create a Proc that's curriable.
@@ -47,9 +40,7 @@ module RParsec
     # See the "functor_test.rb"
     [Proc, Method].each do |klass|
       refine klass do
-        def curry(ary = arity)
-          Functors.curry(ary, &self)
-        end
+        def curry(ary = arity) = Functors.curry(ary, &self)
       end
     end
 
@@ -61,42 +52,30 @@ module RParsec
     # the hood to perform the actual job when currying is done.  +ary+
     # explicitly specifies the number of parameters to curry.
     #
-    def reverse_curry(ary = arity)
-      Functors.reverse_curry(ary, &self)
-    end
+    def reverse_curry(ary = arity) = Functors.reverse_curry(ary, &self)
 
     #
     # Uncurry a curried closure.
     #
-    def uncurry
-      Functors.uncurry(&self)
-    end
+    def uncurry = Functors.uncurry(&self)
 
     #
     # Uncurry a reverse curried closure.
     #
-    def reverse_uncurry
-      Functors.reverse_uncurry(&self)
-    end
+    def reverse_uncurry = Functors.reverse_uncurry(&self)
 
     #
     # Create a +Proc+, when called, repeatedly call +self+ for +n+
     # times.  The same arguments are passed to each invocation.
     #
-    def repeat(n)
-      Functors.repeat(n, &self)
-    end
-    #
+    def repeat(n) = Functors.repeat(n, &self)
+    alias * repeat
 
     # Create a +Proc+, when called, repeatedly call +self+ for +n+
     # times.  At each iteration, return value from the previous
     # iteration is used as parameter.
     #
-    def power(n)
-      Functors.power(n, &self)
-    end
-
+    def power(n) = Functors.power(n, &self)
     alias ** power
-    alias * repeat
   end
 end
