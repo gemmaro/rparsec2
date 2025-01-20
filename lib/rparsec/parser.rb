@@ -2,7 +2,7 @@
 
 require "rparsec/functors"
 require "rparsec/monad"
-require "rparsec/misc"
+require "rparsec/def_helper"
 require "rparsec/parser_monad"
 require "rparsec/context"
 require "rparsec/error"

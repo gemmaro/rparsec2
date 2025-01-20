@@ -31,7 +31,13 @@ module RParsec
     def get_current_input: -> nil
   end
 
+  module DefHelper
+    def def_readable: (*:code | :index vars) -> untyped
+    def initialize: (*untyped params) -> void
+  end
+
   class ParserException < StandardError
+    extend DefHelper
   end
 
   class Failure
@@ -156,13 +162,10 @@ module RParsec
 
   class CodeLocator
     LF: String
+    extend DefHelper
 
     def locate: (untyped ind) -> [Integer, Integer]
     def _locateEof: -> [Integer, Integer]
-  end
-
-  module DefHelper
-    def def_readable: (*untyped vars) -> untyped
   end
 
   module Monad

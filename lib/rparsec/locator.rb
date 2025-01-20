@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rparsec/misc'
+require 'rparsec/def_helper'
 
 module RParsec
 

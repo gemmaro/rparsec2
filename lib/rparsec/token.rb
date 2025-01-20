@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'rparsec/misc'
-
 module RParsec
 
   #
