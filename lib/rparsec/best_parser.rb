@@ -1,4 +1,5 @@
 require "rparsec/parser"
+require "rparsec/failures"
 
 module RParsec
   class BestParser < Parser # :nodoc:

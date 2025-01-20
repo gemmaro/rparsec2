@@ -1,4 +1,5 @@
 require "rparsec/look_ahead_sensitive_parser"
+require "rparsec/failures"
 
 module RParsec
   class PlusParser < LookAheadSensitiveParser # :nodoc:
