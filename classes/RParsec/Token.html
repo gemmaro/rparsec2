@@ -39,63 +39,24 @@ Superclass:
 </div>
 <div id='content'>
 <div id='text'>
-<div id='description'>
-<p>Represents a token during lexical analysis.</p>
-</div>
+<div id='description'></div>
 <div id='method-list'>
 <h2>Methods</h2>
 <h3>Public Instance</h3>
 <ol>
-<li><a href="#attribute-i-index">index</a></li>
-<li><a href="#attribute-i-kind">kind</a></li>
 <li><a href="#method-i-length">length</a></li>
-<li><a href="#attribute-i-text">text</a></li>
 <li><a href="#method-i-to_s">to_s</a></li>
 </ol>
 </div>
 <div id='context'>
 </div>
 <div id='section'>
-<div id='attribute-list'>
-<h2 class='section-bar'>Attributes</h2>
-<div class='name-list'>
-<table>
-<tr class='top-aligned-row context-row'>
-<td class='context-item-name'>
-<a name='attribute-i-index'>index</a>
-</td>
-<td class='context-item-value'>[R]</td>
-<td class='context-item-desc'>
-<p>The starting index of the matched range</p>
-</td>
-</tr>
-<tr class='top-aligned-row context-row'>
-<td class='context-item-name'>
-<a name='attribute-i-kind'>kind</a>
-</td>
-<td class='context-item-value'>[R]</td>
-<td class='context-item-desc'>
-<p>The type of the token</p>
-</td>
-</tr>
-<tr class='top-aligned-row context-row'>
-<td class='context-item-name'>
-<a name='attribute-i-text'>text</a>
-</td>
-<td class='context-item-value'>[R]</td>
-<td class='context-item-desc'>
-<p>The text of the matched range</p>
-</td>
-</tr>
-</table>
-</div>
-</div>
 <div id='methods'>
 <h2>Public Instance methods</h2>
 <div class='method public-instance' id='method-method-i-length'>
 <a name='method-i-length'></a>
 <div class='synopsis'>
-<span class='name'>length</span><span class='arguments'>()</span>
+<span class='name'>length</span><span class='arguments'>(= @text.length)</span>
 
 </div>
 <div class='description'>
@@ -107,16 +68,22 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-length-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-length-source'><span class="ruby-comment"># File lib/rparsec/token.rb, line 33</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">length</span>
-  <span class="ruby-ivar">@text</span>.<span class="ruby-identifier">length</span>
+<pre id='method-i-length-source'><span class="ruby-comment"># File lib/rparsec/token.rb, line 18</span>
+    <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">length</span> = <span class="ruby-ivar">@text</span>.<span class="ruby-identifier">length</span>
+
+    <span class="ruby-comment">#</span>
+    <span class="ruby-comment"># String representation of the token.</span>
+    <span class="ruby-comment">#</span>
+    <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_s</span> = <span class="ruby-node">&quot;#{@kind}: #{@text}&quot;</span>
+  <span class="ruby-keyword">end</span>
+
 <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-to_s'>
 <a name='method-i-to_s'></a>
 <div class='synopsis'>
-<span class='name'>to_s</span><span class='arguments'>()</span>
+<span class='name'>to_s</span><span class='arguments'>(= "#{@kind}: #{@text}")</span>
 
 </div>
 <div class='description'>
@@ -128,9 +95,8 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-to_s-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-to_s-source'><span class="ruby-comment"># File lib/rparsec/token.rb, line 40</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_s</span>
-  <span class="ruby-node">&quot;#{@kind}: #{@text}&quot;</span>
+<pre id='method-i-to_s-source'><span class="ruby-comment"># File lib/rparsec/token.rb, line 23</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_s</span> = <span class="ruby-node">&quot;#{@kind}: #{@text}&quot;</span>
 <span class="ruby-keyword">end</span></pre>
 </div>
 </div>

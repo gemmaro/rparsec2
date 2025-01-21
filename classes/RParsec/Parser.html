@@ -80,7 +80,6 @@ Superclass:
 <li><a href="#method-i-separated">separated</a></li>
 <li><a href="#method-i-separated1">separated1</a></li>
 <li><a href="#method-i-seq">seq</a></li>
-<li><a href="#method-i-set_name">set_name</a></li>
 <li><a href="#method-i-some">some</a></li>
 <li><a href="#method-i-some_">some_</a></li>
 <li><a href="#method-i-to_s">to_s</a></li>
@@ -117,9 +116,19 @@ Superclass:
 <div class='name-list'>
 <table summary='Public Instance Aliases'>
 <tr class='top-aligned-row context-row'>
-<td class='context-item-name'>setName</td>
+<td class='context-item-name'>*</td>
 <td>-&gt;</td>
-<td class='context-item-value'><a href="#method-i-set_name">set_name</a></td>
+<td class='context-item-value'><a href="#method-i-repeat_">repeat_</a></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'><<</td>
+<td>-&gt;</td>
+<td class='context-item-value'><a href="#method-i-followed">followed</a></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>~</td>
+<td>-&gt;</td>
+<td class='context-item-value'><a href="#method-i-not">not</a></td>
 </tr>
 </table>
 </div>
@@ -153,7 +162,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-new-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-new-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 44</span>
+<pre id='method-c-new-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 43</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>
   <span class="ruby-identifier">initMonad</span>(<span class="ruby-constant">MyMonad</span>, <span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -175,7 +184,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-3E-3E-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-3E-3E-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 448</span>
+<pre id='method-i-3E-3E-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 446</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">&gt;&gt;</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-identifier">seq</span>(<span class="ruby-identifier">autobox_parser</span>(<span class="ruby-identifier">other</span>))
 <span class="ruby-keyword">end</span></pre>
@@ -196,9 +205,9 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-atomize-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-atomize-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 130</span>
+<pre id='method-i-atomize-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 125</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">atomize</span>
-  <span class="ruby-constant">AtomParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>).<span class="ruby-identifier">setName</span>(<span class="ruby-ivar">@name</span>)
+  <span class="ruby-constant">AtomParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>).<span class="ruby-identifier">tap</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span> <span class="ruby-identifier">p</span>.<span class="ruby-identifier">name</span> = <span class="ruby-ivar">@name</span> }
 <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
@@ -219,7 +228,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-bindn-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-bindn-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 110</span>
+<pre id='method-i-bindn-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 105</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">bindn</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
   <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">block</span>
   <span class="ruby-constant">BoundnParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">block</span>)
@@ -241,7 +250,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-catchp-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-catchp-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 313</span>
+<pre id='method-i-catchp-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 311</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">catchp</span>(<span class="ruby-identifier">symbol</span>)
   <span class="ruby-constant">CatchParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">symbol</span>, <span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -262,7 +271,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-delimited-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-delimited-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 281</span>
+<pre id='method-i-delimited-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 279</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">delimited</span> <span class="ruby-identifier">delim</span>
   <span class="ruby-identifier">delimited1</span>(<span class="ruby-identifier">delim</span>).<span class="ruby-identifier">plus</span> <span class="ruby-identifier">value</span>([])
 <span class="ruby-keyword">end</span></pre>
@@ -283,7 +292,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-delimited1-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-delimited1-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 267</span>
+<pre id='method-i-delimited1-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 265</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">delimited1</span> <span class="ruby-identifier">delim</span>
   <span class="ruby-identifier">rest</span> = <span class="ruby-identifier">delim</span> <span class="ruby-operator">&gt;&gt;</span> (<span class="ruby-keyword">self</span>.<span class="ruby-identifier">plus</span> <span class="ruby-constant">Parsers</span>.<span class="ruby-identifier">throwp</span>(<span class="ruby-value">:__end_delimiter__</span>))
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">bind</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">v0</span><span class="ruby-operator">|</span>
@@ -308,7 +317,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-expect-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-expect-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 160</span>
+<pre id='method-i-expect-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 156</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">expect</span> <span class="ruby-identifier">msg</span>
   <span class="ruby-constant">ExpectParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">msg</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -329,7 +338,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-followed-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-followed-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 168</span>
+<pre id='method-i-followed-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 164</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">followed</span>(<span class="ruby-identifier">other</span>)
   <span class="ruby-constant">FollowedParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -350,7 +359,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-fragment-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-fragment-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 320</span>
+<pre id='method-i-fragment-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 318</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">fragment</span>
   <span class="ruby-constant">FragmentParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -371,7 +380,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-infixl-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-infixl-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 391</span>
+<pre id='method-i-infixl-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 389</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">infixl</span>(<span class="ruby-identifier">op</span>)
   <span class="ruby-constant">Parsers</span>.<span class="ruby-identifier">sequence</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">_infix_rest</span>(<span class="ruby-identifier">op</span>, <span class="ruby-keyword">self</span>).<span class="ruby-identifier">many</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">v</span>, <span class="ruby-identifier">rests</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">rests</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
@@ -398,7 +407,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-infixn-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-infixn-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 377</span>
+<pre id='method-i-infixn-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 375</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">infixn</span>(<span class="ruby-identifier">op</span>)
   <span class="ruby-identifier">bind</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">v1</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">bin</span> = <span class="ruby-constant">Parsers</span>.<span class="ruby-identifier">sequence</span>(<span class="ruby-identifier">op</span>, <span class="ruby-keyword">self</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span>, <span class="ruby-identifier">v2</span><span class="ruby-operator">|</span>
@@ -424,7 +433,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-infixr-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-infixr-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 406</span>
+<pre id='method-i-infixr-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 404</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">infixr</span>(<span class="ruby-identifier">op</span>)
   <span class="ruby-constant">Parsers</span>.<span class="ruby-identifier">sequence</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">_infix_rest</span>(<span class="ruby-identifier">op</span>, <span class="ruby-keyword">self</span>).<span class="ruby-identifier">many</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">v</span>, <span class="ruby-identifier">rests</span><span class="ruby-operator">|</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">rests</span>.<span class="ruby-identifier">empty?</span>
@@ -458,7 +467,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-lexeme-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-lexeme-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 337</span>
+<pre id='method-i-lexeme-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 335</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">lexeme</span>(<span class="ruby-identifier">delim</span> = <span class="ruby-constant">Parsers</span>.<span class="ruby-identifier">whitespaces</span>)
   <span class="ruby-identifier">delim</span> = <span class="ruby-identifier">delim</span>.<span class="ruby-identifier">many_</span>
   <span class="ruby-identifier">delim</span> <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">delimited</span>(<span class="ruby-identifier">delim</span>)
@@ -480,7 +489,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-many-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-many-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 216</span>
+<pre id='method-i-many-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 214</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">many</span>(<span class="ruby-identifier">least</span> = <span class="ruby-value">0</span>)
   <span class="ruby-constant">ManyParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">least</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -501,7 +510,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-many_-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-many_-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 208</span>
+<pre id='method-i-many_-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 206</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">many_</span>(<span class="ruby-identifier">least</span> = <span class="ruby-value">0</span>)
   <span class="ruby-constant">Many_Parser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">least</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -522,7 +531,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-map-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-map-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 96</span>
+<pre id='method-i-map-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 91</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
   <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">block</span>
   <span class="ruby-constant">MapParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">block</span>)
@@ -544,7 +553,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-mapn-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-mapn-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 121</span>
+<pre id='method-i-mapn-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 116</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">mapn</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
   <span class="ruby-keyword">return</span> <span class="ruby-keyword">self</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">block</span>
   <span class="ruby-constant">MapnParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">block</span>)
@@ -566,7 +575,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-nested-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-nested-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 328</span>
+<pre id='method-i-nested-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 326</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">nested</span>(<span class="ruby-identifier">parser</span>)
   <span class="ruby-constant">NestedParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">parser</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -587,7 +596,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-not-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-not-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 144</span>
+<pre id='method-i-not-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 139</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">not</span>(<span class="ruby-identifier ruby-title">msg</span> = <span class="ruby-node">&quot;#{self} unexpected&quot;</span>)
   <span class="ruby-constant">NotParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">msg</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -608,7 +617,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-optional-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-optional-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 305</span>
+<pre id='method-i-optional-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 303</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">optional</span>(<span class="ruby-identifier">default</span> = <span class="ruby-keyword">nil</span>)
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">plus</span>(<span class="ruby-identifier">value</span>(<span class="ruby-identifier">default</span>))
 <span class="ruby-keyword">end</span></pre>
@@ -629,7 +638,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-parse-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-parse-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 70</span>
+<pre id='method-i-parse-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 75</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">parse</span>(<span class="ruby-identifier">src</span>)
   <span class="ruby-identifier">ctxt</span> = <span class="ruby-constant">ParseContext</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">src</span>)
   <span class="ruby-keyword">return</span> <span class="ruby-identifier">ctxt</span>.<span class="ruby-identifier">result</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">_parse</span> <span class="ruby-identifier">ctxt</span>
@@ -657,9 +666,9 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-peek-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-peek-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 137</span>
+<pre id='method-i-peek-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 132</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">peek</span>
-  <span class="ruby-constant">PeekParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>).<span class="ruby-identifier">setName</span>(<span class="ruby-ivar">@name</span>)
+  <span class="ruby-constant">PeekParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>).<span class="ruby-identifier">tap</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span> <span class="ruby-identifier">p</span>.<span class="ruby-identifier">name</span> = <span class="ruby-ivar">@name</span> }
 <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
@@ -678,7 +687,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-postfix-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-postfix-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 365</span>
+<pre id='method-i-postfix-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 363</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">postfix</span>(<span class="ruby-identifier">op</span>)
   <span class="ruby-constant">Parsers</span>.<span class="ruby-identifier">sequence</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">op</span>.<span class="ruby-identifier">many</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">v</span>, <span class="ruby-identifier">funcs</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">funcs</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> = <span class="ruby-identifier">f</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">v</span>) }
@@ -702,7 +711,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-prefix-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-prefix-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 350</span>
+<pre id='method-i-prefix-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 348</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">prefix</span>(<span class="ruby-identifier">op</span>)
   <span class="ruby-constant">Parsers</span>.<span class="ruby-identifier">sequence</span>(<span class="ruby-identifier">op</span>.<span class="ruby-identifier">many</span>, <span class="ruby-keyword">self</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">funcs</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">funcs</span>.<span class="ruby-identifier">reverse_each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> = <span class="ruby-identifier">f</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">v</span>) }
@@ -726,7 +735,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-repeat-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-repeat-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 193</span>
+<pre id='method-i-repeat-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 191</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">repeat</span>(<span class="ruby-identifier">min</span>, <span class="ruby-identifier">max</span> = <span class="ruby-identifier">min</span>)
   <span class="ruby-keyword">return</span> <span class="ruby-constant">Parsers</span>.<span class="ruby-identifier">failure</span>(<span class="ruby-node">&quot;min=#{min}, max=#{max}&quot;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">min</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">max</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">min</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">max</span>
@@ -752,7 +761,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-repeat_-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-repeat_-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 177</span>
+<pre id='method-i-repeat_-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 174</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">repeat_</span>(<span class="ruby-identifier">min</span>, <span class="ruby-identifier">max</span> = <span class="ruby-identifier">min</span>)
   <span class="ruby-keyword">return</span> <span class="ruby-constant">Parsers</span>.<span class="ruby-identifier">failure</span>(<span class="ruby-node">&quot;min=#{min}, max=#{max}&quot;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">min</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">max</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">min</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">max</span>
@@ -780,7 +789,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-separated-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-separated-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 256</span>
+<pre id='method-i-separated-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 254</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">separated</span> <span class="ruby-identifier">delim</span>
   <span class="ruby-identifier">separated1</span>(<span class="ruby-identifier">delim</span>).<span class="ruby-identifier">plus</span> <span class="ruby-identifier">value</span>([])
 <span class="ruby-keyword">end</span></pre>
@@ -801,7 +810,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-separated1-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-separated1-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 242</span>
+<pre id='method-i-separated1-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 240</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">separated1</span> <span class="ruby-identifier">delim</span>
   <span class="ruby-identifier">rest</span> = <span class="ruby-identifier">delim</span> <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-keyword">self</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">bind</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">v0</span><span class="ruby-operator">|</span>
@@ -826,31 +835,9 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-seq-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-seq-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 440</span>
+<pre id='method-i-seq-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 438</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">seq</span>(<span class="ruby-identifier">other</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
   <span class="ruby-constant">Parsers</span>.<span class="ruby-identifier">sequence</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-<span class="ruby-keyword">end</span></pre>
-</div>
-</div>
-<div class='method public-instance' id='method-method-i-set_name'>
-<a name='method-i-set_name'></a>
-<div class='synopsis'>
-<span class='name'>set_name</span><span class='arguments'>(nm)</span>
-
-</div>
-<div class='description'>
-
-<p>Set name for the parser.  <code>self</code> is returned.</p>
-
-</div>
-<div class='source'>
-<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-set_name-source&#39;); return false'>
-[show source]
-</a>
-<pre id='method-i-set_name-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 84</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">set_name</span>(<span class="ruby-identifier">nm</span>)
-  <span class="ruby-ivar">@name</span> = <span class="ruby-identifier">nm</span>
-  <span class="ruby-keyword">self</span>
 <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
@@ -869,7 +856,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-some-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-some-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 232</span>
+<pre id='method-i-some-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 230</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">some</span>(<span class="ruby-identifier">max</span>)
   <span class="ruby-identifier">repeat</span>(<span class="ruby-value">0</span>, <span class="ruby-identifier">max</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -890,7 +877,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-some_-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-some_-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 224</span>
+<pre id='method-i-some_-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 222</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">some_</span>(<span class="ruby-identifier">max</span>)
   <span class="ruby-identifier">repeat_</span>(<span class="ruby-value">0</span>, <span class="ruby-identifier">max</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -911,7 +898,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-to_s-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-to_s-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 288</span>
+<pre id='method-i-to_s-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 286</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_s</span>
   <span class="ruby-keyword">return</span> <span class="ruby-identifier">name</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">nil?</span>
   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">to_s</span>
@@ -933,7 +920,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-token-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-token-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 429</span>
+<pre id='method-i-token-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 427</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">token</span>(<span class="ruby-identifier">kind</span>)
   <span class="ruby-constant">TokenParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">kind</span>, <span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -954,7 +941,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-7C-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-7C-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 297</span>
+<pre id='method-i-7C-source'><span class="ruby-comment"># File lib/rparsec/parser.rb, line 295</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">|</span> <span class="ruby-identifier">other</span>
   <span class="ruby-constant">AltParser</span>.<span class="ruby-identifier">new</span>([<span class="ruby-keyword">self</span>, <span class="ruby-identifier">autobox_parser</span>(<span class="ruby-identifier">other</span>)])
 <span class="ruby-keyword">end</span></pre>

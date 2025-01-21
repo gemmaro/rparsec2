@@ -52,27 +52,18 @@ Superclass:
 </ol>
 <h3>Public Instance</h3>
 <ol>
+<li><a href="#method-i-canonical_name">canonical_name</a></li>
 <li><a href="#method-i-case_sensitive-3F">case_sensitive?</a></li>
+<li><a href="#method-i-copy_words">copy_words</a></li>
 <li><a href="#attribute-i-keyword_symbol">keyword_symbol</a></li>
 <li><a href="#attribute-i-lexer">lexer</a></li>
+<li><a href="#method-i-make_lexer">make_lexer</a></li>
 <li><a href="#method-i-parser">parser</a></li>
 </ol>
 </div>
 <div id='context'>
 </div>
 <div id='section'>
-<div id='aliases-list'>
-<h2>Public Instance Aliases</h2>
-<div class='name-list'>
-<table summary='Public Instance Aliases'>
-<tr class='top-aligned-row context-row'>
-<td class='context-item-name'>[]</td>
-<td>-&gt;</td>
-<td class='context-item-value'><a href="#method-i-parser">parser</a></td>
-</tr>
-</table>
-</div>
-</div>
 <div id='attribute-list'>
 <h2 class='section-bar'>Attributes</h2>
 <div class='name-list'>
@@ -115,7 +106,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-case_insensitive-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-case_insensitive-source'><span class="ruby-comment"># File lib/rparsec/keywords.rb, line 54</span>
+<pre id='method-c-case_insensitive-source'><span class="ruby-comment"># File lib/rparsec/keywords.rb, line 52</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">case_insensitive</span>(<span class="ruby-identifier">words</span>, <span class="ruby-identifier">default_lexer</span> = <span class="ruby-identifier">word</span>.<span class="ruby-identifier">token</span>(<span class="ruby-value">:word</span>), <span class="ruby-identifier">keyword_symbol</span> = <span class="ruby-value">:keyword</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
   <span class="ruby-identifier">new</span>(<span class="ruby-identifier">words</span>, <span class="ruby-keyword">false</span>, <span class="ruby-identifier">default_lexer</span>, <span class="ruby-identifier">keyword_symbol</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -136,7 +127,7 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-case_sensitive-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-case_sensitive-source'><span class="ruby-comment"># File lib/rparsec/keywords.rb, line 41</span>
+<pre id='method-c-case_sensitive-source'><span class="ruby-comment"># File lib/rparsec/keywords.rb, line 39</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">case_sensitive</span>(<span class="ruby-identifier">words</span>, <span class="ruby-identifier">default_lexer</span> = <span class="ruby-identifier">word</span>.<span class="ruby-identifier">token</span>(<span class="ruby-value">:word</span>), <span class="ruby-identifier">keyword_symbol</span> = <span class="ruby-value">:keyword</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
   <span class="ruby-identifier">new</span>(<span class="ruby-identifier">words</span>, <span class="ruby-keyword">true</span>, <span class="ruby-identifier">default_lexer</span>, <span class="ruby-identifier">keyword_symbol</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -157,9 +148,11 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-new-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-new-source'><span class="ruby-comment"># File lib/rparsec/keywords.rb, line 59</span>
+<pre id='method-c-new-source'><span class="ruby-comment"># File lib/rparsec/keywords.rb, line 57</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">words</span>, <span class="ruby-identifier">case_sensitive</span>, <span class="ruby-identifier">default_lexer</span>, <span class="ruby-identifier">keyword_symbol</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-  <span class="ruby-ivar">@default_lexer</span>, <span class="ruby-ivar">@case_sensitive</span>, <span class="ruby-ivar">@keyword_symbol</span> = <span class="ruby-identifier">default_lexer</span>, <span class="ruby-identifier">case_sensitive</span>, <span class="ruby-identifier">keyword_symbol</span>
+  <span class="ruby-ivar">@default_lexer</span> = <span class="ruby-identifier">default_lexer</span>
+  <span class="ruby-ivar">@case_sensitive</span> = <span class="ruby-identifier">case_sensitive</span>
+  <span class="ruby-ivar">@keyword_symbol</span> = <span class="ruby-identifier">keyword_symbol</span>
   <span class="ruby-comment"># this guarantees that we have copy of the words array and all the word strings.</span>
   <span class="ruby-identifier">words</span> = <span class="ruby-identifier">copy_words</span>(<span class="ruby-identifier">words</span>, <span class="ruby-identifier">case_sensitive</span>)
   <span class="ruby-ivar">@name_map</span> = {}
@@ -177,10 +170,29 @@ Superclass:
 </div>
 </div>
 <h2>Public Instance methods</h2>
+<div class='method public-instance' id='method-method-i-canonical_name'>
+<a name='method-i-canonical_name'></a>
+<div class='synopsis'>
+<span class='name'>canonical_name</span><span class='arguments'>(name)</span>
+
+</div>
+<div class='description'>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-canonical_name-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-canonical_name-source'><span class="ruby-comment"># File lib/rparsec/keywords.rb, line 105</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">canonical_name</span>(<span class="ruby-identifier">name</span>)
+  <span class="ruby-ivar">@case_sensitive</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">name</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">downcase</span>
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
 <div class='method public-instance' id='method-method-i-case_sensitive-3F'>
 <a name='method-i-case_sensitive-3F'></a>
 <div class='synopsis'>
-<span class='name'>case_sensitive?</span><span class='arguments'>()</span>
+<span class='name'>case_sensitive?</span><span class='arguments'>(= @case_sensitive)</span>
 
 </div>
 <div class='description'>
@@ -193,8 +205,138 @@ Superclass:
 [show source]
 </a>
 <pre id='method-i-case_sensitive-3F-source'><span class="ruby-comment"># File lib/rparsec/keywords.rb, line 28</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">case_sensitive?</span>
-  <span class="ruby-ivar">@case_sensitive</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">case_sensitive?</span> = <span class="ruby-ivar">@case_sensitive</span>
+
+  <span class="ruby-comment">#</span>
+  <span class="ruby-comment"># To create an instance that lexes the given keywords case</span>
+  <span class="ruby-comment"># sensitively.  +default_lexer+ is used to lex a token first, the</span>
+  <span class="ruby-comment"># token text is then compared with the given keywords. If it</span>
+  <span class="ruby-comment"># matches any of the keyword, a keyword token is generated instead</span>
+  <span class="ruby-comment"># using +keyword_symbol+.  The +block+ parameter, if present, is</span>
+  <span class="ruby-comment"># used to convert the token text to another object when the token</span>
+  <span class="ruby-comment"># is recognized during grammar parsing phase.</span>
+  <span class="ruby-comment">#</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">case_sensitive</span>(<span class="ruby-identifier">words</span>, <span class="ruby-identifier">default_lexer</span> = <span class="ruby-identifier">word</span>.<span class="ruby-identifier">token</span>(<span class="ruby-value">:word</span>), <span class="ruby-identifier">keyword_symbol</span> = <span class="ruby-value">:keyword</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+    <span class="ruby-identifier">new</span>(<span class="ruby-identifier">words</span>, <span class="ruby-keyword">true</span>, <span class="ruby-identifier">default_lexer</span>, <span class="ruby-identifier">keyword_symbol</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment">#</span>
+  <span class="ruby-comment"># To create an instance that lexes the given keywords case</span>
+  <span class="ruby-comment"># insensitively.  +default_lexer+ is used to lex a token first,</span>
+  <span class="ruby-comment"># the token text is then compared with the given keywords. If it</span>
+  <span class="ruby-comment"># matches any of the keyword, a keyword token is generated instead</span>
+  <span class="ruby-comment"># using +keyword_symbol+.  The +block+ parameter, if present, is</span>
+  <span class="ruby-comment"># used to convert the token text to another object when the token</span>
+  <span class="ruby-comment"># is recognized during parsing phase.</span>
+  <span class="ruby-comment">#</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">case_insensitive</span>(<span class="ruby-identifier">words</span>, <span class="ruby-identifier">default_lexer</span> = <span class="ruby-identifier">word</span>.<span class="ruby-identifier">token</span>(<span class="ruby-value">:word</span>), <span class="ruby-identifier">keyword_symbol</span> = <span class="ruby-value">:keyword</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+    <span class="ruby-identifier">new</span>(<span class="ruby-identifier">words</span>, <span class="ruby-keyword">false</span>, <span class="ruby-identifier">default_lexer</span>, <span class="ruby-identifier">keyword_symbol</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment"># scanner has to return a string</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">words</span>, <span class="ruby-identifier">case_sensitive</span>, <span class="ruby-identifier">default_lexer</span>, <span class="ruby-identifier">keyword_symbol</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+    <span class="ruby-ivar">@default_lexer</span> = <span class="ruby-identifier">default_lexer</span>
+    <span class="ruby-ivar">@case_sensitive</span> = <span class="ruby-identifier">case_sensitive</span>
+    <span class="ruby-ivar">@keyword_symbol</span> = <span class="ruby-identifier">keyword_symbol</span>
+    <span class="ruby-comment"># this guarantees that we have copy of the words array and all the word strings.</span>
+    <span class="ruby-identifier">words</span> = <span class="ruby-identifier">copy_words</span>(<span class="ruby-identifier">words</span>, <span class="ruby-identifier">case_sensitive</span>)
+    <span class="ruby-ivar">@name_map</span> = {}
+    <span class="ruby-ivar">@symbol_map</span> = {}
+    <span class="ruby-identifier">word_map</span> = {}
+    <span class="ruby-identifier">words</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">w</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">symbol</span> = <span class="ruby-node">&quot;#{keyword_symbol}:#{w}&quot;</span>.<span class="ruby-identifier">to_sym</span>
+      <span class="ruby-identifier">word_map</span>[<span class="ruby-identifier">w</span>] = <span class="ruby-identifier">symbol</span>
+      <span class="ruby-identifier">parser</span> = <span class="ruby-constant">Parsers</span>.<span class="ruby-identifier">token</span>(<span class="ruby-identifier">symbol</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-ivar">@symbol_map</span>[<span class="ruby-node">&quot;#{w}&quot;</span>.<span class="ruby-identifier">to_sym</span>] = <span class="ruby-identifier">parser</span>
+      <span class="ruby-ivar">@name_map</span>[<span class="ruby-identifier">w</span>] = <span class="ruby-identifier">parser</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-ivar">@lexer</span> = <span class="ruby-identifier">make_lexer</span>(<span class="ruby-identifier">default_lexer</span>, <span class="ruby-identifier">word_map</span>)
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment">#</span>
+  <span class="ruby-comment"># Get the parser that recognizes the token of the given keyword during the parsing phase.</span>
+  <span class="ruby-comment">#</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">parser</span>(<span class="ruby-identifier">key</span>)
+    <span class="ruby-identifier">result</span> = <span class="ruby-keyword">nil</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">key</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">String</span>
+      <span class="ruby-identifier">name</span> = <span class="ruby-identifier">canonical_name</span>(<span class="ruby-identifier">key</span>)
+      <span class="ruby-identifier">result</span> = <span class="ruby-ivar">@name_map</span>[<span class="ruby-identifier">name</span>]
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">result</span> = <span class="ruby-ivar">@symbol_map</span>[<span class="ruby-identifier">key</span>]
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;parser not found for #{key}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">result</span>.<span class="ruby-identifier">nil?</span>
+    <span class="ruby-identifier">result</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">alias</span> <span class="ruby-identifier">[]</span> <span class="ruby-identifier">parser</span>
+
+  <span class="ruby-identifier">private</span>
+
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">make_lexer</span>(<span class="ruby-identifier">default_lexer</span>, <span class="ruby-identifier">word_map</span>)
+    <span class="ruby-identifier">default_lexer</span>.<span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tok</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">text</span> = <span class="ruby-identifier">tok</span>.<span class="ruby-identifier">text</span>
+      <span class="ruby-identifier">ind</span> = <span class="ruby-identifier">tok</span>.<span class="ruby-identifier">index</span>
+      <span class="ruby-identifier">key</span> = <span class="ruby-identifier">canonical_name</span>(<span class="ruby-identifier">text</span>)
+      <span class="ruby-identifier">my_symbol</span> = <span class="ruby-identifier">word_map</span>[<span class="ruby-identifier">key</span>]
+      <span class="ruby-identifier">my_symbol</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">tok</span> <span class="ruby-operator">:</span> <span class="ruby-constant">Token</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">my_symbol</span>, <span class="ruby-identifier">text</span>, <span class="ruby-identifier">ind</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">canonical_name</span>(<span class="ruby-identifier">name</span>)
+    <span class="ruby-ivar">@case_sensitive</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">name</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">downcase</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">copy_words</span>(<span class="ruby-identifier">words</span>, <span class="ruby-identifier">case_sensitive</span>)
+    <span class="ruby-identifier">words</span>.<span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">w</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">case_sensitive</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">w</span>.<span class="ruby-identifier">dup</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">w</span>.<span class="ruby-identifier">downcase</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-copy_words'>
+<a name='method-i-copy_words'></a>
+<div class='synopsis'>
+<span class='name'>copy_words</span><span class='arguments'>(words, case_sensitive)</span>
+
+</div>
+<div class='description'>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-copy_words-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-copy_words-source'><span class="ruby-comment"># File lib/rparsec/keywords.rb, line 109</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">copy_words</span>(<span class="ruby-identifier">words</span>, <span class="ruby-identifier">case_sensitive</span>)
+  <span class="ruby-identifier">words</span>.<span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">w</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">case_sensitive</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">w</span>.<span class="ruby-identifier">dup</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">w</span>.<span class="ruby-identifier">downcase</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-make_lexer'>
+<a name='method-i-make_lexer'></a>
+<div class='synopsis'>
+<span class='name'>make_lexer</span><span class='arguments'>(default_lexer, word_map)</span>
+
+</div>
+<div class='description'>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-make_lexer-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-make_lexer-source'><span class="ruby-comment"># File lib/rparsec/keywords.rb, line 95</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">make_lexer</span>(<span class="ruby-identifier">default_lexer</span>, <span class="ruby-identifier">word_map</span>)
+  <span class="ruby-identifier">default_lexer</span>.<span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tok</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">text</span> = <span class="ruby-identifier">tok</span>.<span class="ruby-identifier">text</span>
+    <span class="ruby-identifier">ind</span> = <span class="ruby-identifier">tok</span>.<span class="ruby-identifier">index</span>
+    <span class="ruby-identifier">key</span> = <span class="ruby-identifier">canonical_name</span>(<span class="ruby-identifier">text</span>)
+    <span class="ruby-identifier">my_symbol</span> = <span class="ruby-identifier">word_map</span>[<span class="ruby-identifier">key</span>]
+    <span class="ruby-identifier">my_symbol</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">tok</span> <span class="ruby-operator">:</span> <span class="ruby-constant">Token</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">my_symbol</span>, <span class="ruby-identifier">text</span>, <span class="ruby-identifier">ind</span>)
+  <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
 </div>
 </div>

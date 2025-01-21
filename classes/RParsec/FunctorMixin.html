@@ -56,28 +56,6 @@ RParsec::FunctorMixin
 <div id='context'>
 </div>
 <div id='section'>
-<div id='aliases-list'>
-<h2>Public Instance Aliases</h2>
-<div class='name-list'>
-<table summary='Public Instance Aliases'>
-<tr class='top-aligned-row context-row'>
-<td class='context-item-name'>*</td>
-<td>-&gt;</td>
-<td class='context-item-value'><a href="#method-i-repeat">repeat</a></td>
-</tr>
-<tr class='top-aligned-row context-row'>
-<td class='context-item-name'>**</td>
-<td>-&gt;</td>
-<td class='context-item-value'><a href="#method-i-power">power</a></td>
-</tr>
-<tr class='top-aligned-row context-row'>
-<td class='context-item-name'><<</td>
-<td>-&gt;</td>
-<td class='context-item-value'><a href="#method-i-compose">compose</a></td>
-</tr>
-</table>
-</div>
-</div>
 <div id='methods'>
 <h2>Public Instance methods</h2>
 <div class='method public-instance' id='method-method-i-3E-3E'>
@@ -88,17 +66,69 @@ RParsec::FunctorMixin
 </div>
 <div class='description'>
 
-<p><code>a &gt;&gt; b</code> is equivalent to <code>b &lt;&lt; a</code>.  See also <a href="FunctorMixin.html#method-i-3C-3C"><code>&lt;&lt;</code></a>.</p>
+<p><code>a &gt;&gt; b</code> is equivalent to <code>b &lt;&lt; a</code>.  See also <<.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-3E-3E-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-3E-3E-source'><span class="ruby-comment"># File lib/rparsec/functor_mixin.rb, line 30</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">&gt;&gt;</span>(<span class="ruby-identifier">other</span>)
-  <span class="ruby-identifier">other</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-keyword">self</span>
-<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-3E-3E-source'><span class="ruby-comment"># File lib/rparsec/functor_mixin.rb, line 25</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">&gt;&gt;</span>(<span class="ruby-identifier">other</span>) = <span class="ruby-identifier">other</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-keyword">self</span>
+
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># Create a Proc that&#39;s curriable.</span>
+<span class="ruby-comment"># When curried, parameters are passed in from left to right.</span>
+<span class="ruby-comment"># i.e. closure.curry.call(a).call(b) is quivalent to closure.call(a,b) .</span>
+<span class="ruby-comment"># _self_ is encapsulated under the hood to perform the actual</span>
+<span class="ruby-comment"># job when currying is done.</span>
+<span class="ruby-comment"># _ary_ explicitly specifies the number of parameters to curry.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># *IMPORTANT*</span>
+<span class="ruby-comment"># Proc and Method have built-in curry.</span>
+<span class="ruby-comment"># but the arity always return -1.</span>
+<span class="ruby-comment"># So, curry.reverse_curry does not work as expected.</span>
+<span class="ruby-comment"># You need to use the &quot;using FunctorMixin&quot;</span>
+<span class="ruby-comment"># See the &quot;functor_test.rb&quot;</span>
+[<span class="ruby-constant">Proc</span>, <span class="ruby-constant">Method</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">klass</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">refine</span> <span class="ruby-identifier">klass</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">curry</span>(<span class="ruby-identifier">ary</span> = <span class="ruby-identifier">arity</span>) = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">curry</span>(<span class="ruby-identifier">ary</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># Create a +Proc+ that&#39;s curriable.  When curried, parameters are</span>
+<span class="ruby-comment"># passed in from right to left.</span>
+<span class="ruby-comment"># i.e. &lt;tt&gt;closure.reverse_curry.call(a).call(b)&lt;/tt&gt; is quivalent</span>
+<span class="ruby-comment"># to &lt;tt&gt;closure.call(b, a)&lt;/tt&gt;.  +self+ is encapsulated under</span>
+<span class="ruby-comment"># the hood to perform the actual job when currying is done.  +ary+</span>
+<span class="ruby-comment"># explicitly specifies the number of parameters to curry.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">reverse_curry</span>(<span class="ruby-identifier">ary</span> = <span class="ruby-identifier">arity</span>) = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">reverse_curry</span>(<span class="ruby-identifier">ary</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># Uncurry a curried closure.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">uncurry</span> = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">uncurry</span>(<span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># Uncurry a reverse curried closure.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">reverse_uncurry</span> = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">reverse_uncurry</span>(<span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># Create a +Proc+, when called, repeatedly call +self+ for +n+</span>
+<span class="ruby-comment"># times.  The same arguments are passed to each invocation.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">repeat</span>(<span class="ruby-identifier">n</span>) = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">repeat</span>(<span class="ruby-identifier">n</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">alias</span> <span class="ruby-identifier">*</span> <span class="ruby-identifier">repeat</span>
+
+<span class="ruby-comment"># Create a +Proc+, when called, repeatedly call +self+ for +n+</span>
+<span class="ruby-comment"># times.  At each iteration, return value from the previous</span>
+<span class="ruby-comment"># iteration is used as parameter.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">power</span>(<span class="ruby-identifier">n</span>) = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">power</span>(<span class="ruby-identifier">n</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">alias</span> </pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-compose'>
@@ -116,10 +146,68 @@ RParsec::FunctorMixin
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-compose-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-compose-source'><span class="ruby-comment"># File lib/rparsec/functor_mixin.rb, line 21</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">compose</span>(<span class="ruby-identifier">other</span>)
-  <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">compose</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
-<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-compose-source'><span class="ruby-comment"># File lib/rparsec/functor_mixin.rb, line 19</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">compose</span>(<span class="ruby-identifier">other</span>) = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">compose</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
+<span class="ruby-keyword">alias</span> <span class="ruby-identifier">&lt;&lt;</span> <span class="ruby-identifier">compose</span>
+
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># &lt;tt&gt;a &gt;&gt; b&lt;/tt&gt; is equivalent to &lt;tt&gt;b &lt;&lt; a&lt;/tt&gt;.  See also #&lt;&lt;.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">&gt;&gt;</span>(<span class="ruby-identifier">other</span>) = <span class="ruby-identifier">other</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-keyword">self</span>
+
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># Create a Proc that&#39;s curriable.</span>
+<span class="ruby-comment"># When curried, parameters are passed in from left to right.</span>
+<span class="ruby-comment"># i.e. closure.curry.call(a).call(b) is quivalent to closure.call(a,b) .</span>
+<span class="ruby-comment"># _self_ is encapsulated under the hood to perform the actual</span>
+<span class="ruby-comment"># job when currying is done.</span>
+<span class="ruby-comment"># _ary_ explicitly specifies the number of parameters to curry.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># *IMPORTANT*</span>
+<span class="ruby-comment"># Proc and Method have built-in curry.</span>
+<span class="ruby-comment"># but the arity always return -1.</span>
+<span class="ruby-comment"># So, curry.reverse_curry does not work as expected.</span>
+<span class="ruby-comment"># You need to use the &quot;using FunctorMixin&quot;</span>
+<span class="ruby-comment"># See the &quot;functor_test.rb&quot;</span>
+[<span class="ruby-constant">Proc</span>, <span class="ruby-constant">Method</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">klass</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">refine</span> <span class="ruby-identifier">klass</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">curry</span>(<span class="ruby-identifier">ary</span> = <span class="ruby-identifier">arity</span>) = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">curry</span>(<span class="ruby-identifier">ary</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># Create a +Proc+ that&#39;s curriable.  When curried, parameters are</span>
+<span class="ruby-comment"># passed in from right to left.</span>
+<span class="ruby-comment"># i.e. &lt;tt&gt;closure.reverse_curry.call(a).call(b)&lt;/tt&gt; is quivalent</span>
+<span class="ruby-comment"># to &lt;tt&gt;closure.call(b, a)&lt;/tt&gt;.  +self+ is encapsulated under</span>
+<span class="ruby-comment"># the hood to perform the actual job when currying is done.  +ary+</span>
+<span class="ruby-comment"># explicitly specifies the number of parameters to curry.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">reverse_curry</span>(<span class="ruby-identifier">ary</span> = <span class="ruby-identifier">arity</span>) = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">reverse_curry</span>(<span class="ruby-identifier">ary</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># Uncurry a curried closure.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">uncurry</span> = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">uncurry</span>(<span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># Uncurry a reverse curried closure.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">reverse_uncurry</span> = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">reverse_uncurry</span>(<span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># Create a +Proc+, when called, repeatedly call +self+ for +n+</span>
+<span class="ruby-comment"># times.  The same arguments are passed to each invocation.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">repeat</span>(<span class="ruby-identifier">n</span>) = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">repeat</span>(<span class="ruby-identifier">n</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">alias</span> <span class="ruby-identifier">*</span> <span class="ruby-identifier">repeat</span>
+
+<span class="ruby-comment"># Create a +Proc+, when called, repeatedly call +self+ for +n+</span>
+<span class="ruby-comment"># times.  At each iteration, return value from the previous</span>
+<span class="ruby-comment"># iteration is used as parameter.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">power</span>(<span class="ruby-identifier">n</span>) = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">power</span>(<span class="ruby-identifier">n</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+</pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-curry'>
@@ -135,16 +223,15 @@ RParsec::FunctorMixin
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-curry-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-curry-source'><span class="ruby-comment"># File lib/rparsec/functor_mixin.rb, line 50</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">curry</span>(<span class="ruby-identifier">ary</span> = <span class="ruby-identifier">arity</span>)
-  <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">curry</span>(<span class="ruby-identifier">ary</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+<pre id='method-i-curry-source'><span class="ruby-comment"># File lib/rparsec/functor_mixin.rb, line 43</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">curry</span>(<span class="ruby-identifier">ary</span> = <span class="ruby-identifier">arity</span>) = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">curry</span>(<span class="ruby-identifier">ary</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-flip'>
 <a name='method-i-flip'></a>
 <div class='synopsis'>
-<span class='name'>flip</span><span class='arguments'>()</span>
+<span class='name'>flip</span><span class='arguments'>(= Functors.flip(&self))</span>
 
 </div>
 <div class='description'>
@@ -157,9 +244,73 @@ RParsec::FunctorMixin
 [show source]
 </a>
 <pre id='method-i-flip-source'><span class="ruby-comment"># File lib/rparsec/functor_mixin.rb, line 12</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">flip</span>
-  <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">flip</span>(<span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
-<span class="ruby-keyword">end</span></pre>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">flip</span> = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">flip</span>(<span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># Create a +Proc+, when called, the parameter is first passed into</span>
+<span class="ruby-comment"># +other+, +self+ is called in turn with the return value from</span>
+<span class="ruby-comment"># +other+.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">compose</span>(<span class="ruby-identifier">other</span>) = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">compose</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">other</span>)
+<span class="ruby-keyword">alias</span> <span class="ruby-identifier">&lt;&lt;</span> <span class="ruby-identifier">compose</span>
+
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># &lt;tt&gt;a &gt;&gt; b&lt;/tt&gt; is equivalent to &lt;tt&gt;b &lt;&lt; a&lt;/tt&gt;.  See also #&lt;&lt;.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">&gt;&gt;</span>(<span class="ruby-identifier">other</span>) = <span class="ruby-identifier">other</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-keyword">self</span>
+
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># Create a Proc that&#39;s curriable.</span>
+<span class="ruby-comment"># When curried, parameters are passed in from left to right.</span>
+<span class="ruby-comment"># i.e. closure.curry.call(a).call(b) is quivalent to closure.call(a,b) .</span>
+<span class="ruby-comment"># _self_ is encapsulated under the hood to perform the actual</span>
+<span class="ruby-comment"># job when currying is done.</span>
+<span class="ruby-comment"># _ary_ explicitly specifies the number of parameters to curry.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># *IMPORTANT*</span>
+<span class="ruby-comment"># Proc and Method have built-in curry.</span>
+<span class="ruby-comment"># but the arity always return -1.</span>
+<span class="ruby-comment"># So, curry.reverse_curry does not work as expected.</span>
+<span class="ruby-comment"># You need to use the &quot;using FunctorMixin&quot;</span>
+<span class="ruby-comment"># See the &quot;functor_test.rb&quot;</span>
+[<span class="ruby-constant">Proc</span>, <span class="ruby-constant">Method</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">klass</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">refine</span> <span class="ruby-identifier">klass</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">curry</span>(<span class="ruby-identifier">ary</span> = <span class="ruby-identifier">arity</span>) = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">curry</span>(<span class="ruby-identifier">ary</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># Create a +Proc+ that&#39;s curriable.  When curried, parameters are</span>
+<span class="ruby-comment"># passed in from right to left.</span>
+<span class="ruby-comment"># i.e. &lt;tt&gt;closure.reverse_curry.call(a).call(b)&lt;/tt&gt; is quivalent</span>
+<span class="ruby-comment"># to &lt;tt&gt;closure.call(b, a)&lt;/tt&gt;.  +self+ is encapsulated under</span>
+<span class="ruby-comment"># the hood to perform the actual job when currying is done.  +ary+</span>
+<span class="ruby-comment"># explicitly specifies the number of parameters to curry.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">reverse_curry</span>(<span class="ruby-identifier">ary</span> = <span class="ruby-identifier">arity</span>) = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">reverse_curry</span>(<span class="ruby-identifier">ary</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># Uncurry a curried closure.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">uncurry</span> = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">uncurry</span>(<span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># Uncurry a reverse curried closure.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">reverse_uncurry</span> = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">reverse_uncurry</span>(<span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># Create a +Proc+, when called, repeatedly call +self+ for +n+</span>
+<span class="ruby-comment"># times.  The same arguments are passed to each invocation.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">repeat</span>(<span class="ruby-identifier">n</span>) = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">repeat</span>(<span class="ruby-identifier">n</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">alias</span> <span class="ruby-identifier">*</span> <span class="ruby-identifier">repeat</span>
+
+<span class="ruby-comment"># Create a +Proc+, when called, repeatedly call +self+ for +n+</span>
+<span class="ruby-comment"># times.  At each iteration, return value from the previous</span>
+<span class="ruby-comment"># iteration is used as parameter.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">power</span>(<span class="ruby-identifier">n</span>) = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">power</span>(<span class="ruby-identifier">n</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)</pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-power'>
@@ -177,9 +328,9 @@ RParsec::FunctorMixin
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-power-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-power-source'><span class="ruby-comment"># File lib/rparsec/functor_mixin.rb, line 95</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">power</span>(<span class="ruby-identifier">n</span>)
-  <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">power</span>(<span class="ruby-identifier">n</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+<pre id='method-i-power-source'><span class="ruby-comment"># File lib/rparsec/functor_mixin.rb, line 78</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">power</span>(<span class="ruby-identifier">n</span>) = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">power</span>(<span class="ruby-identifier">n</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+  <span class="ruby-keyword">alias</span> <span class="ruby-identifier">**</span> <span class="ruby-identifier">power</span>
 <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
@@ -198,9 +349,17 @@ RParsec::FunctorMixin
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-repeat-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-repeat-source'><span class="ruby-comment"># File lib/rparsec/functor_mixin.rb, line 86</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">repeat</span>(<span class="ruby-identifier">n</span>)
-  <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">repeat</span>(<span class="ruby-identifier">n</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+<pre id='method-i-repeat-source'><span class="ruby-comment"># File lib/rparsec/functor_mixin.rb, line 71</span>
+    <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">repeat</span>(<span class="ruby-identifier">n</span>) = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">repeat</span>(<span class="ruby-identifier">n</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+    <span class="ruby-keyword">alias</span> <span class="ruby-identifier">*</span> <span class="ruby-identifier">repeat</span>
+
+    <span class="ruby-comment"># Create a +Proc+, when called, repeatedly call +self+ for +n+</span>
+    <span class="ruby-comment"># times.  At each iteration, return value from the previous</span>
+    <span class="ruby-comment"># iteration is used as parameter.</span>
+    <span class="ruby-comment">#</span>
+    <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">power</span>(<span class="ruby-identifier">n</span>) = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">power</span>(<span class="ruby-identifier">n</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+    <span class="ruby-keyword">alias</span> <span class="ruby-identifier">**</span> <span class="ruby-identifier">power</span>
+  <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
@@ -219,16 +378,38 @@ RParsec::FunctorMixin
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-reverse_curry-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-reverse_curry-source'><span class="ruby-comment"># File lib/rparsec/functor_mixin.rb, line 64</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">reverse_curry</span>(<span class="ruby-identifier">ary</span> = <span class="ruby-identifier">arity</span>)
-  <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">reverse_curry</span>(<span class="ruby-identifier">ary</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
-<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-reverse_curry-source'><span class="ruby-comment"># File lib/rparsec/functor_mixin.rb, line 55</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">reverse_curry</span>(<span class="ruby-identifier">ary</span> = <span class="ruby-identifier">arity</span>) = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">reverse_curry</span>(<span class="ruby-identifier">ary</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># Uncurry a curried closure.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">uncurry</span> = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">uncurry</span>(<span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># Uncurry a reverse curried closure.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">reverse_uncurry</span> = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">reverse_uncurry</span>(<span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># Create a +Proc+, when called, repeatedly call +self+ for +n+</span>
+<span class="ruby-comment"># times.  The same arguments are passed to each invocation.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">repeat</span>(<span class="ruby-identifier">n</span>) = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">repeat</span>(<span class="ruby-identifier">n</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">alias</span> <span class="ruby-identifier">*</span> <span class="ruby-identifier">repeat</span>
+
+<span class="ruby-comment"># Create a +Proc+, when called, repeatedly call +self+ for +n+</span>
+<span class="ruby-comment"># times.  At each iteration, return value from the previous</span>
+<span class="ruby-comment"># iteration is used as parameter.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">power</span>(<span class="ruby-identifier">n</span>) = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">power</span>(<span class="ruby-identifier">n</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">alias</span> <span class="ruby-identifier">**</span> </pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-reverse_uncurry'>
 <a name='method-i-reverse_uncurry'></a>
 <div class='synopsis'>
-<span class='name'>reverse_uncurry</span><span class='arguments'>()</span>
+<span class='name'>reverse_uncurry</span><span class='arguments'>(= Functors.reverse_uncurry(&self))</span>
 
 </div>
 <div class='description'>
@@ -240,16 +421,29 @@ RParsec::FunctorMixin
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-reverse_uncurry-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-reverse_uncurry-source'><span class="ruby-comment"># File lib/rparsec/functor_mixin.rb, line 78</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">reverse_uncurry</span>
-  <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">reverse_uncurry</span>(<span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+<pre id='method-i-reverse_uncurry-source'><span class="ruby-comment"># File lib/rparsec/functor_mixin.rb, line 65</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">reverse_uncurry</span> = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">reverse_uncurry</span>(<span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+
+  <span class="ruby-comment">#</span>
+  <span class="ruby-comment"># Create a +Proc+, when called, repeatedly call +self+ for +n+</span>
+  <span class="ruby-comment"># times.  The same arguments are passed to each invocation.</span>
+  <span class="ruby-comment">#</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">repeat</span>(<span class="ruby-identifier">n</span>) = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">repeat</span>(<span class="ruby-identifier">n</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+  <span class="ruby-keyword">alias</span> <span class="ruby-identifier">*</span> <span class="ruby-identifier">repeat</span>
+
+  <span class="ruby-comment"># Create a +Proc+, when called, repeatedly call +self+ for +n+</span>
+  <span class="ruby-comment"># times.  At each iteration, return value from the previous</span>
+  <span class="ruby-comment"># iteration is used as parameter.</span>
+  <span class="ruby-comment">#</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">power</span>(<span class="ruby-identifier">n</span>) = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">power</span>(<span class="ruby-identifier">n</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+  <span class="ruby-keyword">alias</span> <span class="ruby-identifier">**</span> <span class="ruby-identifier">power</span>
 <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-uncurry'>
 <a name='method-i-uncurry'></a>
 <div class='synopsis'>
-<span class='name'>uncurry</span><span class='arguments'>()</span>
+<span class='name'>uncurry</span><span class='arguments'>(= Functors.uncurry(&self))</span>
 
 </div>
 <div class='description'>
@@ -261,10 +455,28 @@ RParsec::FunctorMixin
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-uncurry-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-uncurry-source'><span class="ruby-comment"># File lib/rparsec/functor_mixin.rb, line 71</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">uncurry</span>
-  <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">uncurry</span>(<span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
-<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-uncurry-source'><span class="ruby-comment"># File lib/rparsec/functor_mixin.rb, line 60</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">uncurry</span> = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">uncurry</span>(<span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># Uncurry a reverse curried closure.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">reverse_uncurry</span> = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">reverse_uncurry</span>(<span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># Create a +Proc+, when called, repeatedly call +self+ for +n+</span>
+<span class="ruby-comment"># times.  The same arguments are passed to each invocation.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">repeat</span>(<span class="ruby-identifier">n</span>) = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">repeat</span>(<span class="ruby-identifier">n</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">alias</span> <span class="ruby-identifier">*</span> <span class="ruby-identifier">repeat</span>
+
+<span class="ruby-comment"># Create a +Proc+, when called, repeatedly call +self+ for +n+</span>
+<span class="ruby-comment"># times.  At each iteration, return value from the previous</span>
+<span class="ruby-comment"># iteration is used as parameter.</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">power</span>(<span class="ruby-identifier">n</span>) = <span class="ruby-constant">Functors</span>.<span class="ruby-identifier">power</span>(<span class="ruby-identifier">n</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>)
+<span class="ruby-keyword">alias</span> <span class="ruby-identifier">**</span> <span class="ruby-identifier">power</span>
+</pre>
 </div>
 </div>
 </div>
